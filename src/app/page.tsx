@@ -1,21 +1,19 @@
 import Link from "next/link";
-import { SignOut } from "@/components/sign-out";
 import { auth } from "@/lib/auth";
 
 const Page = async () => {
   const session = await auth();
 
   return (
-    // <div className="min-h-screen flex flex-col w-full">
-      <>
-      {/* // <div className="min-h-screen flex flex-col w-full"> */}
-      <Header session={session} /><main className="flex-grow p-4 flex items-center justify-center w-full">
+    <>
+      <Header session={session} />
+      <main className="flex-grow p-4 flex items-center justify-center w-full">
         <div className="bg-gray-100 rounded-lg p-4 text-center w-full">
           <p className="text-gray-600">Bem vindo! Aqui vai ficar as fotos dos bagulhos la.</p>
         </div>
       </main>
       <Footer />
-      </>
+    </>
   );
 };
 
@@ -28,12 +26,14 @@ const Header = ({ session }) => {
       <NavLinks />
       {!session ? (
         <Link href="/sign-in">
-          <button className="bg-white text-blue-500 px-4 py-2 rounded">Sign In</button>
+          <button className="bg-white text-blue-500 px-4 py-2 rounded">Login</button>
         </Link>
       ) : (
         <div className="flex items-center">
           <p className="mr-4">Logado como: {session.user?.email}</p>
-          <SignOut />
+          <Link href="/dashboard">
+            <button className="bg-white text-blue-500 px-4 py-2 rounded">Dashboard</button>
+          </Link>
         </div>
       )}
     </header>

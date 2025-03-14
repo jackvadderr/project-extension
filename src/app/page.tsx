@@ -1,28 +1,63 @@
-import Header from "@/components/header/Header";
-import { AuthProvider } from "@/contexts/AuthContext";
-// import Image from "next/image";
-// import 'tailwindcss/tailwind.css'
+import Link from "next/link";
+import { SignOut } from "@/components/sign-out";
+import { auth } from "@/lib/auth";
 
-import { SessionProvider } from "next-auth/react"
+const Page = async () => {
+  const session = await auth();
 
-export default function Home() {
   return (
-      <Header/>
+    // <div className="min-h-screen flex flex-col w-full">
+      <>
+      {/* // <div className="min-h-screen flex flex-col w-full"> */}
+      <Header session={session} /><main className="flex-grow p-4 flex items-center justify-center w-full">
+        <div className="bg-gray-100 rounded-lg p-4 text-center w-full">
+          <p className="text-gray-600">Bem vindo! Aqui vai ficar as fotos dos bagulhos la.</p>
+        </div>
+      </main>
+      <Footer />
+      </>
   );
-}
+};
 
-// 'use client'
-// import { useEffect } from 'react'
-// import { useRouter } from 'next/navigation'
+const Header = ({ session }) => {
+  return (
+    <header className="bg-blue-500 p-4 text-white flex justify-between items-center border-b w-full">
+      <div className="flex items-center">
+        <Logo />
+      </div>
+      <NavLinks />
+      {!session ? (
+        <Link href="/sign-in">
+          <button className="bg-white text-blue-500 px-4 py-2 rounded">Sign In</button>
+        </Link>
+      ) : (
+        <div className="flex items-center">
+          <p className="mr-4">Logado como: {session.user?.email}</p>
+          <SignOut />
+        </div>
+      )}
+    </header>
+  );
+};
 
-// const Main = () => {
-//   const router = useRouter()
+const Footer = () => (
+  <footer className="bg-blue-500 p-4 text-white text-center w-full">
+    <p>&copy; 2025 Minha Aplicação. Todos os direitos reservados.</p>
+  </footer>
+);
 
-//   useEffect(() => {
-//     router.push('/auth')
-//   }, [])
+const Logo = () => (
+  <h1 className="text-xl font-bold">Minha Aplicação</h1>
+);
 
-//   return null
-// }
+const NavLinks = () => (
+  <nav>
+    <ul className="flex space-x-4">
+      <li><Link href="/home" className="hover:underline">Inicio</Link></li>
+      <li><Link href="/about" className="hover:underline">Sobre</Link></li>
+      <li><Link href="/contact" className="hover:underline">Contato</Link></li>
+    </ul>
+  </nav>
+);
 
-// export default Main
+export default Page;

@@ -1,16 +1,17 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { SAIR } from "@/constants/constants";
 import { signOut } from "next-auth/react";
 
-const SignOut = () => {
+const SignOut = () => {  
   const handleSignOut = async () => {
-    await signOut();
+    await signOut()
   };
 
   return (
     <div className="flex justify-center">
       <Button variant="destructive" onClick={handleSignOut}>
-        Sign Out
+        {SAIR}
       </Button>
     </div>
   );

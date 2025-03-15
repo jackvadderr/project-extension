@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
+import { APP_NAME, COPYRIGHT_YEAR } from "@/constants/constants";
 
 const Page = async () => {
   const session = await auth();
@@ -30,7 +31,7 @@ const Header = ({ session }) => {
         </Link>
       ) : (
         <div className="flex items-center">
-          <p className="mr-4">Logado como: {session.user?.email}</p>
+          {/* <p className="mr-4">Logado como: {session.user?.email}</p> */}
           <Link href="/dashboard">
             <button className="bg-white text-blue-500 px-4 py-2 rounded">Dashboard</button>
           </Link>
@@ -42,12 +43,12 @@ const Header = ({ session }) => {
 
 const Footer = () => (
   <footer className="bg-blue-500 p-4 text-white text-center w-full">
-    <p>&copy; 2025 Minha Aplicação. Todos os direitos reservados.</p>
+    <p>&copy; {COPYRIGHT_YEAR} {APP_NAME}. Todos os direitos reservados.</p>
   </footer>
 );
 
 const Logo = () => (
-  <h1 className="text-xl font-bold">Minha Aplicação</h1>
+  <h1 className="text-xl font-bold">{APP_NAME}</h1>
 );
 
 const NavLinks = () => (

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import { ReactNode } from "react";
+import { APP_NAME } from "@/constants/constants";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 const metadata: Metadata = {
-  title: "Nao sei o nome do site",
-  description: "Aqui vai a descrição do site",
+  title: APP_NAME,
+  description: "Empresa de organizacao de eventos.",
 };
 
 type LayoutProps = {

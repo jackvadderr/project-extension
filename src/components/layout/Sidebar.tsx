@@ -11,15 +11,15 @@ const Sidebar = () => {
         <Link href="/dashboard" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100">
           <Home size={20} /> Dashboard
         </Link>
-        <Link href="/financer" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100">
+        <Link href="/dashboard/financer" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100">
           <DollarSign size={20} /> Financeiro
         </Link>
-        <Link href="/events" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100">
+        <Link href="/dashboard/events" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100">
           <Calendar size={20} /> Eventos
         </Link>
-        <Link href="/reminders" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100">
+        {/* <Link href="/dashboard/reminders" className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100">
           <Bell size={20} /> Lembretes
-        </Link>
+        </Link> */}
       </nav>
 
       <div className="mt-auto">

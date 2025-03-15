@@ -60,6 +60,7 @@ const MyResponsivePie = () => (
                 ]
             ]
         }}
+        arcLabel={(d) => `${d.value}%`}
         defs={[
             {
                 id: 'dots',
@@ -108,8 +109,8 @@ const MyResponsivePie = () => (
         ]}
         legends={[
             {
-                anchor: 'bottom',
-                direction: 'row',
+                anchor: 'right',
+                direction: 'column',
                 justify: false,
                 translateX: 0,
                 translateY: 56,

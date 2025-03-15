@@ -13,4 +13,3 @@ const ReminderCard = ({ title, description }: ReminderCardProps) => {
 };
   
   export default ReminderCard;
-  

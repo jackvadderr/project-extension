@@ -1,4 +1,3 @@
-// /src/app/home/page.tsx
 import { auth } from "@/lib/auth";
 import Layout from "./layout";
 

@@ -7,7 +7,7 @@
 3. **Install & Run**
 ```bash
 yarn install
-npm run dev
+yarn dev
 ```
 
 ## Branches

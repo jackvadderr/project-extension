@@ -37,7 +37,6 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
 const Header = ({ session }: { session: any }) => {
   return (
     <header className="bg-blue-500 p-4 text-white flex flex-col md:flex-row justify-between items-center border-b w-full">
-      {/* <Button className="mb-2 md:mb-0">Criar evento</Button> */}
         <h1 className="text-2xl font-bold">Dashboard</h1>
       <div className="flex items-center">
         <p className="mr-4 text-sm md:text-base">Logado como: {session.user?.email}</p>

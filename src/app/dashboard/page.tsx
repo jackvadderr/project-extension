@@ -1,8 +1,8 @@
-import ReminderCard from "@/components/dashboard/cards/todo_list/ReminderCard";
-import EventCard from "@/components/dashboard/cards/events/future/EventCard";
-import MyResponsiveLine from "@/components/dashboard/charts/LineChart";
-import MiniEventCard from "@/components/dashboard/cards/events/current/MiniEventCard";
-import MyResponsivePie from "@/components/dashboard/charts/PieChart";
+import ReminderCard from "@/components/dashboard/dashboard/cards/todo_list/ReminderCard";
+import EventCard from "@/components/dashboard/dashboard/cards/events/future/EventCard";
+import MyResponsiveLine from "@/components/dashboard/dashboard/charts/LineChart";
+import MiniEventCard from "@/components/dashboard/dashboard/cards/events/current/MiniEventCard";
+import MyResponsivePie from "@/components/dashboard/dashboard/charts/PieChart";
 
 const DashboardPage = () => {
   return (

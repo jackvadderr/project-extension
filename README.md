@@ -20,5 +20,10 @@ yarn dev
 - Prisma
 - Auth.js
 
+## Database view
+```bash
+npx prisma studio
+```
+
 ---
 Happy coding! 🚀

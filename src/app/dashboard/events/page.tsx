@@ -1,32 +1,25 @@
-"use client"
-import AddEventButton from "@/components/dashboard/events/AddEventButton";
-import EventList from "@/components/dashboard/events/EventList";
-import SearchBar from "@/components/dashboard/events/SearchBar";
-import { useState } from "react";
+import EventListPage from "@/components/dashboard/events/EventListPage";
+import EventRepository from "@/data/repository/impl/EventRepository";
+import { ListAllEventsUsecase } from "@/domain/usecase/ListAllEventsUseCase";
 import { Event } from "@/types/Event";
 
-const initialEvents: Event[] = [
-  { id: 1, name: "Churras do seu Jorge", location: "Porto Velho", date: "2025-06-15", organizer: "NA Eventos", status: "scheduled" },
-  { id: 2, name: "Festa de aniversario", location: "Porto Velho", date: "2025-07-20", organizer: "NA Eventos", status: "ongoing" },
-];
+export default async function DashboardEventsPage() {
+  const eventRepository = new EventRepository();
+  const findAllEventsUsecase = new ListAllEventsUsecase(eventRepository);
 
-const EventListPage: React.FC = () => {
-  const [events, setEvents] = useState(initialEvents);
+  // Busca os eventos no banco de dados
+  const rawEvents = await findAllEventsUsecase.execute();
 
-  return (
-    <div className="p-5">
-      <div className="flex justify-between items-center mb-5">
-        <SearchBar placeholder="Buscar evento..." />
-        <div className="flex gap-2">
-          <AddEventButton />
-        </div>
-      </div>
-      {events.length > 0 ? (
-        <EventList events={events} />
-      ) : (
-        <p>Nenhum evento encontrado.</p>
-      )}    </div>
-  );
-};
+  // Mapeia os eventos para o tipo correto
+  const events: Event[] = rawEvents.map((event: any) => ({
+    id: event.id,
+    name: event.name,
+    date: event.start_date.toISOString(),
+    location: event.location,
+    organizer: event.responsible || "Desconhecido",
+    status: event.status || "Indefinido",
+    max_capacity: event.max_capacity,
+  }));
 
-export default EventListPage;
+  return <EventListPage initialEvents={events} />;
+}

@@ -5,5 +5,6 @@ export interface Event {
     date: string;
     organizer: string;
     status: "scheduled" | "ongoing" | "canceled";
+    max_capacity: number;
   }
   

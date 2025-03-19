@@ -79,3 +79,24 @@ model Authenticator {
 
   @@id([userId, credentialID])
 }
+
+model Event {
+  id               Int       @id @default(autoincrement())
+  name             String
+  description      String?
+  start_date       DateTime
+  end_date         DateTime
+  location         String
+  max_capacity     Int
+  responsible      String? 
+  status           String? @default("scheduled") 
+  event_type       String?
+  privacy          String? @default("public")
+  notes            String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  duration         Int? 
+  tags             String?
+  event_code       String? 
+  budget           Float?
+}

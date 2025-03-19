@@ -23,8 +23,9 @@ const Layout = async ({ children }: LayoutProps) => {
 
 const Header = ({ session }: { session: any }) => {
   return (
-    <header className="bg-blue-500 p-4 text-white flex justify-between items-center border-b w-full">
+    <header className="bg-[#1E3A8A] p-4 text-white flex justify-between items-center border-b w-full">
       <div className="flex items-center">
+      <img src="/android-chrome-512x512.png" alt="Logo da Empresa" className="h-10 w-auto mr-4" />
         <Logo />
       </div>
       <NavLinks />
@@ -44,7 +45,7 @@ const Header = ({ session }: { session: any }) => {
 };
 
 const Footer = () => (
-  <footer className="bg-blue-500 p-4 text-white text-center w-full">
+  <footer className="bg-[#1E3A8A] p-4 text-white text-center w-full">
     <p>&copy; {COPYRIGHT_YEAR} {APP_NAME}. Todos os direitos reservados.</p>
   </footer>
 );

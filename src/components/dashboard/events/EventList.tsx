@@ -14,6 +14,7 @@ const EventList: React.FC<EventListProps> = ({ events }) => {
           <th className="p-3 text-left">Local</th>
           <th className="p-3 text-left">Data</th>
           <th className="p-3 text-left">Organizador</th>
+          <th className="p-3 text-center">Capacidade</th>
           <th className="p-3 text-center">Status</th>
         </tr>
       </thead>

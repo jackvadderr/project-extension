@@ -8,12 +8,12 @@ interface LayoutProps {
 }
 
 const Layout = async ({ children }: LayoutProps) => {
-  const session = await auth(); // Obtém a sessão aqui
+  const session = await auth();
 
   return (
     <>
       <Header session={session} />
-      <main className="flex-grow p-4 flex items-center justify-center w-full">
+      <main className="flex-grow p-4 items-center justify-center w-full">
         {children}
       </main>
       <Footer />

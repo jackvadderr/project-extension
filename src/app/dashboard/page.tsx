@@ -4,6 +4,8 @@ import MyResponsiveLine from "@/components/dashboard/dashboard/charts/LineChart"
 import MiniEventCard from "@/components/dashboard/dashboard/cards/events/current/MiniEventCard";
 import MyResponsivePie from "@/components/dashboard/dashboard/charts/PieChart";
 
+
+
 const DashboardPage = () => {
   return (
     <>
@@ -25,7 +27,7 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {/* Espaço reservado */}
+        {/* Distribuição de eventos */}
         <div className="bg-white shadow rounded-lg p-4">
           <h2 className="text-xl font-bold">Distribuição de eventos</h2>
           <div className="h-60 overflow-hidden">

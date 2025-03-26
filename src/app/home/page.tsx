@@ -1,5 +1,3 @@
-import { auth } from "@/lib/auth";
-import Layout from "./layout";
 import { EmblaOptionsType } from "embla-carousel";
 import EmblaCarousel from "@/components/home/carousel/EmblaCarousel";
 

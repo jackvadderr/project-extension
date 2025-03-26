@@ -1,23 +1,13 @@
 import EventListPage from '@/components/dashboard/events/EventListPage';
-import EventRepository from '@/data/repository/impl/EventRepository';
-import { ListAllEventsUsecase } from '@/domain/usecase/ListAllEventsUseCase';
-import { Event } from '@/types/Event';
+import { getEvents } from '@/actions/list-all-events-action';
+import { createEvent } from '@/actions/create-event-action';
 
 export default async function DashboardEventsPage() {
-  const eventRepository = new EventRepository();
-  const findAllEventsUsecase = new ListAllEventsUsecase(eventRepository);
-
-  const rawEvents = await findAllEventsUsecase.execute();
-
-  const events: Event[] = rawEvents.map((event: any) => ({
-    id: event.id,
-    name: event.name,
-    date: event.start_date.toISOString(),
-    location: event.location,
-    organizer: event.responsible || 'Desconhecido',
-    status: event.status || 'Indefinido',
-    max_capacity: event.max_capacity,
-  }));
-
-  return <EventListPage initialEvents={events} />;
+  try {
+    const events = await getEvents();
+    return <EventListPage initialEvents={events} createEventAction={createEvent} />;
+  } catch (err) {
+    console.error('Error:', err);
+    return <p className="text-red-500">Falha ao carregar eventos. Tente novamente mais tarde.</p>;
+  }
 }

@@ -5,9 +5,10 @@ import { useState } from "react";
 
 interface EventFormProps {
   onCancel: () => void;
+  onSubmit: (formData: EventFormData) => Promise<void>;
 }
 
-export default function EventForm({ onCancel }: EventFormProps) {
+export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
   const [formData, setFormData] = useState<EventFormData>({
     name: "",
     description: "",
@@ -31,14 +32,15 @@ export default function EventForm({ onCancel }: EventFormProps) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "max_capacity" || name === "duration" || name === "budget"
+        ? Number(value)
+        : value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Dados do Evento:", formData);
-    // Aqui você pode adicionar a lógica para enviar os dados para o backend
+    await onSubmit(formData);
   };
 
   return (
@@ -51,7 +53,7 @@ export default function EventForm({ onCancel }: EventFormProps) {
       {/* Nome do Evento */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Nome do Evento
+          Nome do Evento*
         </label>
         <input
           type="text"
@@ -74,46 +76,49 @@ export default function EventForm({ onCancel }: EventFormProps) {
           name="description"
           value={formData.description}
           onChange={handleChange}
+          rows={3}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
-      {/* Data de Início */}
-      <div>
-        <label htmlFor="start_date" className="block text-sm font-medium text-gray-700">
-          Data de Início
-        </label>
-        <input
-          type="datetime-local"
-          id="start_date"
-          name="start_date"
-          value={formData.start_date}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Data de Início */}
+        <div>
+          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700">
+            Data de Início*
+          </label>
+          <input
+            type="datetime-local"
+            id="start_date"
+            name="start_date"
+            value={formData.start_date}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-      {/* Data de Término */}
-      <div>
-        <label htmlFor="end_date" className="block text-sm font-medium text-gray-700">
-          Data de Término
-        </label>
-        <input
-          type="datetime-local"
-          id="end_date"
-          name="end_date"
-          value={formData.end_date}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        {/* Data de Término */}
+        <div>
+          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700">
+            Data de Término*
+          </label>
+          <input
+            type="datetime-local"
+            id="end_date"
+            name="end_date"
+            value={formData.end_date}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
 
       {/* Localização */}
       <div>
         <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-          Localização
+          Localização*
         </label>
         <input
           type="text"
@@ -126,20 +131,39 @@ export default function EventForm({ onCancel }: EventFormProps) {
         />
       </div>
 
-      {/* Capacidade Máxima */}
-      <div>
-        <label htmlFor="max_capacity" className="block text-sm font-medium text-gray-700">
-          Capacidade Máxima
-        </label>
-        <input
-          type="number"
-          id="max_capacity"
-          name="max_capacity"
-          value={formData.max_capacity}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Capacidade Máxima */}
+        <div>
+          <label htmlFor="max_capacity" className="block text-sm font-medium text-gray-700">
+            Capacidade Máxima*
+          </label>
+          <input
+            type="number"
+            id="max_capacity"
+            name="max_capacity"
+            min="0"
+            value={formData.max_capacity}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        {/* Duração */}
+        <div>
+          <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
+            Duração (horas)
+          </label>
+          <input
+            type="number"
+            id="duration"
+            name="duration"
+            min="0"
+            value={formData.duration}
+            onChange={handleChange}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
       </div>
 
       {/* Responsável */}
@@ -157,56 +181,43 @@ export default function EventForm({ onCancel }: EventFormProps) {
         />
       </div>
 
-      {/* Tipo de Evento */}
-      <div>
-        <label htmlFor="event_type" className="block text-sm font-medium text-gray-700">
-          Tipo de Evento
-        </label>
-        <select
-          id="event_type"
-          name="event_type"
-          value={formData.event_type}
-          onChange={handleChange}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">Selecione...</option>
-          <option value="workshop">Workshop</option>
-          <option value="conference">Conferência</option>
-          <option value="meeting">Reunião</option>
-          <option value="seminar">Seminário</option>
-        </select>
-      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Tipo de Evento */}
+        <div>
+          <label htmlFor="event_type" className="block text-sm font-medium text-gray-700">
+            Tipo de Evento
+          </label>
+          <select
+            id="event_type"
+            name="event_type"
+            value={formData.event_type}
+            onChange={handleChange}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Selecione...</option>
+            <option value="workshop">Workshop</option>
+            <option value="conference">Conferência</option>
+            <option value="meeting">Reunião</option>
+            <option value="seminar">Seminário</option>
+          </select>
+        </div>
 
-      {/* Privacidade */}
-      <div>
-        <label htmlFor="privacy" className="block text-sm font-medium text-gray-700">
-          Privacidade
-        </label>
-        <select
-          id="privacy"
-          name="privacy"
-          value={formData.privacy}
-          onChange={handleChange}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="public">Público</option>
-          <option value="private">Privado</option>
-        </select>
-      </div>
-
-      {/* Duração */}
-      <div>
-        <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-          Duração (horas)
-        </label>
-        <input
-          type="number"
-          id="duration"
-          name="duration"
-          value={formData.duration}
-          onChange={handleChange}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        {/* Privacidade */}
+        <div>
+          <label htmlFor="privacy" className="block text-sm font-medium text-gray-700">
+            Privacidade
+          </label>
+          <select
+            id="privacy"
+            name="privacy"
+            value={formData.privacy}
+            onChange={handleChange}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="public">Público</option>
+            <option value="private">Privado</option>
+          </select>
+        </div>
       </div>
 
       {/* Tags */}
@@ -224,6 +235,21 @@ export default function EventForm({ onCancel }: EventFormProps) {
         />
       </div>
 
+      {/* Código do Evento */}
+      <div>
+        <label htmlFor="event_code" className="block text-sm font-medium text-gray-700">
+          Código do Evento
+        </label>
+        <input
+          type="text"
+          id="event_code"
+          name="event_code"
+          value={formData.event_code}
+          onChange={handleChange}
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       {/* Orçamento */}
       <div>
         <label htmlFor="budget" className="block text-sm font-medium text-gray-700">
@@ -233,6 +259,8 @@ export default function EventForm({ onCancel }: EventFormProps) {
           type="number"
           id="budget"
           name="budget"
+          min="0"
+          step="0.01"
           value={formData.budget}
           onChange={handleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -249,22 +277,23 @@ export default function EventForm({ onCancel }: EventFormProps) {
           name="notes"
           value={formData.notes}
           onChange={handleChange}
+          rows={3}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
       {/* Botões de Ação */}
-      <div className="flex justify-end gap-4">
+      <div className="flex justify-end gap-4 pt-4">
         <button
           type="button"
           onClick={onCancel}
-          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600"
+          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
         >
           Cancelar
         </button>
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
           Cadastrar Evento
         </button>

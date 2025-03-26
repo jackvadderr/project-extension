@@ -41,7 +41,7 @@ type Options<T> = {
 
 const executeAction = async <T>({
   actionFn,
-  successMessage = "The actions was successful",
+  successMessage = 'The actions was successful',
 }: Options<T>): Promise<{ success: boolean; message: string }> => {
   try {
     await actionFn();
@@ -57,7 +57,7 @@ const executeAction = async <T>({
 
     return {
       success: false,
-      message: "An error has occurred during executing the action",
+      message: 'An error has occurred during executing the action',
     };
   }
 };
@@ -271,7 +271,7 @@ if (!session) redirect("/sign-in");
 npm run dev to see everything works
 
 ```ts src/lib/auth.ts
-import NextAuth from "next-auth";
+import NextAuth from 'next-auth';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [],
@@ -281,7 +281,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 app/api/auth/[...nextauth]/route.ts
 
 ```ts
-import { handlers } from "@/app/(auth)/_utils/auth";
+import { handlers } from '@/app/(auth)/_utils/auth';
 export const { GET, POST } = handlers;
 ```
 
@@ -434,7 +434,7 @@ emphasize that never directly save password and always hash of it
 now we want to implement it in credentials
 
 ```ts src/lib/db/db.ts
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
   return new PrismaClient();
@@ -448,7 +448,7 @@ const db = globalThis.prismaGlobal ?? prismaClientSingleton();
 
 export default db;
 
-if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = db;
+if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = db;
 ```
 
 ```ts
@@ -615,8 +615,8 @@ we want register user by credentials
 const signUp = async (formData: FormData) => {
   return executeAction({
     actionFn: async () => {
-      const email = formData.get("email");
-      const password = formData.get("password");
+      const email = formData.get('email');
+      const password = formData.get('password');
       const validatedData = schema.parse({ email, password });
       await db.user.create({
         data: {

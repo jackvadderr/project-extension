@@ -18,7 +18,9 @@ export default function EventListPage({
                                       }: EventListPageProps) {
   const [events, setEvents] = useState(initialEvents);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // Initialize with an empty string
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const eventsPerPage = 10;
 
   const handleAddEvent = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
@@ -46,6 +48,24 @@ export default function EventListPage({
     event.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const indexOfLastEvent = currentPage * eventsPerPage;
+  const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+  const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+
+  const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className="p-5">
       <div className="flex justify-between items-center mb-5">
@@ -57,11 +77,29 @@ export default function EventListPage({
         <AddEventButton onClick={handleAddEvent} />
       </div>
 
-      {filteredEvents.length > 0 ? (
-        <EventList events={filteredEvents} />
+      {currentEvents.length > 0 ? (
+        <EventList events={currentEvents} />
       ) : (
         <p>Nenhum evento encontrado.</p>
       )}
+
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
+        >
+          Anterior
+        </button>
+        <span>Página {currentPage} de {totalPages}</span>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
+        >
+          Próxima
+        </button>
+      </div>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">

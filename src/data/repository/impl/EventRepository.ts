@@ -18,6 +18,20 @@ export default class EventRepository {
     return db.event.findMany();
   }
 
+  async findEventsWithFilters(
+    filters: Partial<Prisma.EventWhereInput>,
+    page: number,
+    pageSize: number,
+    orderBy: Prisma.EventOrderByWithRelationInput
+  ): Promise<Event[]> {
+    return db.event.findMany({
+      where: filters,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+  }
+
   async updateEvent(id: number, eventData: Partial<Prisma.EventUpdateInput>): Promise<Event | null> {
     return db.event.update({
       where: { id },

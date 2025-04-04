@@ -30,7 +30,7 @@ const formatEventsByMonth = (eventsByMonth: { month: number, count: number, year
 export default async function DashboardPage() {
   // try {
     const onGoingEvents = await getEventosByFilter({ status: 'scheduled' }, 1, 10, { event_date: 'asc' });
-    const eventsByMonth = await getCountEventsByMonthAction(2025, 1, 12);
+    const eventsByMonth = await getCountEventsByMonthAction(1970, 2025, 1, 12);
 
     const formattedEventsByMonth = formatEventsByMonth(eventsByMonth);
 
@@ -73,7 +73,7 @@ export default async function DashboardPage() {
           <div className="bg-white shadow rounded-lg p-4">
             <h2 className="text-xl font-bold">Quantidade de eventos por mês</h2>
             <div className="h-60 overflow-hidden">
-              <EventsByMonthChart data={formattedEventsByMonth} />
+              <EventsByMonthChart data={allData} />
             </div>
           </div>
 

@@ -8,14 +8,16 @@ export class CountEventsInMonthRangeUsecase {
   }
 
   async execute(
-    year: number,
-    monthStart: number,
-    monthEnd: number
+    startYear: number,
+    endYear: number,
+    startMonth: number,
+    endMonth: number
   ): Promise<{ month: number; count: number; year: number }[]> {
-    return await this.eventRepository.countEventsInMonthRange(
-      year,
-      monthStart,
-      monthEnd
+    return await this.eventRepository.countEventsInYearRangeByMonth(
+      startYear,
+      endYear,
+      startMonth,
+      endMonth
     );
   }
 }

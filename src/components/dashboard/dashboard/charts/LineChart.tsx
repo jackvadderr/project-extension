@@ -20,6 +20,11 @@ interface EventsByMonthChartProps {
 // Ordem fixa dos meses em português
 const monthOrder = ['Jan', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
+// Função para gerar cores aleatórias
+const getRandomColor = () => {
+  return `#${Math.floor(Math.random()*16777215).toString(16)}`;
+};
+
 const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
   // Processamento dos dados para garantir que todos os meses apareçam
   const transformedData = data.flatMap(series => {
@@ -54,8 +59,8 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
     });
   });
 
-  // Definir cores diferentes para cada ano
-  const colors = ['#e8c1a0', '#f47560', '#f1e15b', '#e8a838', '#61cdbb'];
+  // Mapa para armazenar cores de cada ano
+  const colorMap = new Map<number, string>();
 
   return (
     <ResponsiveLine
@@ -71,7 +76,10 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
       }}
       colors={({ id }) => {
         const year = parseInt(id.split(' ').pop() || '0');
-        return colors[year % colors.length];
+        if (!colorMap.has(year)) {
+          colorMap.set(year, getRandomColor());
+        }
+        return colorMap.get(year)!;
       }}
       yFormat=" >-.2f"
       axisTop={null}

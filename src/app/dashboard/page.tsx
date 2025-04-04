@@ -1,4 +1,3 @@
-import ReminderCard from '@/components/dashboard/dashboard/cards/todo_list/ReminderCard';
 import EventsByMonthChart from '@/components/dashboard/dashboard/charts/LineChart';
 import EventDistribution from '@/components/dashboard/dashboard/charts/PieChart';
 import MiniEventCardPage from '@/components/dashboard/dashboard/MiniEventCardPage';
@@ -8,6 +7,11 @@ import { getCountEventsDistribuition } from '@/actions/events-distribuition-acti
 import EventListCard from '@/components/dashboard/dashboard/cards/events/future/EventCard';
 import { allData } from '@/samples/samples';
 import { EventCardProps } from '@/types/EventCardProps';
+import dynamic from 'next/dynamic';
+import TodoList from '@/components/dashboard/dashboard/TodoList';
+// const TodoList = dynamic(() => import('@/components/dashboard/dashboard/TodoList'), {
+//   ssr: false
+// })
 
 export default async function DashboardPage() {
     const onGoingEvents = await getEventosByFilter({ status: 'ongoing' }, 1, 10, { event_date: 'asc' });
@@ -63,15 +67,8 @@ export default async function DashboardPage() {
           {/* Lembretes */}
           <div className="bg-white shadow rounded-lg p-4">
             <h2 className="text-xl font-bold">Lembretes</h2>
-            <div className="grid gap-4 mt-4 max-h-60 overflow-auto">
-              <ReminderCard
-                title="Monitorar a carne"
-                description="Certificar-se de que não vai faltar carne."
-              />
-              <ReminderCard
-                title="Monitorar bebidas"
-                description="Certificar-se de que tudo está servido no tempo certo."
-              />
+            <div className="grid gap-2 mt-4 max-h-60 overflow-auto">
+              <TodoList />
             </div>
           </div>
         </div>

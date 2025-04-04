@@ -114,4 +114,21 @@ export default class EventRepository {
       count: group._count._all,
     }));
   }
+
+  async findLatestEventsByStatus(
+    status: string,
+    limit: number,
+    additionalFilters: Partial<Prisma.EventWhereInput> = {}
+  ): Promise<Event[]> {
+    return db.event.findMany({
+      where: {
+        ...additionalFilters,
+        status: status,
+      },
+      orderBy: {
+        event_date: 'desc',
+      },
+      take: limit,
+    });
+  }
 }

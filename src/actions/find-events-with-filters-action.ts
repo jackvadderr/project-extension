@@ -34,16 +34,3 @@ export async function getEventosByFilter(
     max_capacity: event.max_capacity,
   }));
 }
-  // ?   id?: SortOrder,
-  //   ?   name?: SortOrder,
-  //   ?   description?: SortOrder | SortOrderInput,
-  //   ?   event_date?: SortOrder,
-  //   ?   location?: SortOrder,
-  //   ?   max_capacity?: SortOrder,
-  //   ?   responsible?: SortOrder | SortOrderInput,
-  //   ?   status?: SortOrder | SortOrderInput,
-  //   ?   event_type?: SortOrder | SortOrderInput,
-  //   ?   created_at?: SortOrder,
-  //   ?   updated_at?: SortOrder,
-  //   ?   duration?: SortOrder | SortOrderInput,
-  //   ?   budget?: SortOrder | SortOrderInput

@@ -9,7 +9,7 @@ const MiniEventCardPage = ({ events = [] }) => {
         <p className="text-gray-500">Nenhum evento em andamento.</p>
       ) : (
         <div className="grid gap-4">
-          {events.map((event, index) => (
+          {events.map((event: any, index) => (
             <MiniEventCard
               key={index}
               name={event.name}

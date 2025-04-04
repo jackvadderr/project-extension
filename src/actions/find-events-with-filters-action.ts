@@ -10,7 +10,15 @@ export async function getEventosByFilter(
   page: number,
   pageSize: number,
   orderBy: Prisma.EventOrderByWithRelationInput
-): Promise<Event[]> {
+): Promise<{
+  id: number;
+  name: string;
+  description: any;
+  date: any;
+  location: string;
+  status: "scheduled" | "ongoing" | "canceled" | "completed" | "indefinido" | string;
+  max_capacity: number
+}[]> {
   const eventRepository = new EventRepository();
   const findEventsWithFiltersUsecase = new FindEventsWithFiltersUsecase(eventRepository);
 
@@ -19,10 +27,23 @@ export async function getEventosByFilter(
   return events.map((event) => ({
     id: event.id,
     name: event.name,
-    date: event.start_date.toISOString(),
+    description: event.description,
+    date: event.event_date.toISOString(),
     location: event.location,
-    organizer: event.responsible || 'Desconhecido',
     status: (event.status as EventStatus) || 'Indefinido',
     max_capacity: event.max_capacity,
   }));
 }
+  // ?   id?: SortOrder,
+  //   ?   name?: SortOrder,
+  //   ?   description?: SortOrder | SortOrderInput,
+  //   ?   event_date?: SortOrder,
+  //   ?   location?: SortOrder,
+  //   ?   max_capacity?: SortOrder,
+  //   ?   responsible?: SortOrder | SortOrderInput,
+  //   ?   status?: SortOrder | SortOrderInput,
+  //   ?   event_type?: SortOrder | SortOrderInput,
+  //   ?   created_at?: SortOrder,
+  //   ?   updated_at?: SortOrder,
+  //   ?   duration?: SortOrder | SortOrderInput,
+  //   ?   budget?: SortOrder | SortOrderInput

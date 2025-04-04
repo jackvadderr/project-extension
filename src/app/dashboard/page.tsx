@@ -2,10 +2,11 @@ import ReminderCard from '@/components/dashboard/dashboard/cards/todo_list/Remin
 import EventCard from '@/components/dashboard/dashboard/cards/events/future/EventCard';
 import EventsByMonthChart from '@/components/dashboard/dashboard/charts/LineChart';
 // import MiniEventCard from '@/components/dashboard/dashboard/cards/events/current/MiniEventCard';
-import MyResponsivePie from '@/components/dashboard/dashboard/charts/PieChart';
+import EventDistribution from '@/components/dashboard/dashboard/charts/PieChart';
 import MiniEventCardPage from '@/components/dashboard/dashboard/MiniEventCardPage';
 import { getEventosByFilter } from '@/actions/find-events-with-filters-action';
 import { getCountEventsByMonthAction } from '@/actions/events-by-month-action';
+import { getCountEventsDistribuition } from '@/actions/events-distribuition-action';
 
 const formatEventsByMonth = (eventsByMonth: { month: number, count: number, year: number }[]) => {
   // Mapeia os meses numéricos para abreviações em português
@@ -27,12 +28,41 @@ const formatEventsByMonth = (eventsByMonth: { month: number, count: number, year
   ];
 };
 
+const formatEventsDistribuition = (eventsDistribuition: { event_type: string, count: number }[]) => {
+  const colors = [
+    "hsl(205, 70%, 50%)",
+    "hsl(100, 70%, 50%)",
+    "hsl(50, 70%, 50%)",
+    "hsl(300, 70%, 50%)"
+  ];
+
+  const total = eventsDistribuition.reduce((sum, event) => sum + event.count, 0);
+
+  console.log(eventsDistribuition)
+  return eventsDistribuition.map((event, index) => {
+    const percentage = ((event.count / total) * 100);
+    return {
+      id: event.event_type,
+      label: event.event_type,
+      value: event.count, // mantém o valor real para o gráfico
+      percentageLabel: `${percentage.toFixed(1)}%`,
+      count: event.count,
+      color: colors[index % colors.length]
+    };
+  });
+};
+
+
+
 export default async function DashboardPage() {
   // try {
     const onGoingEvents = await getEventosByFilter({ status: 'scheduled' }, 1, 10, { event_date: 'asc' });
     const eventsByMonth = await getCountEventsByMonthAction(1970, 2025, 1, 12);
 
     const formattedEventsByMonth = formatEventsByMonth(eventsByMonth);
+
+    const eventsDistribuition = await getCountEventsDistribuition();
+    const formattedEventsDistribuition = formatEventsDistribuition(eventsDistribuition);
 
     const allData = [
       {
@@ -56,6 +86,33 @@ export default async function DashboardPage() {
         ]
       }
     ];
+
+  const eventData = [
+    {
+      id: "Festa de Aniversário",
+      label: "Festa de Aniversário",
+      value: 40,
+      color: "hsl(205, 70%, 50%)"
+    },
+    {
+      id: "Churrasco",
+      label: "Churrasco",
+      value: 30,
+      color: "hsl(100, 70%, 50%)"
+    },
+    {
+      id: "Reunião",
+      label: "Reunião",
+      value: 20,
+      color: "hsl(50, 70%, 50%)"
+    },
+    {
+      id: "Workshop",
+      label: "Workshop",
+      value: 10,
+      color: "hsl(300, 70%, 50%)"
+    }
+  ];
 
     return (
       <>
@@ -81,7 +138,7 @@ export default async function DashboardPage() {
           <div className="bg-white shadow rounded-lg p-4">
             <h2 className="text-xl font-bold">Distribuição de eventos</h2>
             <div className="h-60 overflow-hidden">
-              <MyResponsivePie />
+              <EventDistribution data={formattedEventsDistribuition} />
             </div>
           </div>
         </div>

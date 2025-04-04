@@ -3,7 +3,7 @@ import { ResponsiveLine } from '@nivo/line'
 
 interface DataPoint {
   x: string;
-  y: number | null; // Pode ser nulo para meses sem eventos
+  y: number | null;
   year: number;
 }
 
@@ -17,7 +17,6 @@ interface EventsByMonthChartProps {
   data: SeriesData[];
 }
 
-// Ordem fixa dos meses em português
 const monthOrder = ['Jan', 'Feb', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
 // Função para gerar cores aleatórias
@@ -26,7 +25,6 @@ const getRandomColor = () => {
 };
 
 const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
-  // Processamento dos dados para garantir que todos os meses apareçam
   const transformedData = data.flatMap(series => {
     const byYear: Record<number, DataPoint[]> = {};
 
@@ -47,7 +45,7 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
       // Garantir que todos os meses apareçam
       const fullYearData = monthOrder.map(month => ({
         x: month,
-        y: monthMap.get(month) ?? null, // Se não houver dado para o mês, usar null
+        y: monthMap.get(month) ?? null,
         year: yearNumber
       }));
 
@@ -59,7 +57,6 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
     });
   });
 
-  // Mapa para armazenar cores de cada ano
   const colorMap = new Map<number, string>();
 
   return (
@@ -92,7 +89,7 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
         legendOffset: 36,
         legendPosition: 'middle',
         truncateTickAt: 0,
-        tickValues: monthOrder // Força a ordem correta dos meses no eixo X
+        tickValues: monthOrder
       }}
       axisLeft={{
         tickSize: 5,

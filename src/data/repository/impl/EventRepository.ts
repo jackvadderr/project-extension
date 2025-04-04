@@ -98,4 +98,20 @@ export default class EventRepository {
     }).sort((a, b) => a.year - b.year || a.month - b.month);
   }
 
+  async countEventsByType(): Promise<{ event_type: string, count: number }[]> {
+    const grouped = await db.event.groupBy({
+      by: ['event_type'],
+      _count: { _all: true },
+      where: {
+        event_type: {
+          not: null,
+        },
+      },
+    });
+
+    return grouped.map(group => ({
+      event_type: group.event_type ?? 'Não especificado',
+      count: group._count._all,
+    }));
+  }
 }

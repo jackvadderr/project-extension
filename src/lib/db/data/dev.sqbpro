@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="dev.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="3599"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Event" custom_title="0" dock_id="1" table="4,5:mainEvent"/><dock_state state="000000ff00000000fd00000001000000020000058500000373fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000000005850000011c00ffffff000002950000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Account" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="26"/><column index="2" value="47"/><column index="3" value="35"/><column index="4" value="62"/><column index="5" value="129"/><column index="6" value="98"/><column index="7" value="93"/><column index="8" value="74"/><column index="9" value="79"/><column index="10" value="44"/><column index="11" value="61"/><column index="12" value="96"/><column index="13" value="71"/><column index="14" value="76"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Event" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="26"/><column index="2" value="117"/><column index="3" value="109"/><column index="4" value="109"/><column index="5" value="300"/><column index="6" value="95"/><column index="7" value="78"/><column index="8" value="164"/><column index="9" value="109"/><column index="10" value="109"/><column index="11" value="62"/><column index="12" value="47"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">INSERT INTO Event VALUES 
+  (NULL, 'Evento 14', 'Descrição do evento 14', '2024-02-29T19:00:00', 2.5, 530.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 120, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 15', 'Descrição do evento 15', '2024-03-31T19:00:00', 3.0, 540.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 110, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 16', 'Descrição do evento 16', '2024-04-30T19:00:00', 1.5, 510.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 130, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 17', 'Descrição do evento 17', '2024-05-31T19:00:00', 2.8, 600.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 100, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 18', 'Descrição do evento 18', '2024-06-30T19:00:00', 3.2, 620.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 100, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 19', 'Descrição do evento 19', '2024-07-31T19:00:00', 2.1, 570.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 110, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 20', 'Descrição do evento 20', '2024-08-31T19:00:00', 1.8, 490.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 90, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 21', 'Descrição do evento 21', '2024-09-30T19:00:00', 2.9, 650.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 100, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 22', 'Descrição do evento 22', '2024-10-31T19:00:00', 3.1, 670.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 110, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 23', 'Descrição do evento 23', '2024-11-30T19:00:00', 1.9, 560.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 100, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO Event VALUES 
+  (NULL, 'Evento 24', 'Descrição do evento 24', '2024-12-31T19:00:00', 2.4, 580.0,
+   'R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830', 120, 'scheduled', 'tipo B',
+   CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+</sql><current_tab id="0"/></tab_sql></sqlb_project>

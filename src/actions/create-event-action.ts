@@ -3,28 +3,31 @@
 import EventRepository from '@/data/repository/impl/EventRepository';
 import { CreateEventUsecase } from '@/domain/usecase/CreateEventUseCase';
 import { Event, EventStatus } from '@/types/Event';
+import { undefined } from 'zod';
 
-export async function createEvent(eventData: Omit<Event, 'id'>): Promise<Event> {
+export async function createEventAction(eventData: Omit<Event, 'id'>): Promise<Event> {
   const eventRepository = new EventRepository();
   const createEventUsecase = new CreateEventUsecase(eventRepository);
 
   const newEvent = await createEventUsecase.execute({
+    duration: 0,
+    event_type: eventData.event_type,
+    rent: 0,
     name: eventData.name,
     location: eventData.location,
-    start_date: new Date(eventData.date),
-    end_date: new Date(eventData.date),
-    responsible: eventData.organizer,
+    event_date: new Date(eventData.date),
     max_capacity: eventData.max_capacity,
-    status: eventData.status as EventStatus || 'scheduled',
+    status: eventData.status as EventStatus || 'scheduled'
   });
 
   return {
     id: newEvent.id,
     name: newEvent.name,
+    description: newEvent.description,
     location: newEvent.location,
-    date: newEvent.start_date.toISOString(),
-    organizer: newEvent.responsible || 'Desconhecido',
+    event_type: newEvent.event_type,
+    date: newEvent.event_date.toISOString(),
     status: newEvent.status as EventStatus,
-    max_capacity: newEvent.max_capacity,
+    max_capacity: newEvent.max_capacity
   };
 }

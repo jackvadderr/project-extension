@@ -1,3 +1,4 @@
+// src/components/dashboard/events/EventForm.tsx
 "use client";
 
 import { EventFormData } from "@/types/EventFormData";
@@ -12,18 +13,14 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
   const [formData, setFormData] = useState<EventFormData>({
     name: "",
     description: "",
-    start_date: "",
-    end_date: "",
+    event_date: "",
+    event_time: "",
     location: "",
     max_capacity: 0,
-    responsible: "",
     event_type: "",
-    privacy: "public",
     duration: 0,
-    tags: "",
-    event_code: "",
-    budget: 0,
-    notes: "",
+    rent: 0,
+    status: "scheduled",
   });
 
   const handleChange = (
@@ -32,7 +29,7 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "max_capacity" || name === "duration" || name === "budget"
+      [name]: name === "max_capacity" || name === "duration"
         ? Number(value)
         : value,
     }));
@@ -82,32 +79,32 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Data de Início */}
+        {/* Data do Evento */}
         <div>
-          <label htmlFor="start_date" className="block text-sm font-medium text-gray-700">
-            Data de Início*
+          <label htmlFor="event_date" className="block text-sm font-medium text-gray-700">
+            Data do Evento*
           </label>
           <input
-            type="datetime-local"
-            id="start_date"
-            name="start_date"
-            value={formData.start_date}
+            type="date"
+            id="event_date"
+            name="event_date"
+            value={formData.event_date}
             onChange={handleChange}
             required
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
-        {/* Data de Término */}
+        {/* Hora do Evento */}
         <div>
-          <label htmlFor="end_date" className="block text-sm font-medium text-gray-700">
-            Data de Término*
+          <label htmlFor="event_time" className="block text-sm font-medium text-gray-700">
+            Hora do Evento*
           </label>
           <input
-            type="datetime-local"
-            id="end_date"
-            name="end_date"
-            value={formData.end_date}
+            type="time"
+            id="event_time"
+            name="event_time"
+            value={formData.event_time}
             onChange={handleChange}
             required
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -166,21 +163,6 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
         </div>
       </div>
 
-      {/* Responsável */}
-      <div>
-        <label htmlFor="responsible" className="block text-sm font-medium text-gray-700">
-          Responsável
-        </label>
-        <input
-          type="text"
-          id="responsible"
-          name="responsible"
-          value={formData.responsible}
-          onChange={handleChange}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Tipo de Evento */}
         <div>
@@ -202,84 +184,40 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
           </select>
         </div>
 
-        {/* Privacidade */}
+        {/* Orçamento */}
         <div>
-          <label htmlFor="privacy" className="block text-sm font-medium text-gray-700">
-            Privacidade
+          <label htmlFor="rent" className="block text-sm font-medium text-gray-700">
+            Orçamento (R\$)
           </label>
-          <select
-            id="privacy"
-            name="privacy"
-            value={formData.privacy}
+          <input
+            type="number"
+            id="rent"
+            name="rent"
+            min="0"
+            step="0.01"
+            value={formData.rent}
             onChange={handleChange}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="public">Público</option>
-            <option value="private">Privado</option>
-          </select>
+          />
         </div>
       </div>
 
-      {/* Tags */}
+      {/* Status */}
       <div>
-        <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
-          Tags (separadas por vírgula)
+        <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+          Status
         </label>
-        <input
-          type="text"
-          id="tags"
-          name="tags"
-          value={formData.tags}
+        <select
+          id="status"
+          name="status"
+          value={formData.status}
           onChange={handleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      {/* Código do Evento */}
-      <div>
-        <label htmlFor="event_code" className="block text-sm font-medium text-gray-700">
-          Código do Evento
-        </label>
-        <input
-          type="text"
-          id="event_code"
-          name="event_code"
-          value={formData.event_code}
-          onChange={handleChange}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      {/* Orçamento */}
-      <div>
-        <label htmlFor="budget" className="block text-sm font-medium text-gray-700">
-          Orçamento (R$)
-        </label>
-        <input
-          type="number"
-          id="budget"
-          name="budget"
-          min="0"
-          step="0.01"
-          value={formData.budget}
-          onChange={handleChange}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      {/* Notas */}
-      <div>
-        <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
-          Notas
-        </label>
-        <textarea
-          id="notes"
-          name="notes"
-          value={formData.notes}
-          onChange={handleChange}
-          rows={3}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        >
+          <option value="scheduled">Agendado</option>
+          <option value="completed">Concluído</option>
+          <option value="canceled">Cancelado</option>
+        </select>
       </div>
 
       {/* Botões de Ação */}

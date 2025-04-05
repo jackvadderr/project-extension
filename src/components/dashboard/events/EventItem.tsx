@@ -13,7 +13,6 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
       <td className="p-3">{event.name}</td>
       <td className="p-3">{event.location}</td>
       <td className="p-3">{formattedDate}</td>
-      <td className="p-3">{event.organizer}</td>
       <td className="p-3 text-center">{event.max_capacity}</td>
       <td className="p-3 text-center">
         <StatusIndicator status={event.status} />

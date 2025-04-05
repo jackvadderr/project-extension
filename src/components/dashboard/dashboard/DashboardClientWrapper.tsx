@@ -1,6 +1,5 @@
 'use client'
 
-import TodoList from '@/components/dashboard/dashboard/TodoList'
 import EventListCard from '@/components/dashboard/dashboard/cards/events/future/EventCard'
 import MiniEventCardPage from '@/components/dashboard/dashboard/MiniEventCardPage'
 import EventsByMonthChart from '@/components/dashboard/dashboard/charts/LineChart'
@@ -15,7 +14,7 @@ interface Props {
   eventsFutureFormatted: EventCardProps[];
 }
 
-export default function DashboardClient({
+export default function DashboardClientWrapper({
                                           onGoingEvents,
                                           eventsByMonthFormatted,
                                           eventsDistribuitionFormatted,

@@ -1,11 +1,17 @@
-export interface Event {
+export interface BaseEvent {
   id: number;
   name: string;
+}
+
+export interface Event extends BaseEvent{
   location: string;
   date: string;
-  organizer: string;
   status: EventStatus;
   max_capacity: number;
+  event_type: string;
+  description?: string;
+  duration?: number;
+  rent: number;
 }
 
 export type EventStatus = 'scheduled' | 'ongoing' | 'canceled' | 'completed' | 'indefinido';

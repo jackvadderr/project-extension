@@ -29,11 +29,14 @@ export default function EventListPage({
     try {
       const newEvent = await createEventAction({
         name: formData.name,
+        description: formData.description,
+        duration: formData.duration,
+        rent: formData.rent,
         location: formData.location,
-        date: formData.start_date,
-        organizer: formData.responsible,
+        date: formData.event_date,
+        event_type: formData.event_type,
         max_capacity: formData.max_capacity,
-        status: 'scheduled'
+        status: 'scheduled',
       });
 
       setEvents(prev => [...prev, newEvent]);

@@ -1,16 +1,13 @@
+// src/types/EventFormData.ts
 export interface EventFormData {
   name: string;
   description?: string;
-  start_date: string;
-  end_date: string;
+  event_date: string;
+  event_time: string;
   location: string;
   max_capacity: number;
-  responsible?: string;
-  event_type?: string;
-  privacy?: string;
+  event_type: string;
   duration?: number;
-  tags?: string;
-  event_code?: string;
-  budget?: number;
-  notes?: string;
+  rent: number;
+  status: string;
 }

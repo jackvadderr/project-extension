@@ -1,9 +1,7 @@
-// import DashboardClient from './DashboardClient';
 import { getEventosByFilter } from '@/actions/find-events-with-filters-action';
 import { getCountEventsByMonthAction } from '@/actions/events-by-month-action';
 import { getCountEventsDistribuition } from '@/actions/events-distribuition-action';
-import DashboardClient from '@/components/dashboard/dashboard/DashboardClient';
-// import { Event } from '@/types/EventCardProps';
+import DashboardClientWrapper from '@/components/dashboard/dashboard/DashboardClientWrapper';
 
 export default async function DashboardPage() {
   const onGoingEvents = await getEventosByFilter({ status: 'ongoing' }, 1, 10, { event_date: 'asc' });
@@ -12,7 +10,7 @@ export default async function DashboardPage() {
   const eventsFuture = await getEventosByFilter({ status: 'scheduled' }, 1, 3, { event_date: 'asc' });
 
   return (
-    <DashboardClient
+    <DashboardClientWrapper
       onGoingEvents={onGoingEvents}
       eventsByMonthFormatted={formatEventsByMonth(eventsByMonth)}
       eventsDistribuitionFormatted={formatEventsDistribuition(eventsDistribuition)}

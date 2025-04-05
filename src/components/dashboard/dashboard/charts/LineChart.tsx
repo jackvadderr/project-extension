@@ -1,6 +1,18 @@
 "use client"
 import { ResponsiveLine } from '@nivo/line'
 
+const fixedColors = [
+  "#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#A133FF",
+  "#33FFF5", "#FF8C33", "#8CFF33", "#338CFF", "#FF338C"
+];
+
+const getColor = (year: number, index: number) => {
+  if (index < fixedColors.length) {
+    return fixedColors[index];
+  }
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+};
+
 interface DataPoint {
   x: string;
   y: number | null;
@@ -28,7 +40,6 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
   const transformedData = data.flatMap(series => {
     const byYear: Record<number, DataPoint[]> = {};
 
-    // Agrupar os pontos por ano
     series.data.forEach(point => {
       if (!byYear[point.year]) {
         byYear[point.year] = [];
@@ -36,13 +47,11 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
       byYear[point.year].push(point);
     });
 
-    return Object.entries(byYear).map(([year, points]) => {
+    return Object.entries(byYear).map(([year, points], index) => {
       const yearNumber = parseInt(year);
 
-      // Criar um mapa dos meses já presentes
       const monthMap = new Map(points.map(p => [p.x, p.y]));
 
-      // Garantir que todos os meses apareçam
       const fullYearData = monthOrder.map(month => ({
         x: month,
         y: monthMap.get(month) ?? null,
@@ -52,7 +61,8 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
       return {
         id: `${series.id} ${year}`,
         data: fullYearData,
-        year: yearNumber
+        year: yearNumber,
+        color: getColor(yearNumber, index)
       };
     });
   });
@@ -74,7 +84,7 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
       colors={({ id }) => {
         const year = parseInt(id.split(' ').pop() || '0');
         if (!colorMap.has(year)) {
-          colorMap.set(year, getRandomColor());
+          colorMap.set(year, transformedData.find(d => d.year === year)?.color || getRandomColor());
         }
         return colorMap.get(year)!;
       }}

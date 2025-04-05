@@ -6,24 +6,43 @@ import EventList from "./EventList";
 import EventForm from "./EventForm";
 import AddEventButton from "./AddEventButton";
 import SearchBar from "./SearchBar";
+import BulkActions from '@/app/dashboard/events/BulkActions';
 
 interface EventListPageProps {
   initialEvents: Event[];
   createEventAction: (eventData: Omit<Event, 'id'>) => Promise<Event>;
+  updateEventAction: (id: string, eventData: Partial<Event>) => Promise<Event>;
+  deleteEventsAction: (ids: string[]) => Promise<void>;
 }
 
 export default function EventListPage({
                                         initialEvents,
-                                        createEventAction
+                                        createEventAction,
+                                        updateEventAction,
+                                        deleteEventsAction
                                       }: EventListPageProps) {
   const [events, setEvents] = useState(initialEvents);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const eventsPerPage = 10;
 
-  const handleAddEvent = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleAddEvent = () => {
+    setEditingEvent(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditEvent = (event: Event) => {
+    setEditingEvent(event);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingEvent(null);
+  };
 
   const handleCreateEvent = async (formData: any) => {
     try {
@@ -36,7 +55,7 @@ export default function EventListPage({
         date: formData.event_date,
         event_type: formData.event_type,
         max_capacity: formData.max_capacity,
-        status: 'scheduled',
+        status: formData.status || 'scheduled',
       });
 
       setEvents(prev => [...prev, newEvent]);
@@ -45,6 +64,85 @@ export default function EventListPage({
       console.error("Failed to create event:", error);
     }
   };
+
+  const handleUpdateEvent = async (formData: any) => {
+    if (!editingEvent) return;
+
+    try {
+      const updatedEvent = await updateEventAction(editingEvent.id, {
+        name: formData.name,
+        description: formData.description,
+        duration: formData.duration,
+        rent: formData.rent,
+        location: formData.location,
+        date: formData.event_date,
+        event_type: formData.event_type,
+        max_capacity: formData.max_capacity,
+        status: formData.status,
+      });
+
+      setEvents(prev =>
+        prev.map(event => event.id === updatedEvent.id ? updatedEvent : event)
+      );
+      handleCloseModal();
+    } catch (error) {
+      console.error("Failed to update event:", error);
+    }
+  };
+
+  const handleDeleteEvents = async () => {
+    if (selectedEvents.length === 0) return;
+
+    try {
+      await deleteEventsAction(selectedEvents);
+      setEvents(prev => prev.filter(event => !selectedEvents.includes(String(event.id))));
+      setSelectedEvents([]);
+    } catch (error) {
+      console.error("Failed to delete events:", error);
+    }
+  };
+
+  const handleMarkAsCompleted = async () => {
+    if (selectedEvents.length === 0) return;
+
+    try {
+      const updatedEvents = await Promise.all(
+        selectedEvents.map(id =>
+          updateEventAction(id, { status: 'completed' })
+        )
+      );
+
+      setEvents(prev =>
+        prev.map(event => {
+          const updatedEvent = updatedEvents.find(e => e.id === event.id);
+          return updatedEvent || event;
+        })
+      );
+      setSelectedEvents([]);
+    } catch (error) {
+      console.error("Failed to mark events as completed:", error);
+    }
+  };
+
+  const handleSelectEvent = (id: string, isSelected: boolean) => {
+    setSelectedEvents(prev =>
+      isSelected
+        ? [...prev, id]
+        : prev.filter(eventId => eventId !== id)
+    );
+  };
+
+  const handleSelectAll = (isSelected: boolean) => {
+    const currentPageIds = currentEvents.map(event => event.id);
+
+    if (isSelected) {
+      setSelectedEvents(prev => [...new Set([...prev, ...currentPageIds])]);
+    } else {
+      setSelectedEvents(prev => prev.filter(id => !currentPageIds.includes(id)));
+    }
+  };
+
+
 
   const filteredEvents = events.filter(event =>
     event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -56,6 +154,9 @@ export default function EventListPage({
   const currentEvents = filteredEvents.slice(indexOfFirstEvent, indexOfLastEvent);
 
   const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
+
+  const isAllSelected = currentEvents.length > 0 &&
+    currentEvents.every(event => selectedEvents.includes(event.id));
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -75,13 +176,32 @@ export default function EventListPage({
         <SearchBar
           placeholder="Buscar evento..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1);
+          }}
         />
         <AddEventButton onClick={handleAddEvent} />
       </div>
 
+      {selectedEvents.length > 0 && (
+        <BulkActions
+          onDelete={handleDeleteEvents}
+          onMarkAsCompleted={handleMarkAsCompleted}
+          selectedCount={selectedEvents.length}
+        />
+      )}
+
       {currentEvents.length > 0 ? (
-        <EventList events={currentEvents} />
+        <EventList
+          events={currentEvents}
+          onEdit={handleEditEvent}
+          selectedEvents={selectedEvents}
+          onSelectEvent={handleSelectEvent}
+          onSelectAll={handleSelectAll}
+          isAllSelected={currentEvents.length > 0 &&
+            currentEvents.every(event => selectedEvents.includes(String(event.id)))}
+        />
       ) : (
         <p>Nenhum evento encontrado.</p>
       )}
@@ -90,7 +210,7 @@ export default function EventListPage({
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
-          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
+          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors disabled:opacity-50"
         >
           Anterior
         </button>
@@ -98,27 +218,41 @@ export default function EventListPage({
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors"
+          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors disabled:opacity-50"
         >
           Próxima
         </button>
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Cadastrar Evento</h2>
+              <h2 className="text-xl font-bold">
+                {editingEvent ? "Editar Evento" : "Cadastrar Evento"}
+              </h2>
               <button
                 onClick={handleCloseModal}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 text-2xl"
               >
                 &times;
               </button>
             </div>
             <EventForm
               onCancel={handleCloseModal}
-              onSubmit={handleCreateEvent}
+              onSubmit={editingEvent ? handleUpdateEvent : handleCreateEvent}
+              initialData={editingEvent ? {
+                name: editingEvent.name,
+                description: editingEvent.description,
+                event_date: editingEvent.date,
+                event_time: "",
+                location: editingEvent.location,
+                max_capacity: editingEvent.max_capacity,
+                event_type: editingEvent.event_type,
+                duration: editingEvent.duration,
+                rent: editingEvent.rent,
+                status: editingEvent.status,
+              } : undefined}
             />
           </div>
         </div>

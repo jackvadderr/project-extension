@@ -4,7 +4,7 @@ import { getCountEventsDistribuition } from '@/actions/events-distribuition-acti
 import DashboardClientWrapper from '@/components/dashboard/dashboard/DashboardClientWrapper';
 
 export default async function DashboardPage() {
-  const onGoingEvents = await getEventosByFilter({ status: 'ongoing' }, 1, 10, { event_date: 'asc' });
+  const onGoingEvents = await getEventosByFilter({ status: 'ongoing' }, 1, 1, { event_date: 'asc' });
   const eventsByMonth = await getCountEventsByMonthAction(1970, 2025, 1, 12);
   const eventsDistribuition = await getCountEventsDistribuition();
   const eventsFuture = await getEventosByFilter({ status: 'scheduled' }, 1, 3, { event_date: 'asc' });

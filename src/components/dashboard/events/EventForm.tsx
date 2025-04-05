@@ -2,14 +2,15 @@
 "use client";
 
 import { EventFormData } from "@/types/EventFormData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface EventFormProps {
   onCancel: () => void;
   onSubmit: (formData: EventFormData) => Promise<void>;
+  initialData?: EventFormData;
 }
 
-export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
+export default function EventForm({ onCancel, onSubmit, initialData }: EventFormProps) {
   const [formData, setFormData] = useState<EventFormData>({
     name: "",
     description: "",
@@ -23,13 +24,30 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
     status: "scheduled",
   });
 
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        name: initialData.name,
+        description: initialData.description,
+        event_date: initialData.event_date,
+        event_time: initialData.event_time || "",
+        location: initialData.location,
+        max_capacity: initialData.max_capacity,
+        event_type: initialData.event_type,
+        duration: initialData.duration,
+        rent: initialData.rent,
+        status: initialData.status,
+      });
+    }
+  }, [initialData]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "max_capacity" || name === "duration"
+      [name]: name === "max_capacity" || name === "duration" || name === "rent"
         ? Number(value)
         : value,
     }));
@@ -41,12 +59,7 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-4 max-w-2xl mx-auto p-4 bg-white shadow-md rounded-lg max-h-[calc(100vh-8rem)] overflow-y-auto"
-    >
-      <h2 className="text-2xl font-bold text-center mb-4">Cadastrar Evento</h2>
-
+    <form onSubmit={handleSubmit} className="space-y-4">
       {/* Nome do Evento */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -220,7 +233,6 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
         </select>
       </div>
 
-      {/* Botões de Ação */}
       <div className="flex justify-end gap-4 pt-4">
         <button
           type="button"
@@ -233,7 +245,7 @@ export default function EventForm({ onCancel, onSubmit }: EventFormProps) {
           type="submit"
           className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
-          Cadastrar Evento
+          {initialData ? "Atualizar Evento" : "Cadastrar Evento"}
         </button>
       </div>
     </form>

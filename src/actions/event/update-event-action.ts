@@ -2,12 +2,12 @@
 
 import EventRepository from '@/data/repository/impl/EventRepository';
 import { Event, EventStatus } from '@/types/Event';
-import { UpdateEventUsecase } from '@/domain/usecase/UpdateEventUsecase';
+import { UpdateEventUsecase } from '@/domain/usecase/Events/UpdateEventUsecase';
 import { Prisma } from '@prisma/client';
 
 export async function updateEventAction(id: number, eventData: Partial<Prisma.EventUpdateInput>): Promise<Event> {
-  const eventRepository = new EventRepository();
-  const usecase = new UpdateEventUsecase(eventRepository);
+  const repository = new EventRepository();
+  const usecase = new UpdateEventUsecase(repository);
 
   const newEvent = await usecase.execute(
     id,

@@ -1,11 +1,11 @@
 "use server";
 
 import EventRepository from '@/data/repository/impl/EventRepository';
-import { CountEventDistribuitionUsecase } from '@/domain/usecase/CountEventDistribuitionUsecase';
+import { CountEventDistribuitionUsecase } from '@/domain/usecase/Events/CountEventDistribuitionUsecase';
 
 export async function getCountEventsDistribuition(): Promise<{ event_type: string, count: number }[]> {
-  const eventRepository = new EventRepository();
-  const usecase = new CountEventDistribuitionUsecase(eventRepository);
+  const repository = new EventRepository();
+  const usecase = new CountEventDistribuitionUsecase(repository);
 
   const countEvents = await usecase.execute();
 

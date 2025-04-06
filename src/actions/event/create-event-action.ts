@@ -1,14 +1,14 @@
 "use server";
 
 import EventRepository from '@/data/repository/impl/EventRepository';
-import { CreateEventUsecase } from '@/domain/usecase/CreateEventUseCase';
+import { CreateEventUsecase } from '@/domain/usecase/Events/CreateEventUseCase';
 import { Event, EventStatus } from '@/types/Event';
 
 export async function createEventAction(eventData: Omit<Event, 'id'>): Promise<Event> {
-  const eventRepository = new EventRepository();
-  const createEventUsecase = new CreateEventUsecase(eventRepository);
+  const repository = new EventRepository();
+  const usecase = new CreateEventUsecase(repository);
 
-  const newEvent = await createEventUsecase.execute({
+  const newEvent = await usecase.execute({
     duration: 0,
     event_type: eventData.event_type,
     rent: parseFloat(String(eventData.rent)),

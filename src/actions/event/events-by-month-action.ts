@@ -1,7 +1,7 @@
 "use server";
 
 import EventRepository from '@/data/repository/impl/EventRepository';
-import { CountEventsInMonthRangeUsecase } from '@/domain/usecase/CountEventsInMonthRangeUsecase';
+import { CountEventsInMonthRangeUsecase } from '@/domain/usecase/Events/CountEventsInMonthRangeUsecase';
 
 export async function getCountEventsByMonthAction(
   startYear: number,
@@ -9,8 +9,8 @@ export async function getCountEventsByMonthAction(
   startMonth: number,
   endMonth: number
 ): Promise<{ month: number, count: number, year: number }[]> {
-  const eventRepository = new EventRepository();
-  const usecase = new CountEventsInMonthRangeUsecase(eventRepository);
+  const repository = new EventRepository();
+  const usecase = new CountEventsInMonthRangeUsecase(repository);
 
   const countEvents = await usecase.execute(
     startYear,

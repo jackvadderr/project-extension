@@ -94,3 +94,9 @@ model Event {
   duration         Float
   rent             Float
 }
+
+model Task {
+  id        String  @id @default(cuid())
+  text      String
+  completed Boolean @default(false)
+}

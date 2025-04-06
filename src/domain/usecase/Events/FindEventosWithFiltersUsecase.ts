@@ -2,10 +2,10 @@ import EventRepository from '@/data/repository/impl/EventRepository';
 import { Event, Prisma } from '@prisma/client';
 
 export class FindEventsWithFiltersUsecase {
-  private eventRepository: EventRepository;
+  private repository: EventRepository;
 
-  constructor(eventRepository: EventRepository) {
-    this.eventRepository = eventRepository;
+  constructor(repository: EventRepository) {
+    this.repository = repository;
   }
 
   async execute(
@@ -14,7 +14,7 @@ export class FindEventsWithFiltersUsecase {
     pageSize: number,
     orderBy: Prisma.EventOrderByWithRelationInput,
   ): Promise<Event[]> {
-    return await this.eventRepository.findEventsWithFilters(
+    return await this.repository.findEventsWithFilters(
       filters,
       page,
       pageSize,

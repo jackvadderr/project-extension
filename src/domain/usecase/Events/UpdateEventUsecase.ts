@@ -2,13 +2,13 @@ import EventRepository from '@/data/repository/impl/EventRepository';
 import { Event, Prisma } from '@prisma/client';
 
 export class UpdateEventUsecase {
-  private eventRepository: EventRepository;
+  private repository: EventRepository;
 
-  constructor(eventRepository: EventRepository) {
-    this.eventRepository = eventRepository;
+  constructor(repository: EventRepository) {
+    this.repository = repository;
   }
 
   async execute(id: number, eventData: Partial<Prisma.EventUpdateInput>): Promise<Event | null> {
-    return await this.eventRepository.updateEvent(id, eventData);
+    return await this.repository.updateEvent(id, eventData);
   }
 }

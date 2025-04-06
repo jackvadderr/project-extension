@@ -1,8 +1,8 @@
 import EventListPage from '@/components/dashboard/events/EventListPage';
-import { getEvents } from '@/actions/list-all-events-action';
-import { createEventAction } from '@/actions/create-event-action';
-import { deleteEventsAction } from '@/actions/delete-event-action';
-import { updateEventAction } from '@/actions/update-event-action';
+import { getEvents } from '@/actions/event/list-all-events-action';
+import { createEventAction } from '@/actions/event/create-event-action';
+import { deleteEventsAction } from '@/actions/event/delete-event-action';
+import { updateEventAction } from '@/actions/event/update-event-action';
 
 export default async function DashboardEventsPage() {
   try {

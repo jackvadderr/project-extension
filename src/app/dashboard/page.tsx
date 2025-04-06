@@ -1,6 +1,6 @@
-import { getEventosByFilter } from '@/actions/find-events-with-filters-action';
-import { getCountEventsByMonthAction } from '@/actions/events-by-month-action';
-import { getCountEventsDistribuition } from '@/actions/events-distribuition-action';
+import { getEventosByFilter } from '@/actions/event/find-events-with-filters-action';
+import { getCountEventsByMonthAction } from '@/actions/event/events-by-month-action';
+import { getCountEventsDistribuition } from '@/actions/event/events-distribuition-action';
 import DashboardClientWrapper from '@/components/dashboard/dashboard/DashboardClientWrapper';
 
 export default async function DashboardPage() {

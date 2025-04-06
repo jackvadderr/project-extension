@@ -1,10 +1,10 @@
 import EventRepository from '@/data/repository/impl/EventRepository';
 
 export class CountEventsInMonthRangeUsecase {
-  private eventRepository: EventRepository;
+  private repository: EventRepository;
 
-  constructor(eventRepository: EventRepository) {
-    this.eventRepository = eventRepository;
+  constructor(repository: EventRepository) {
+    this.repository = repository;
   }
 
   async execute(
@@ -13,7 +13,7 @@ export class CountEventsInMonthRangeUsecase {
     startMonth: number,
     endMonth: number
   ): Promise<{ month: number; count: number; year: number }[]> {
-    return await this.eventRepository.countEventsInYearRangeByMonth(
+    return await this.repository.countEventsInYearRangeByMonth(
       startYear,
       endYear,
       startMonth,

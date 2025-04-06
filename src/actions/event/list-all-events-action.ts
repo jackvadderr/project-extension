@@ -1,7 +1,7 @@
 "use server";
 
 import EventRepository from '@/data/repository/impl/EventRepository';
-import { ListAllEventsUsecase } from '@/domain/usecase/ListAllEventsUseCase';
+import { ListAllEventsUsecase } from '@/domain/usecase/Events/ListAllEventsUseCase';
 import { Event, EventStatus } from '@/types/Event';
 
 export async function getEvents(): Promise<{
@@ -17,10 +17,10 @@ export async function getEvents(): Promise<{
   updated_at: any;
   duration: any
 }[]> {
-  const eventRepository = new EventRepository();
-  const findAllEventsUsecase = new ListAllEventsUsecase(eventRepository);
+  const repository = new EventRepository();
+  const usecase = new ListAllEventsUsecase(repository);
 
-  const rawEvents = await findAllEventsUsecase.execute();
+  const rawEvents = await usecase.execute();
 
   return rawEvents.map((event) => ({
     id: event.id,

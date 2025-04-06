@@ -2,14 +2,14 @@ import EventRepository from "@/data/repository/impl/EventRepository";
 import { Event } from "@prisma/client";
 
 export class ListAllEventsUsecase {
-    private eventRepository: EventRepository;
+    private repository: EventRepository;
 
-    constructor(eventRepository: EventRepository) {
-        this.eventRepository = eventRepository;
+    constructor(repository: EventRepository) {
+        this.repository = repository;
     }
 
     async execute(): Promise<Event[]> {
-        const events = await this.eventRepository.findAllEvents();
+        const events = await this.repository.findAllEvents();
         return events;
     }
 }

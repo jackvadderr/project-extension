@@ -1,7 +1,7 @@
 "use server";
 
 import EventRepository from '@/data/repository/impl/EventRepository';
-import { FindEventsWithFiltersUsecase } from '@/domain/usecase/FindEventosWithFiltersUsecase';
+import { FindEventsWithFiltersUsecase } from '@/domain/usecase/Events/FindEventosWithFiltersUsecase';
 import { Event, EventStatus } from '@/types/Event';
 import { Prisma } from '@prisma/client';
 
@@ -19,10 +19,10 @@ export async function getEventosByFilter(
   status: "scheduled" | "ongoing" | "canceled" | "completed" | "indefinido" | string;
   max_capacity: number
 }[]> {
-  const eventRepository = new EventRepository();
-  const findEventsWithFiltersUsecase = new FindEventsWithFiltersUsecase(eventRepository);
+  const repository = new EventRepository();
+  const usecase = new FindEventsWithFiltersUsecase(repository);
 
-  const events = await findEventsWithFiltersUsecase.execute(filters, page, pageSize, orderBy);
+  const events = await usecase.execute(filters, page, pageSize, orderBy);
 
   return events.map((event) => ({
     id: event.id,

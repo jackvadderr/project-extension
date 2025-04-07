@@ -5,5 +5,5 @@ interface EventsLayoutProps {
 }
 
 export default function EventsLayout({ children }: EventsLayoutProps) {
-  return <div className="min-h-screen bg-gray-100">{children}</div>;
+  return <div className="min-h-screen bg-gray-100 rounded-2xl">{children}</div>;
 }

@@ -106,7 +106,7 @@ export default function EventListPage({
     if (selectedEvents.length === 0) return;
 
     try {
-      const updatedEvents = await Promise.all(
+      const updatedEvents = await  mise.all(
         selectedEvents.map(id =>
           updateEventAction(id, { status: 'completed' })
         )
@@ -172,15 +172,17 @@ export default function EventListPage({
 
   return (
     <div className="p-5">
-      <div className="flex justify-between items-center mb-5">
-        <SearchBar
-          placeholder="Buscar evento..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrentPage(1);
-          }}
-        />
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
+        <div className="w-full sm:w-auto flex-1">
+          <SearchBar
+            placeholder="Buscar por nome ou localização..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
         <AddEventButton onClick={handleAddEvent} />
       </div>
 
@@ -210,7 +212,7 @@ export default function EventListPage({
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
-          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors disabled:opacity-50"
+          className="bg-gray-500 text-white px-4 py-2 rounded-xl hover:bg-gray-600 transition-colors disabled:opacity-50"
         >
           Anterior
         </button>
@@ -218,7 +220,7 @@ export default function EventListPage({
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors disabled:opacity-50"
+          className="bg-gray-500 text-white px-4 py-2 rounded-xl hover:bg-gray-600 transition-colors disabled:opacity-50"
         >
           Próxima
         </button>

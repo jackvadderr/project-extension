@@ -74,13 +74,19 @@ const Drawer = () => {
                   onClick={() => handleNavigation("/dashboard/financer")}
                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 transition"
                 >
-                  <DollarSign size={20} /> Financeiro
+                  <DollarSign size={20} /> Relatório
                 </button>
                 <button
                   onClick={() => handleNavigation("/dashboard/events")}
                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 transition"
                 >
                   <Calendar size={20} /> Eventos
+                </button>
+                <button
+                  onClick={() => handleNavigation("/dashboard/clients")}
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 transition"
+                >
+                  <DollarSign size={20} /> Clientes
                 </button>
               </nav>
 

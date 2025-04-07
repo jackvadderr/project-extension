@@ -23,11 +23,13 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header session={session} />
-        <main className="flex-grow p-4 bg-gray-50">{children}</main>
+        <main className="flex-grow p-6 bg-gray-50">
+          {children}
+        </main>
         <Footer />
       </div>
     </div>
@@ -36,19 +38,20 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
 
 const Header = ({ session }: { session: any }) => {
   return (
-    <header className="bg-blue-500 p-4 text-white flex flex-col md:flex-row justify-between items-center border-b w-full">
-      {/* <Button className="mb-2 md:mb-0">Criar evento</Button> */}
-        <h1 className="text-2xl font-bold"></h1>
-      <div className="flex items-center">
-        <p className="mr-4 text-sm md:text-base">Logado como: {session.user?.email}</p>
-        <SignOut />
+    <header className="bg-[#1c3681] p-4 text-white flex flex-col md:flex-row justify-between items-center w-full shadow-sm">
+      <h1 className="text-xl font-medium flex-1 text-center"></h1>
+      <div className="flex items-center gap-4 mt-2 md:mt-0">
+        <p className="text-xs md:text-sm text-blue-100 opacity-90">
+          {session.user?.email}
+        </p>
+        <SignOut className="bg-[#2c3575] hover:bg-[#1c3681] px-3 py-1.5 rounded-full text-xs font-medium shadow-xs border border-[#4367b6]" />
       </div>
     </header>
   );
 };
 
 const Footer = () => (
-  <footer className="bg-blue-500 p-4 text-white text-center w-full">
+  <footer className="bg-[#1c3681] p-3 text-white text-center w-full text-xs">
     <p>&copy; {COPYRIGHT_YEAR} {APP_NAME}. Todos os direitos reservados.</p>
   </footer>
 );

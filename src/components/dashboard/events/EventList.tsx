@@ -1,4 +1,3 @@
-// src/components/dashboard/events/EventList.tsx
 "use client";
 
 import { Checkbox } from '@/components/ui/checkbox';
@@ -34,8 +33,8 @@ export default function EventList({
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+      <table className="min-w-full border-separate" style={{ borderSpacing: '0 0.5rem' }}>
+        <thead className="">
         <tr>
           <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
             <Checkbox
@@ -60,10 +59,11 @@ export default function EventList({
           </th>
         </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="">
         {events.map((event) => (
-          <tr key={event.id} className="hover:bg-gray-50">
-            <td className="px-6 py-4 whitespace-nowrap">
+          <tr key={event.id} className="group">
+            <td className={`px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50 
+                first:rounded-l-xl first:border-l first:border-gray-200`}>
               <Checkbox
                 checked={selectedEvents.includes(event.id)}
                 onCheckedChange={(checked) =>
@@ -71,23 +71,24 @@ export default function EventList({
                 }
               />
             </td>
-            <td className="px-6 py-4 whitespace-nowrap">
+            <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50">
               <div className="text-sm font-medium text-gray-900">{event.name}</div>
               <div className="text-sm text-gray-500">{event.event_type}</div>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap">
+            <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50">
               <div className="text-sm text-gray-900">{new Date(event.date).toLocaleDateString()}</div>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 bg-white group-hover:bg-gray-50">
               {event.location}
             </td>
-            <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(event.status)}`}>
+            <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50">
+                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(event.status)}`}>
                   {event.status === 'completed' ? 'Concluído' :
                     event.status === 'canceled' ? 'Cancelado' : 'Agendado'}
                 </span>
             </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium bg-white group-hover:bg-gray-50
+                last:rounded-r-xl last:border-r last:border-gray-200`}>
               <button
                 onClick={() => onEdit(event)}
                 className="text-blue-600 hover:text-blue-900 mr-3"

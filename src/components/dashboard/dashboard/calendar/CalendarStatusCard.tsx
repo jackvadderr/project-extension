@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import {
   format, startOfMonth, endOfMonth, eachDayOfInterval,
   getDay, isSameDay, addMonths, subMonths
@@ -15,13 +15,16 @@ interface Props {
 
 export default function SimpleCalendarCard({ scheduledDates, blockedDates }: Props) {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const router = useRouter();
+  const [showSelector, setShowSelector] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth());
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
 
   const start = startOfMonth(currentDate);
   const end = endOfMonth(currentDate);
   const days = eachDayOfInterval({ start, end });
 
   const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+  const months = [...Array(12).keys()].map(m => format(new Date(2000, m), 'MMMM', { locale: ptBR }));
 
   const getStatus = (day: Date) => {
     const iso = format(day, 'yyyy-MM-dd');
@@ -34,30 +37,70 @@ export default function SimpleCalendarCard({ scheduledDates, blockedDates }: Pro
     redirect("/dashboard/events");
   };
 
-  // Cálculo de porcentagem de dias agendados
-  const totalDays = days.length;
+  const handleMonthYearChange = () => {
+    setCurrentDate(new Date(selectedYear, selectedMonth, 1));
+    setShowSelector(false);
+  };
+
   const scheduledCount = days.filter(day =>
     scheduledDates.includes(format(day, 'yyyy-MM-dd'))
   ).length;
-  const scheduledPercentage = Math.round((scheduledCount / totalDays) * 100);
+  const scheduledPercentage = Math.round((scheduledCount / days.length) * 100);
 
   return (
     <div className="bg-white shadow rounded-lg p-4 w-full max-w-md">
-      {/* Topo do card */}
       <div className="flex justify-between items-center mb-2">
         <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="text-gray-500 hover:text-gray-700">&lt;</button>
+
         <div className="flex flex-col items-center text-center flex-1">
-          <h2 className="text-base font-semibold leading-5">
-            {format(currentDate, 'MMMM yyyy', { locale: ptBR })}
-          </h2>
+          {showSelector ? (
+            <div className="flex gap-2">
+              <select
+                value={selectedMonth}
+                onChange={e => setSelectedMonth(Number(e.target.value))}
+                className="text-sm border rounded px-1 py-0.5"
+              >
+                {months.map((monthName, index) => (
+                  <option key={monthName} value={index}>{monthName}</option>
+                ))}
+              </select>
+              <select
+                value={selectedYear}
+                onChange={e => setSelectedYear(Number(e.target.value))}
+                className="text-sm border rounded px-1 py-0.5"
+              >
+                {Array.from({ length: 20 }, (_, i) => {
+                  const year = new Date().getFullYear() - 10 + i;
+                  return <option key={year} value={year}>{year}</option>;
+                })}
+              </select>
+              <button
+                onClick={handleMonthYearChange}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                OK
+              </button>
+            </div>
+          ) : (
+            <button onClick={() => {
+              setSelectedMonth(currentDate.getMonth());
+              setSelectedYear(currentDate.getFullYear());
+              setShowSelector(true);
+            }}>
+              <h2 className="text-base font-semibold leading-5">
+                {format(currentDate, 'MMMM yyyy', { locale: ptBR })}
+              </h2>
+            </button>
+          )}
           <span className="text-xs text-gray-500">
             {scheduledPercentage}% do mês agendado
           </span>
         </div>
+
         <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="text-gray-500 hover:text-gray-700">&gt;</button>
       </div>
 
-      {/* Dias da semana */}
+      {/* Cabeçalho dos dias da semana */}
       <div className="grid grid-cols-7 text-center text-sm font-medium text-gray-500 mb-2">
         {weekDays.map(day => <div key={day}>{day}</div>)}
       </div>
@@ -79,7 +122,7 @@ export default function SimpleCalendarCard({ scheduledDates, blockedDates }: Pro
           return (
             <div key={day.toISOString()} className="p-1">
               <button
-                onClick={() => handleDayClick()}
+                onClick={handleDayClick}
                 disabled={status === 'blocked'}
                 className={`${baseClasses} ${bgClass} ${
                   status !== 'blocked' ? 'hover:opacity-80 cursor-pointer' : 'cursor-not-allowed'

@@ -59,7 +59,7 @@ export default function EventForm({ onCancel, onSubmit, initialData }: EventForm
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-md ">
       {/* Nome do Evento */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700">

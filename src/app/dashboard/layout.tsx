@@ -38,17 +38,20 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
 
 const Header = ({ session }: { session: any }) => {
   return (
-    <header className="bg-[#1c3681] p-4 text-white flex flex-col md:flex-row justify-between items-center w-full shadow-sm">
-      <h1 className="text-xl font-medium flex-1 text-center"></h1>
-      <div className="flex items-center gap-4 mt-2 md:mt-0">
-        <p className="text-xs md:text-sm text-blue-100 opacity-90">
+    <header className="bg-[#1c3681] p-4 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-sm w-full">
+      <h1 className="text-lg font-semibold text-center md:text-left flex-1">
+      </h1>
+
+      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full md:w-auto">
+        <p className="text-xs sm:text-sm text-blue-100 opacity-90 text-center sm:text-left break-words">
           {session.user?.email}
         </p>
-        <SignOut className="bg-[#2c3575] hover:bg-[#1c3681] px-3 py-1.5 rounded-full text-xs font-medium shadow-xs border border-[#4367b6]" />
+        <SignOut className="bg-[#2c3575] hover:bg-[#1c3681] px-4 py-1.5 rounded-full text-xs font-medium shadow-sm border border-[#4367b6]" />
       </div>
     </header>
   );
 };
+
 
 const Footer = () => (
   <footer className="bg-[#1c3681] p-3 text-white text-center w-full text-xs">

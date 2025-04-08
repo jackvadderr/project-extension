@@ -106,7 +106,7 @@ export default function EventListPage({
     if (selectedEvents.length === 0) return;
 
     try {
-      const updatedEvents = await  mise.all(
+      const updatedEvents = await mise.all(
         selectedEvents.map(id =>
           updateEventAction(id, { status: 'completed' })
         )
@@ -170,8 +170,9 @@ export default function EventListPage({
     }
   };
 
+
   return (
-    <div className="p-5">
+    <div className="p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
         <div className="w-full sm:w-auto flex-1">
           <SearchBar
@@ -187,11 +188,13 @@ export default function EventListPage({
       </div>
 
       {selectedEvents.length > 0 && (
-        <BulkActions
-          onDelete={handleDeleteEvents}
-          onMarkAsCompleted={handleMarkAsCompleted}
-          selectedCount={selectedEvents.length}
-        />
+        <div className="mb-4">
+          <BulkActions
+            onDelete={handleDeleteEvents}
+            onMarkAsCompleted={handleMarkAsCompleted}
+            selectedCount={selectedEvents.length}
+          />
+        </div>
       )}
 
       {currentEvents.length > 0 ? (
@@ -201,26 +204,25 @@ export default function EventListPage({
           selectedEvents={selectedEvents}
           onSelectEvent={handleSelectEvent}
           onSelectAll={handleSelectAll}
-          isAllSelected={currentEvents.length > 0 &&
-            currentEvents.every(event => selectedEvents.includes(String(event.id)))}
+          isAllSelected={isAllSelected}
         />
       ) : (
-        <p>Nenhum evento encontrado.</p>
+        <p className="text-center mt-4">Nenhum evento encontrado.</p>
       )}
 
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
         <button
           onClick={handlePreviousPage}
           disabled={currentPage === 1}
-          className="bg-gray-500 text-white px-4 py-2 rounded-xl hover:bg-gray-600 transition-colors disabled:opacity-50"
+          className="bg-gray-500 text-white px-4 py-2 rounded-xl hover:bg-gray-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
         >
           Anterior
         </button>
-        <span>Página {currentPage} de {totalPages}</span>
+        <span className="text-center">Página {currentPage} de {totalPages}</span>
         <button
           onClick={handleNextPage}
           disabled={currentPage === totalPages}
-          className="bg-gray-500 text-white px-4 py-2 rounded-xl hover:bg-gray-600 transition-colors disabled:opacity-50"
+          className="bg-gray-500 text-white px-4 py-2 rounded-xl hover:bg-gray-600 transition-colors disabled:opacity-50 w-full sm:w-auto"
         >
           Próxima
         </button>
@@ -228,7 +230,7 @@ export default function EventListPage({
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">
                 {editingEvent ? "Editar Evento" : "Cadastrar Evento"}
@@ -259,6 +261,7 @@ export default function EventListPage({
           </div>
         </div>
       )}
+
     </div>
   );
 }

@@ -1,9 +1,7 @@
-// src/app/dashboard/clients/page.tsx
-
 import CustomerListPage from '../../../components/dashboard/customers/CustomerListPage';
 import { getCustomers } from '@/actions/clients/list-all-customer-action';
 import { createCustomerAction } from '@/actions/clients/create-customer-action';
-import { updateEventAction } from '@/actions/clients/update-customer-action';
+import { updateCustomerAction } from '@/actions/clients/update-customer-action';
 import { deleteCustomerAction } from '@/actions/clients/delete-customer-action';
 
 export default async function DashboardClientsPage() {
@@ -13,7 +11,7 @@ export default async function DashboardClientsPage() {
       <CustomerListPage
         initialClients={clients}
         createClientAction={createCustomerAction}
-        updateClientAction={updateEventAction}
+        updateClientAction={updateCustomerAction}
         deleteClientsAction={deleteCustomerAction}
       />
     );

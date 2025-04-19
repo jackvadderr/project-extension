@@ -71,7 +71,7 @@ const Drawer = () => {
                   <Home size={20} /> Dashboard
                 </button>
                 <button
-                  onClick={() => handleNavigation("/dashboard/financer")}
+                  onClick={() => handleNavigation("/dashboard/analysis")}
                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 transition"
                 >
                   <DollarSign size={20} /> Relatório

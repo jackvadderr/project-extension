@@ -1,42 +1,52 @@
 "use server";
 
-import EventRepository from '@/data/repository/impl/EventRepository';
-import { Event, EventStatus } from '@/types/Event';
-import { UpdateEventUsecase } from '@/domain/usecase/Events/UpdateEventUsecase';
 import { Prisma } from '@prisma/client';
+import { UpdateCustomerUsecase } from '@/domain/usecase/Clients/UpdateCustomerUsecase';
+import CustomerRepository from '@/data/repository/impl/CustomerRepository';
+import { CustomerStatus } from '@/types/Customer';
 
-export async function updateEventAction(id: number, eventData: Partial<Prisma.EventUpdateInput>): Promise<Event> {
-  const repository = new EventRepository();
-  const usecase = new UpdateEventUsecase(repository);
+export async function updateCustomerAction(id: string, data: Partial<Prisma.CustomerUpdateInput>): Promise<{
+  id: string;
+  name: string;
+  cpf: string;
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  status: CustomerStatus;
+  createdAt: Date;
+  updatedAt: Date;
+}> {
+  const repository = new CustomerRepository();
+  const usecase = new UpdateCustomerUsecase(repository);
 
-  const newEvent = await usecase.execute(
+  const newCustomer = await usecase.execute(
     id,
     {
-      duration: 0,
-      event_type: eventData.event_type,
-      rent: parseFloat(String(eventData.rent)),
-      name: eventData.name,
-      location: eventData.location,
-      event_date: eventData.event_date,
-      max_capacity: eventData.max_capacity,
-      status: eventData.status as EventStatus || 'scheduled'
+      name: data.name,
+      cpf: data.cpf,
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      status: data.status as CustomerStatus,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      events: data.events,
     }
   );
 
-  if (!newEvent) {
+  if (!newCustomer) {
     throw new Error('Failed to update event');
   }
 
   return {
-    id: newEvent.id,
-    name: newEvent.name,
-    description: newEvent.description ?? '',
-    location: newEvent.location,
-    duration: 0,
-    rent: 0,
-    event_type: newEvent.event_type ?? '',
-    date: newEvent.event_date.toISOString(),
-    status: newEvent.status as EventStatus,
-    max_capacity: newEvent.max_capacity
+    id: newCustomer.id,
+    name: newCustomer.name,
+    cpf: newCustomer.cpf,
+    phone: newCustomer.phone || "",
+    email: newCustomer.email || "",
+    address: newCustomer.address || "",
+    status: newCustomer.status as CustomerStatus,
+    createdAt: newCustomer.createdAt,
+    updatedAt: newCustomer.updatedAt,
   };
 }

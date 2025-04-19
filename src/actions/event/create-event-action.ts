@@ -16,7 +16,12 @@ export async function createEventAction(eventData: Omit<Event, 'id'>): Promise<E
     location: eventData.location,
     event_date: new Date(eventData.date),
     max_capacity: eventData.max_capacity,
-    status: eventData.status as EventStatus || 'scheduled'
+    status: eventData.status as EventStatus || 'scheduled',
+    client: {
+      connect: {
+        id: eventData.client_id,
+      },
+    }
   });
 
   return {
@@ -29,6 +34,7 @@ export async function createEventAction(eventData: Omit<Event, 'id'>): Promise<E
     event_type: newEvent.event_type,
     date: newEvent.event_date.toISOString(),
     status: newEvent.status as EventStatus,
-    max_capacity: newEvent.max_capacity
+    max_capacity: newEvent.max_capacity,
+    client_id: newEvent.clientId,
   };
 }

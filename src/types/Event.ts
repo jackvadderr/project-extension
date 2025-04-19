@@ -12,6 +12,7 @@ export interface Event extends BaseEvent{
   description?: string;
   duration?: number;
   rent: number;
+  client_id: string;
 }
 
 export type EventStatus = 'scheduled' | 'ongoing' | 'canceled' | 'completed' | 'indefinido';

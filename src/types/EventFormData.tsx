@@ -1,4 +1,3 @@
-// src/types/EventFormData.ts
 export interface EventFormData {
   name: string;
   description?: string;
@@ -10,4 +9,5 @@ export interface EventFormData {
   duration?: number;
   rent: number;
   status: string;
+  client_id: string;
 }

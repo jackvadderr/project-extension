@@ -46,7 +46,7 @@ const formatEventsDistribuition = (eventsDistribuition: { event_type: string, co
   }));
 };
 
-function formatEventsForEventListCard(events) {
+function formatEventsForEventListCard(events: any[]) {
   return events.map(event => ({
     title: event.name,
     location: event.location,

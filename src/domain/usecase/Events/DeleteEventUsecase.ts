@@ -8,6 +8,6 @@ export class DeleteEventUsecase {
   }
 
   async execute(id: number): Promise<void> {
-    return await this.repository.deleteEvent(id);
+    return await this.repository.delete(id);
   }
 }

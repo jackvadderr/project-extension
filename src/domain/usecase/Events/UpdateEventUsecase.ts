@@ -9,6 +9,6 @@ export class UpdateEventUsecase {
   }
 
   async execute(id: number, eventData: Partial<Prisma.EventUpdateInput>): Promise<Event | null> {
-    return await this.repository.updateEvent(id, eventData);
+    return await this.repository.update(id, eventData);
   }
 }

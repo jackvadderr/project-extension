@@ -3,40 +3,60 @@
 
 import { EventFormData } from "@/types/EventFormData";
 import { useState, useEffect } from "react";
+import { Customer } from '@/types/Customer';
 
 interface EventFormProps {
   onCancel: () => void;
   onSubmit: (formData: EventFormData) => Promise<void>;
   initialData?: EventFormData;
+  clients: Customer[];
 }
 
-export default function EventForm({ onCancel, onSubmit, initialData }: EventFormProps) {
-  const [formData, setFormData] = useState<EventFormData>({
-    name: "",
-    description: "",
-    event_date: "",
-    event_time: "",
-    location: "",
-    max_capacity: 0,
-    event_type: "",
-    duration: 0,
-    rent: 0,
-    status: "scheduled",
+export default function EventForm({ onCancel, onSubmit, initialData, clients }: EventFormProps) {
+  const [formData, setFormData] = useState<Omit<EventFormData, 'id' | 'createdAt' | 'updatedAt'> >({
+    name: initialData?.name || "",
+    description: initialData?.description ?? "",
+    event_date: initialData?.event_date || "",
+    event_time: initialData?.event_time || "",
+    location: initialData?.location || "",
+    max_capacity: initialData?.max_capacity || 0,
+    event_type: initialData?.event_type || "",
+    duration: initialData?.duration || 0,
+    rent: initialData?.rent || 0,
+    status: initialData?.status || "scheduled",
+    client_id: initialData?.client_id || "",
   });
 
   useEffect(() => {
     if (initialData) {
+      console.log('Initial event_time:', initialData.event_time);
+
+      const formattedDate = initialData.event_date
+        ? new Date(initialData.event_date).toISOString().split('T')[0]
+        : '';
+      console.log('Formatted date:', formattedDate);
+
+      const formattedTime = initialData.event_date
+        ? new Date(initialData.event_date).toLocaleTimeString('pt-BR', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+        : '';
+
+      console.log('Formatted time:', formattedTime);
+
       setFormData({
-        name: initialData.name,
-        description: initialData.description,
-        event_date: initialData.event_date,
-        event_time: initialData.event_time || "",
-        location: initialData.location,
-        max_capacity: initialData.max_capacity,
-        event_type: initialData.event_type,
-        duration: initialData.duration,
-        rent: initialData.rent,
-        status: initialData.status,
+        name: initialData.name || "",
+        description: initialData.description ?? "",
+        event_date: formattedDate,
+        event_time: formattedTime,
+        location: initialData.location || "",
+        max_capacity: initialData.max_capacity || 0,
+        event_type: initialData.event_type || "",
+        duration: initialData.duration || 0,
+        rent: initialData.rent || 0,
+        status: initialData.status || "scheduled",
+        client_id: initialData.client_id || "",
       });
     }
   }, [initialData]);
@@ -230,6 +250,28 @@ export default function EventForm({ onCancel, onSubmit, initialData }: EventForm
           <option value="scheduled">Agendado</option>
           <option value="completed">Concluído</option>
           <option value="canceled">Cancelado</option>
+        </select>
+      </div>
+
+      {/* Cliente */}
+      <div>
+        <label htmlFor="client_id" className="block text-sm font-medium text-gray-700">
+          Cliente*
+        </label>
+        <select
+          id="client_id"
+          name="client_id"
+          value={formData.client_id}
+          onChange={handleChange}
+          required
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Selecione um cliente...</option>
+          {clients && clients.map((client) => (
+            <option key={client.id} value={client.id}>
+              {client.name}
+            </option>
+          ))}
         </select>
       </div>
 

@@ -9,7 +9,7 @@ export class ListAllEventsUsecase {
     }
 
     async execute(): Promise<Event[]> {
-        const events = await this.repository.findAllEvents();
+        const events = await this.repository.findAll();
         return events;
     }
 }

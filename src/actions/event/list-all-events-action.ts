@@ -15,7 +15,9 @@ export async function getEvents(): Promise<{
   event_type: any;
   created_at: any;
   updated_at: any;
-  duration: any
+  duration: any,
+  client_id: any,
+  rent: any,
 }[]> {
   const repository = new EventRepository();
   const usecase = new ListAllEventsUsecase(repository);
@@ -34,19 +36,7 @@ export async function getEvents(): Promise<{
     created_at: event.created_at,
     updated_at: event.updated_at,
     duration: event.duration,
+    rent: event.rent,
+    client_id: event.clientId,
   }));
 }
-// event: {
-//   name: string
-//   id: number
-//   description: string | null
-//   event_date: Date
-//   location: string
-//   max_capacity: number
-//   status: string | null
-//   event_type: string | null
-//   created_at: Date
-//   updated_at: Date
-//   duration: number
-//   rent: number
-// }

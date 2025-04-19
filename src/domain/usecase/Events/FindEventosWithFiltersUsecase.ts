@@ -14,7 +14,7 @@ export class FindEventsWithFiltersUsecase {
     pageSize: number,
     orderBy: Prisma.EventOrderByWithRelationInput,
   ): Promise<Event[]> {
-    return await this.repository.findEventsWithFilters(
+    return await this.repository.findWithFilters(
       filters,
       page,
       pageSize,

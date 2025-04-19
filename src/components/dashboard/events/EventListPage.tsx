@@ -6,20 +6,23 @@ import EventList from "./EventList";
 import EventForm from "./EventForm";
 import AddEventButton from "./AddEventButton";
 import SearchBar from "./SearchBar";
-import BulkActions from '@/app/dashboard/events/BulkActions';
+import BulkActions from '@/components/dashboard/events/BulkActions';
+import { Customer } from '@/types/Customer';
 
 interface EventListPageProps {
   initialEvents: Event[];
   createEventAction: (eventData: Omit<Event, 'id'>) => Promise<Event>;
-  updateEventAction: (id: string, eventData: Partial<Event>) => Promise<Event>;
-  deleteEventsAction: (ids: string[]) => Promise<void>;
+  updateEventAction: (id: number, eventData: Partial<Event>) => Promise<Event>;
+  deleteEventsAction: (ids: number[]) => Promise<void>;
+  customers: Customer[];
 }
 
 export default function EventListPage({
                                         initialEvents,
                                         createEventAction,
                                         updateEventAction,
-                                        deleteEventsAction
+                                        deleteEventsAction,
+                                        customers,
                                       }: EventListPageProps) {
   const [events, setEvents] = useState(initialEvents);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,6 +31,7 @@ export default function EventListPage({
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const eventsPerPage = 10;
+
 
   const handleAddEvent = () => {
     setEditingEvent(null);
@@ -56,6 +60,7 @@ export default function EventListPage({
         event_type: formData.event_type,
         max_capacity: formData.max_capacity,
         status: formData.status || 'scheduled',
+        client_id: formData.client_id,
       });
 
       setEvents(prev => [...prev, newEvent]);
@@ -79,6 +84,7 @@ export default function EventListPage({
         event_type: formData.event_type,
         max_capacity: formData.max_capacity,
         status: formData.status,
+        client_id: formData.client_id,
       });
 
       setEvents(prev =>
@@ -141,8 +147,6 @@ export default function EventListPage({
       setSelectedEvents(prev => prev.filter(id => !currentPageIds.includes(id)));
     }
   };
-
-
 
   const filteredEvents = events.filter(event =>
     event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -256,7 +260,9 @@ export default function EventListPage({
                 duration: editingEvent.duration,
                 rent: editingEvent.rent,
                 status: editingEvent.status,
+                client_id: editingEvent.client_id,
               } : undefined}
+              clients={customers}
             />
           </div>
         </div>

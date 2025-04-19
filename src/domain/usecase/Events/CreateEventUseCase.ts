@@ -1,5 +1,5 @@
-import EventRepository from "@/data/repository/impl/EventRepository";
-import { Prisma, Event } from "@prisma/client";
+import EventRepository from '@/data/repository/impl/EventRepository';
+import { Event, Prisma } from '@prisma/client';
 
 export class CreateEventUsecase {
   private repository: EventRepository;
@@ -8,8 +8,7 @@ export class CreateEventUsecase {
     this.repository = repository;
   }
 
-  async execute(eventData: Prisma.EventCreateInput): Promise<Event> {
-    const event = await this.repository.createEvent(eventData);
-    return event;
+  async execute(data: Prisma.EventCreateInput): Promise<Event> {
+    return await this.repository.create(data);
   }
 }

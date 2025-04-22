@@ -1,0 +1,35 @@
+'use client';
+
+import { BellIcon, UserIcon } from 'lucide-react';
+import { useState } from 'react';
+import { Cog6ToothIcon } from '@heroicons/react/24/solid';
+
+const sidebarItems = [
+  { icon: UserIcon, label: 'Profile' },
+  { icon: Cog6ToothIcon, label: 'Account' },
+  { icon: BellIcon, label: 'Notification' },
+];
+
+export default function SidebarProfile() {
+  const [active, setActive] = useState('Profile');
+
+  return (
+    <div className="w-64 bg-white p-4 rounded-md shadow-sm">
+      <h2 className="text-lg font-semibold mb-4">Settings</h2>
+      <ul>
+        {sidebarItems.map(({ icon: Icon, label }) => (
+          <li
+            key={label}
+            onClick={() => setActive(label)}
+            className={`flex items-center gap-3 px-4 py-2 cursor-pointer rounded-md ${
+              active === label ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'
+            }`}
+          >
+            <Icon className="h-5 w-5" />
+            {label}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

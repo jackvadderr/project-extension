@@ -21,6 +21,7 @@
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
     "@fullcalendar/react": "^6.1.17",
+    "@heroicons/react": "^2.2.0",
     "@nivo/line": "^0.88.0",
     "@nivo/pie": "^0.88.0",
     "@prisma/client": "^6.1.0",

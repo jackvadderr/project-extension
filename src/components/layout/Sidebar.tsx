@@ -92,7 +92,7 @@ const Drawer = () => {
 
               <div className="mt-auto">
                 <button
-                  onClick={() => handleNavigation("/settings")}
+                  onClick={() => handleNavigation("/dashboard/settings")}
                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 transition"
                 >
                   <Settings size={20} /> Configurações

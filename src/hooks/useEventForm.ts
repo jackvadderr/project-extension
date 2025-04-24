@@ -1,4 +1,3 @@
-// src/hooks/useEventForm.ts
 import { useState, useCallback } from 'react';
 import { EventFormData, EventType, EventStatus } from '@/types/events';
 

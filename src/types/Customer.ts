@@ -1,16 +1,3 @@
-// src/types/Customer.ts
-export interface Customer {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  document: string;
-  address: string;
-  status: 'active' | 'inactive';
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface Customer {
   id: string;
   name: string;
@@ -18,6 +5,7 @@ export interface Customer {
   phone?: string | null;
   email?: string | null;
   address?: string | null;
+  document: string;
   status: CustomerStatus;
   createdAt: Date;
   updatedAt: Date;
@@ -25,3 +13,11 @@ export interface Customer {
 }
 
 export type CustomerStatus = 'active' | 'inactive';
+
+export interface CustomerDetails extends Omit<Customer, 'createdAt' | 'updatedAt'> {
+  createdAt: string;
+  updatedAt: string;
+  observations?: string;
+  lastPurchaseDate?: string;
+  totalPurchases?: number;
+}

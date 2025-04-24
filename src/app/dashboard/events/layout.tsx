@@ -1,4 +1,3 @@
-// src/app/dashboard/events/layout.tsx
 import { Suspense } from 'react';
 
 interface EventsLayoutProps {

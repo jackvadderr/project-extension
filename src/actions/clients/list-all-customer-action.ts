@@ -4,7 +4,7 @@ import CustomerRepository from '@/data/repository/impl/CustomerRepository';
 import { CustomerStatus } from '@/types/Customer';
 import { ListAllCustomerUseCase } from '@/domain/usecase/Clients/ListAllCustomerUseCase';
 
-export async function getCustomers(): Promise<{
+export async function listAllCustomers(): Promise<{
   id: string;
   name: string;
   cpf: string;
@@ -27,7 +27,7 @@ export async function getCustomers(): Promise<{
     phone: customer.phone,
     email: customer.email,
     address: customer.address,
-    status: customer.status,
+    status: customer.status as CustomerStatus,
     createdAt: customer.createdAt,
     updatedAt: customer.updatedAt
   }));

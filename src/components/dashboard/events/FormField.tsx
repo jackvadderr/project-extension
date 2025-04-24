@@ -1,4 +1,3 @@
-// src/components/dashboard/events/form/FormField.tsx
 interface FormFieldProps {
   label: string;
   name: string;

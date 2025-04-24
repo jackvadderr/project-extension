@@ -1,4 +1,3 @@
-// src/components/dashboard/events/EventForm.tsx
 import { useEventForm } from '@/hooks/useEventForm';
 import { Customer } from '@/types/Customer';
 import { FormField } from './FormField';

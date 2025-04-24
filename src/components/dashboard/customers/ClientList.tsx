@@ -1,9 +1,10 @@
-// src/components/dashboard/clients/ClientList.tsx
 "use client";
 
 import React from "react";
 import { Checkbox } from '@/components/ui/checkbox';
-import { Customer } from "@/types/Customer";
+import { Customer } from '@/types/Customer';
+import { useExpandableRows } from '@/hooks/useExpandableRows';
+import { CustomerDetailsRow } from './CustomerDetails';
 
 interface ClientListProps {
   clients: Customer[];
@@ -22,10 +23,19 @@ export default function ClientList({
                                      isAllSelected,
                                      onEdit
                                    }: ClientListProps) {
+  const { toggleRow, isRowExpanded } = useExpandableRows();
+
   const getStatusColor = (status: string) => {
     return status === 'active'
       ? 'bg-green-100 text-green-800'
       : 'bg-red-100 text-red-800';
+  };
+
+  const handleRowClick = (e: React.MouseEvent, client: Customer) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('button') && !target.closest('input[type="checkbox"]')) {
+      toggleRow(client.id);
+    }
   };
 
   return (
@@ -45,33 +55,41 @@ export default function ClientList({
         </thead>
         <tbody>
         {clients.map(client => (
-          <tr key={client.id} className="group">
-            <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50 first:rounded-l-xl first:border-l first:border-gray-200">
-              <Checkbox
-                checked={selectedClients.includes(client.id)}
-                onCheckedChange={checked => onSelectClient(client.id, checked as boolean)}
-              />
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50">
-              <div className="text-sm font-medium text-gray-900">{client.name}</div>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50 text-sm text-gray-500">
-              {client.email || '-'}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50 text-sm text-gray-500">
-              {client.cpf}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50">
-                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(client.status)}`}>
-                  {client.status === 'active' ? 'Ativo' : 'Inativo'}
-                </span>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium bg-white group-hover:bg-gray-50 last:rounded-r-xl last:border-r last:border-gray-200">
-              <button onClick={() => onEdit(client)} className="text-blue-600 hover:text-blue-900">
-                Editar
-              </button>
-            </td>
-          </tr>
+          <React.Fragment key={client.id}>
+            <tr
+              className="group cursor-pointer"
+              onClick={(e) => handleRowClick(e, client)}
+            >
+              <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50 first:rounded-l-xl first:border-l first:border-gray-200">
+                <Checkbox
+                  checked={selectedClients.includes(client.id)}
+                  onCheckedChange={checked => onSelectClient(client.id, checked as boolean)}
+                />
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50">
+                <div className="text-sm font-medium text-gray-900">{client.name}</div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50 text-sm text-gray-500">
+                {client.email || '-'}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50 text-sm text-gray-500">
+                {client.cpf}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50">
+                  <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(client.status)}`}>
+                    {client.status === 'active' ? 'Ativo' : 'Inativo'}
+                  </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium bg-white group-hover:bg-gray-50 last:rounded-r-xl last:border-r last:border-gray-200">
+                <button onClick={() => onEdit(client)} className="text-blue-600 hover:text-blue-900">
+                  Editar
+                </button>
+              </td>
+            </tr>
+            {isRowExpanded(client.id) && (
+              <CustomerDetailsRow customer={client} />
+            )}
+          </React.Fragment>
         ))}
         </tbody>
       </table>

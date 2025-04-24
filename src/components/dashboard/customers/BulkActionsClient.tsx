@@ -1,4 +1,3 @@
-// src/components/dashboard/clients/BulkActionsClient.tsx
 "use client";
 
 import React from "react";

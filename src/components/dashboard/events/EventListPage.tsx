@@ -1,4 +1,3 @@
-// src/components/dashboard/events/EventListPage.tsx
 "use client";
 
 import React, { useState } from "react";

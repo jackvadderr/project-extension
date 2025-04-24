@@ -1,11 +1,10 @@
-// src/app/dashboard/events/page.tsx
 import { Suspense } from 'react';
 import EventListPage from '@/components/dashboard/events/EventListPage';
 import { getEvents } from '@/actions/event/list-all-events-action';
 import { createEventAction } from '@/actions/event/create-event-action';
 import { deleteEventsAction } from '@/actions/event/delete-event-action';
 import { updateEventAction } from '@/actions/event/update-event-action';
-import { getCustomers } from '@/actions/clients/list-all-customer-action';
+import { listAllCustomers } from '@/actions/clients/list-all-customer-action';
 
 export const metadata = {
   title: 'Eventos - Dashboard',
@@ -15,7 +14,7 @@ export const metadata = {
 async function EventsDataFetcher() {
   const [events, customers] = await Promise.all([
     getEvents(),
-    getCustomers()
+    listAllCustomers()
   ]);
 
   return (

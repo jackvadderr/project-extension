@@ -22,7 +22,6 @@ export default function ClientListPage({
                                          updateClientAction,
                                          deleteClientsAction,
                                        }: ClientListPageProps) {
-  // Estados principais
   const [clients, setClients] = useState<Customer[]>(initialClients);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Customer | null>(null);
@@ -63,7 +62,27 @@ export default function ClientListPage({
     }
   };
 
-  // Ações de CRUD
+  const handleMarkAsInactive = async () => {
+    if (selectedClients.length === 0) return;
+    try {
+      await Promise.all(
+        selectedClients.map(id =>
+          updateClientAction(id, { status: 'inactive' })
+        )
+      );
+      setClients(prev =>
+        prev.map(client =>
+          selectedClients.includes(client.id)
+            ? { ...client, status: 'inactive' }
+            : client
+        )
+      );
+      setSelectedClients([]);
+    } catch (error) {
+      console.error("Failed to mark clients as inactive:", error);
+    }
+  };
+
   const handleAddClient = () => {
     setEditingClient(null);
     setIsModalOpen(true);
@@ -126,6 +145,7 @@ export default function ClientListPage({
       {selectedClients.length > 0 && (
         <BulkActionsClient
           onDelete={handleDeleteClients}
+          onMarkAsInactive={handleMarkAsInactive}
           selectedCount={selectedClients.length}
         />
       )}

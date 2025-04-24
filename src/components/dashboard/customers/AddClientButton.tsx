@@ -1,4 +1,3 @@
-// src/components/dashboard/clients/AddClientButton.tsx
 "use client";
 
 import React from "react";

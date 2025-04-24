@@ -1,12 +1,14 @@
+// src/components/dashboard/events/EventListPage.tsx
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Event } from "@/types/Event";
+import { EventStatus, EventFormData } from "@/types/events";
 import EventList from "./EventList";
 import EventForm from "./EventForm";
 import AddEventButton from "./AddEventButton";
 import SearchBar from "./SearchBar";
-import BulkActions from '@/components/dashboard/events/BulkActions';
+import BulkActions from './BulkActions';
 import { Customer } from '@/types/Customer';
 
 interface EventListPageProps {
@@ -24,14 +26,13 @@ export default function EventListPage({
                                         deleteEventsAction,
                                         customers,
                                       }: EventListPageProps) {
-  const [events, setEvents] = useState(initialEvents);
+  const [events, setEvents] = useState<Event[]>(initialEvents);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
+  const [selectedEvents, setSelectedEvents] = useState<number[]>([]);
   const eventsPerPage = 10;
-
 
   const handleAddEvent = () => {
     setEditingEvent(null);
@@ -48,7 +49,7 @@ export default function EventListPage({
     setEditingEvent(null);
   };
 
-  const handleCreateEvent = async (formData: any) => {
+  const handleCreateEvent = async (formData: EventFormData) => {
     try {
       const newEvent = await createEventAction({
         name: formData.name,
@@ -59,7 +60,7 @@ export default function EventListPage({
         date: formData.event_date,
         event_type: formData.event_type,
         max_capacity: formData.max_capacity,
-        status: formData.status || 'scheduled',
+        status: formData.status,
         client_id: formData.client_id,
       });
 
@@ -70,7 +71,7 @@ export default function EventListPage({
     }
   };
 
-  const handleUpdateEvent = async (formData: any) => {
+  const handleUpdateEvent = async (formData: EventFormData) => {
     if (!editingEvent) return;
 
     try {
@@ -101,7 +102,7 @@ export default function EventListPage({
 
     try {
       await deleteEventsAction(selectedEvents);
-      setEvents(prev => prev.filter(event => !selectedEvents.includes(String(event.id))));
+      setEvents(prev => prev.filter(event => !selectedEvents.includes(event.id)));
       setSelectedEvents([]);
     } catch (error) {
       console.error("Failed to delete events:", error);
@@ -112,9 +113,9 @@ export default function EventListPage({
     if (selectedEvents.length === 0) return;
 
     try {
-      const updatedEvents = await mise.all(
+      const updatedEvents = await Promise.all(
         selectedEvents.map(id =>
-          updateEventAction(id, { status: 'completed' })
+          updateEventAction(id, { status: EventStatus.COMPLETED })
         )
       );
 
@@ -130,7 +131,7 @@ export default function EventListPage({
     }
   };
 
-  const handleSelectEvent = (id: string, isSelected: boolean) => {
+  const handleSelectEvent = (id: number, isSelected: boolean) => {
     setSelectedEvents(prev =>
       isSelected
         ? [...prev, id]
@@ -174,6 +175,10 @@ export default function EventListPage({
     }
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="p-4 sm:p-6">
@@ -182,23 +187,18 @@ export default function EventListPage({
           <SearchBar
             placeholder="Buscar por nome ou localização..."
             value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
+            onChange={handleSearchChange}
           />
         </div>
         <AddEventButton onClick={handleAddEvent} />
       </div>
 
       {selectedEvents.length > 0 && (
-        <div className="mb-4">
-          <BulkActions
-            onDelete={handleDeleteEvents}
-            onMarkAsCompleted={handleMarkAsCompleted}
-            selectedCount={selectedEvents.length}
-          />
-        </div>
+        <BulkActions
+          onDelete={handleDeleteEvents}
+          onMarkAsCompleted={handleMarkAsCompleted}
+          selectedCount={selectedEvents.length}
+        />
       )}
 
       {currentEvents.length > 0 ? (
@@ -209,6 +209,7 @@ export default function EventListPage({
           onSelectEvent={handleSelectEvent}
           onSelectAll={handleSelectAll}
           isAllSelected={isAllSelected}
+          customers={customers}
         />
       ) : (
         <p className="text-center mt-4">Nenhum evento encontrado.</p>
@@ -251,14 +252,14 @@ export default function EventListPage({
               onSubmit={editingEvent ? handleUpdateEvent : handleCreateEvent}
               initialData={editingEvent ? {
                 name: editingEvent.name,
-                description: editingEvent.description,
-                event_date: editingEvent.date,
-                event_time: "",
+                description: editingEvent.description || '',
+                event_date: new Date(editingEvent.date).toISOString().split('T')[0],
+                event_time: new Date(editingEvent.date).toTimeString().slice(0, 5),
                 location: editingEvent.location,
                 max_capacity: editingEvent.max_capacity,
                 event_type: editingEvent.event_type,
-                duration: editingEvent.duration,
-                rent: editingEvent.rent,
+                duration: editingEvent.duration || 0,
+                rent: editingEvent.rent || 0,
                 status: editingEvent.status,
                 client_id: editingEvent.client_id,
               } : undefined}
@@ -267,7 +268,6 @@ export default function EventListPage({
           </div>
         </div>
       )}
-
     </div>
   );
 }

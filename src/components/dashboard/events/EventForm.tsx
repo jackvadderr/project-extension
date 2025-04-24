@@ -1,9 +1,8 @@
 // src/components/dashboard/events/EventForm.tsx
-"use client";
-
-import { EventFormData } from "@/types/EventFormData";
-import { useState, useEffect } from "react";
+import { useEventForm } from '@/hooks/useEventForm';
 import { Customer } from '@/types/Customer';
+import { FormField } from './FormField';
+import { EventFormData, EventStatus, EventType } from '@/types/events';
 
 interface EventFormProps {
   onCancel: () => void;
@@ -13,88 +12,28 @@ interface EventFormProps {
 }
 
 export default function EventForm({ onCancel, onSubmit, initialData, clients }: EventFormProps) {
-  const [formData, setFormData] = useState<Omit<EventFormData, 'id' | 'createdAt' | 'updatedAt'> >({
-    name: initialData?.name || "",
-    description: initialData?.description ?? "",
-    event_date: initialData?.event_date || "",
-    event_time: initialData?.event_time || "",
-    location: initialData?.location || "",
-    max_capacity: initialData?.max_capacity || 0,
-    event_type: initialData?.event_type || "",
-    duration: initialData?.duration || 0,
-    rent: initialData?.rent || 0,
-    status: initialData?.status || "scheduled",
-    client_id: initialData?.client_id || "",
+  const { formData, handleChange, handleSubmit } = useEventForm({
+    initialData,
+    onSubmit,
+    onCancel
   });
 
-  useEffect(() => {
-    if (initialData) {
-      console.log('Initial event_time:', initialData.event_time);
-
-      const formattedDate = initialData.event_date
-        ? new Date(initialData.event_date).toISOString().split('T')[0]
-        : '';
-      console.log('Formatted date:', formattedDate);
-
-      const formattedTime = initialData.event_date
-        ? new Date(initialData.event_date).toLocaleTimeString('pt-BR', {
-          hour: '2-digit',
-          minute: '2-digit'
-        })
-        : '';
-
-      console.log('Formatted time:', formattedTime);
-
-      setFormData({
-        name: initialData.name || "",
-        description: initialData.description ?? "",
-        event_date: formattedDate,
-        event_time: formattedTime,
-        location: initialData.location || "",
-        max_capacity: initialData.max_capacity || 0,
-        event_type: initialData.event_type || "",
-        duration: initialData.duration || 0,
-        rent: initialData.rent || 0,
-        status: initialData.status || "scheduled",
-        client_id: initialData.client_id || "",
-      });
-    }
-  }, [initialData]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "max_capacity" || name === "duration" || name === "rent"
-        ? Number(value)
-        : value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await onSubmit(formData);
-  };
+  const eventTypeOptions = Object.entries(EventType).map(([, value]) => ({
+    value,
+    label: value.charAt(0).toUpperCase() + value.slice(1),
+  }));
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-md ">
+    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-md">
       {/* Nome do Evento */}
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Nome do Evento*
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+      <FormField
+        label="Nome do Evento"
+        name="name"
+        type="text"
+        value={formData.name}
+        onChange={handleChange}
+        required
+      />
 
       {/* Descrição */}
       <div>
@@ -210,10 +149,11 @@ export default function EventForm({ onCancel, onSubmit, initialData, clients }: 
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Selecione...</option>
-            <option value="workshop">Workshop</option>
-            <option value="conference">Conferência</option>
-            <option value="meeting">Reunião</option>
-            <option value="seminar">Seminário</option>
+            {eventTypeOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -247,9 +187,9 @@ export default function EventForm({ onCancel, onSubmit, initialData, clients }: 
           onChange={handleChange}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          <option value="scheduled">Agendado</option>
-          <option value="completed">Concluído</option>
-          <option value="canceled">Cancelado</option>
+          <option value={EventStatus.SCHEDULED}>Agendado</option>
+          <option value={EventStatus.COMPLETED}>Concluído</option>
+          <option value={EventStatus.CANCELED}>Cancelado</option>
         </select>
       </div>
 
@@ -267,7 +207,7 @@ export default function EventForm({ onCancel, onSubmit, initialData, clients }: 
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Selecione um cliente...</option>
-          {clients && clients.map((client) => (
+          {clients?.map((client) => (
             <option key={client.id} value={client.id}>
               {client.name}
             </option>

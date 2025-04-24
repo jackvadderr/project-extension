@@ -9,7 +9,7 @@ export async function createEventAction(eventData: Omit<Event, 'id'>): Promise<E
   const usecase = new CreateEventUsecase(repository);
 
   const newEvent = await usecase.execute({
-    duration: 0,
+    duration: Number(eventData.duration),
     event_type: eventData.event_type,
     rent: parseFloat(String(eventData.rent)),
     name: eventData.name,
@@ -24,14 +24,18 @@ export async function createEventAction(eventData: Omit<Event, 'id'>): Promise<E
     }
   });
 
+  if (!newEvent) {
+    throw new Error('Failed to create event');
+  }
+
   return {
     id: newEvent.id,
     name: newEvent.name,
-    description: newEvent.description,
+    description: String(newEvent.description),
     location: newEvent.location,
     duration: 0,
     rent: 0,
-    event_type: newEvent.event_type,
+    event_type: String(newEvent.event_type),
     date: newEvent.event_date.toISOString(),
     status: newEvent.status as EventStatus,
     max_capacity: newEvent.max_capacity,

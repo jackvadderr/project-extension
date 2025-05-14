@@ -7,19 +7,28 @@ import EventDistribution from '@/components/dashboard/dashboard/charts/PieChart'
 import { EventCardProps } from '@/types/EventCardProps'
 import TodoListWrapper from '@/components/dashboard/dashboard/TodoListClient';
 import SimpleCalendarCard from './calendar/CalendarStatusCard';
+import { Task } from '@prisma/client';
 
 interface Props {
   onGoingEvents: any;
   eventsByMonthFormatted: any;
   eventsDistribuitionFormatted: any;
   eventsFutureFormatted: EventCardProps[];
+  tasks: Task[]
+  createTask: (data: Prisma.TaskCreateInput) => Promise<Task>
+  updateTask: (id: string, data: Partial<Prisma.TaskUpdateInput>) => Promise<Task | null>
+  deleteTask: (id: string) => Promise<void>
 }
 
 export default function DashboardClientWrapper({
                                                  onGoingEvents,
                                                  eventsByMonthFormatted,
                                                  eventsDistribuitionFormatted,
-                                                 eventsFutureFormatted
+                                                 eventsFutureFormatted,
+                                                 tasks,
+                                                 createTask,
+                                                 updateTask,
+                                                 deleteTask
                                                }: Props) {
   const scheduledDates = ['2025-04-10', '2025-04-15', '2025-04-21'];
   const blockedDates = ['2025-04-12', '2025-04-25'];
@@ -74,7 +83,12 @@ export default function DashboardClientWrapper({
         <div className="bg-white shadow rounded-2xl p-4">
           <h2 className="text-xl font-bold">Lembretes</h2>
           <div className="grid gap-4 mt-4 h-80 overflow-auto">
-            <TodoListWrapper />
+            <TodoListWrapper
+              tasks={tasks}
+              createTask={createTask}
+              updateTask={updateTask}
+              deleteTask={deleteTask}
+            />
           </div>
         </div>
       </div>

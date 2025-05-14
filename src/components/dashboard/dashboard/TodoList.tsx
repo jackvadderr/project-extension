@@ -1,9 +1,17 @@
-'use client';
+'use client'
 
 import { useState } from 'react'
 import { DndContext, closestCenter, useSensor, useSensors, PointerSensor } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { TodoItem } from './TodoItem'
+import { Task, Prisma } from '@prisma/client'
+
+interface TodoListProps {
+  tasks: Task[]
+  createTask: (data: Prisma.TaskCreateInput) => Promise<Task>
+  updateTask: (id: string, data: Partial<Prisma.TaskUpdateInput>) => Promise<Task | null>
+  deleteTask: (id: string) => Promise<void>
+}
 
 export interface Todo {
   id: string
@@ -11,14 +19,20 @@ export interface Todo {
   completed: boolean
 }
 
-export default function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([
-    { id: '1', text: 'Monitorar a carne', completed: false },
-    { id: '2', text: 'Verificar bebidas', completed: false },
-    { id: '3', text: 'Checar iluminação', completed: false }
-  ])
+export default function TodoList({
+                                   tasks: initialTasks,
+                                   createTask,
+                                   updateTask,
+                                   deleteTask
+                                 }: TodoListProps) {
+  const [todos, setTodos] = useState<Todo[]>(
+    initialTasks.map(task => ({
+      id: task.id,
+      text: task.text,
+      completed: task.completed
+    }))
+  )
   const [newTodoText, setNewTodoText] = useState('')
-
   const sensors = useSensors(useSensor(PointerSensor))
 
   const handleDragEnd = (event: any) => {
@@ -30,39 +44,68 @@ export default function TodoList() {
     }
   }
 
-  const handleEdit = (id: string, newText: string) => {
-    setTodos(prev =>
-      prev.map(todo => (todo.id === id ? { ...todo, text: newText } : todo))
-    )
-  }
-
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (newTodoText.trim()) {
-      const newTodo: Todo = {
-        id: Date.now().toString(),
-        text: newTodoText.trim(),
-        completed: false
+      try {
+        const newTask = await createTask({
+          text: newTodoText.trim(),
+          completed: false
+        })
+
+        setTodos([...todos, {
+          id: newTask.id,
+          text: newTask.text,
+          completed: newTask.completed
+        }])
+        setNewTodoText('')
+      } catch (error) {
+        console.error('Failed to create task:', error)
       }
-      setTodos([...todos, newTodo])
-      setNewTodoText('')
     }
   }
 
-  const handleDelete = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id))
+  const handleEdit = async (id: string, newText: string) => {
+    try {
+      const updatedTask = await updateTask(id, { text: newText })
+      if (updatedTask) {
+        setTodos(prev =>
+          prev.map(todo => (todo.id === id ? { ...todo, text: newText } : todo))
+        )
+      }
+    } catch (error) {
+      console.error('Failed to update task:', error)
+    }
   }
 
-  const handleToggleComplete = (id: string) => {
-    setTodos(prev => {
-      const updatedTodos = prev.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-      // Reordena sempre: incompletos primeiro, completos depois
-      return [
-        ...updatedTodos.filter(t => !t.completed),
-        ...updatedTodos.filter(t => t.completed)
-      ]
-    })
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteTask(id)
+      setTodos(todos.filter(todo => todo.id !== id))
+    } catch (error) {
+      console.error('Failed to delete task:', error)
+    }
+  }
+
+  const handleToggleComplete = async (id: string) => {
+    const todo = todos.find(t => t.id === id)
+    if (todo) {
+      try {
+        const updatedTask = await updateTask(id, { completed: !todo.completed })
+        if (updatedTask) {
+          setTodos(prev => {
+            const updatedTodos = prev.map(todo =>
+              todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
+            return [
+              ...updatedTodos.filter(t => !t.completed),
+              ...updatedTodos.filter(t => t.completed)
+            ]
+          })
+        }
+      } catch (error) {
+        console.error('Failed to toggle task completion:', error)
+      }
+    }
   }
 
   return (

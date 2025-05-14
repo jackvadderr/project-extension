@@ -2,12 +2,19 @@ import { getEventosByFilter } from '@/actions/event/find-events-with-filters-act
 import { getCountEventsByMonthAction } from '@/actions/event/events-by-month-action';
 import { getCountEventsDistribuition } from '@/actions/event/events-distribuition-action';
 import DashboardClientWrapper from '@/components/dashboard/dashboard/DashboardClientWrapper';
+import { createTaskAction } from '@/actions/task/create-task-action';
+import { deleteTaskAction } from '@/actions/task/delete-task-action';
+import { listAllTaskAction } from '@/actions/task/listAll-task-action';
+import { updateTaskAction } from '@/actions/task/update-task-action';
+
 
 export default async function DashboardPage() {
   const onGoingEvents = await getEventosByFilter({ status: 'ongoing' }, 1, 1, { event_date: 'asc' });
   const eventsByMonth = await getCountEventsByMonthAction(1970, 2025, 1, 12);
   const eventsDistribuition = await getCountEventsDistribuition();
   const eventsFuture = await getEventosByFilter({ status: 'scheduled' }, 1, 3, { event_date: 'asc' });
+  const tasks = await listAllTaskAction()
+
 
   return (
     <DashboardClientWrapper
@@ -15,6 +22,10 @@ export default async function DashboardPage() {
       eventsByMonthFormatted={formatEventsByMonth(eventsByMonth)}
       eventsDistribuitionFormatted={formatEventsDistribuition(eventsDistribuition)}
       eventsFutureFormatted={formatEventsForEventListCard(eventsFuture)}
+      tasks={tasks}
+      createTask={createTaskAction}
+      updateTask={updateTaskAction}
+      deleteTask={deleteTaskAction}
     />
   );
 }

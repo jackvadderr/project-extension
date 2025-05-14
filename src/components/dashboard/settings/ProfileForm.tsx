@@ -1,8 +1,10 @@
-'use client';
-
 import Image from 'next/image';
+import { auth } from '@/lib/auth';
 
-export default function ProfileForm() {
+export default async function ProfileForm() {
+  const session = await auth();
+  const userId = session?.user?.id;
+
   return (
     <div>
       <h1 className="text-xl font-semibold mb-4">Profile</h1>
@@ -21,6 +23,11 @@ export default function ProfileForm() {
       </div>
 
       <form className="space-y-4">
+        <div>
+          <h1 className="text-xl font-semibold mb-4">Profile</h1>
+          {/* Debug userId */}
+          <p>User ID: {userId || 'Not found'}</p>
+        </div>
         <div>
           <label className="block text-sm font-medium">Profile name</label>
           <input

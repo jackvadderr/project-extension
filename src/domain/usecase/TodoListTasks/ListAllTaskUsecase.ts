@@ -1,14 +1,14 @@
-import { Task } from '@prisma/client';
 import TaskRepository from '@/data/repository/impl/TaskRepository';
+import { Task } from '@prisma/client';
 
-export class CreateTaskUsecase {
+export class ListAllTaskUsecase {
   private repository: TaskRepository;
 
   constructor(repository: TaskRepository) {
     this.repository = repository;
   }
 
-  async execute(eventData: Prisma.TaskCreateInput): Promise<Task> {
-    return await this.repository.create(eventData);
+  async execute(): Promise<Task[]> {
+    return await this.repository.findAll();
   }
 }

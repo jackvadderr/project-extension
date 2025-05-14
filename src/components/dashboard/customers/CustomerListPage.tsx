@@ -29,12 +29,17 @@ export default function ClientListPage({
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedClients, setSelectedClients] = useState<string[]>([]);
   const clientsPerPage = 10;
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
+
 
   // Filtros e paginação
   const filteredClients = clients.filter(client =>
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (client.email || "").toLowerCase().includes(searchTerm.toLowerCase())
+    (client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (client.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (client.cpf || "").includes(searchTerm)) &&
+    (!selectedStatus || client.status === selectedStatus)
   );
+
   const indexOfLastClient = currentPage * clientsPerPage;
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
   const currentClients = filteredClients.slice(indexOfFirstClient, indexOfLastClient);
@@ -131,13 +136,25 @@ export default function ClientListPage({
         <div className="w-full sm:w-auto flex-1">
           <div className="flex items-center gap-4">
             <SearchBar
-              placeholder="Buscar por nome ou email..."
+              placeholder="Buscar por nome, email ou CPF..."
               value={searchTerm}
               onChange={e => {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
             />
+            <select
+              value={selectedStatus}
+              onChange={(e) => {
+                setSelectedStatus(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="px-3 py-2 border rounded-lg bg-white"
+            >
+              <option value="">Todos os status</option>
+              <option value="active">Ativo</option>
+              <option value="inactive">Inativo</option>
+            </select>
             <div className="text-sm font-medium bg-gray-200 px-3 py-1 rounded-full">
               {filteredClients.length} {filteredClients.length === 1 ? 'cliente' : 'clientes'}
             </div>

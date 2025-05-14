@@ -1,7 +1,6 @@
-// src/app/dashboard/settings/account/page.tsx
 import { auth } from '@/lib/auth';
 import { getUserAction } from '@/actions/systemUser/get-user-action';
-import SettingsPageWrapper from './SettingsPageWrapper';
+import SettingsPageWrapper from '../../../../components/dashboard/settings/SettingsPageWrapper';
 import { updateUserAction } from '@/actions/systemUser/update-user-action';
 
 export default async function SettingsPage() {

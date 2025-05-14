@@ -17,7 +17,7 @@ const SignUpPage = async () => {
             className="mx-auto mb-4 w-20 h-20 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: "url('/favicon.ico')" }}
           ></div>
-          <h1 className="text-2xl font-semibold text-gray-800">Login</h1>
+          <h1 className="text-2xl font-semibold text-gray-800">Cadastro</h1>
         </div>
         <div className="p-6 space-y-5">
           <form
@@ -30,7 +30,7 @@ const SignUpPage = async () => {
           >
             <Input
               name="email"
-              placeholder="Email corporativo"
+              placeholder="Email"
               type="email"
               required
               autoComplete="email"

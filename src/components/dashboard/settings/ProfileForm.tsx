@@ -13,25 +13,34 @@ interface ProfileFormProps {
 type FormData = {
   name: string;
   email: string;
+  currentPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
 };
 
 export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormProps) {
   const [user, setUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<FormData>({
     name: '',
-    email: ''
+    email: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
   });
   const [isChanged, setIsChanged] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
+
 
   useEffect(() => {
     async function load() {
       const u = await getUser(userId);
       if (u) {
         setUser(u);
-        setFormData({
+        setFormData(prev => ({
+          ...prev,
           name: u.name || '',
           email: u.email || ''
-        });
+        }));
         setIsChanged(false);
       }
     }
@@ -48,10 +57,34 @@ export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormPr
     e.preventDefault();
     if (!isChanged) return;
 
-    const updated = await onSubmit(formData);
+    if (formData.newPassword || formData.currentPassword || formData.confirmPassword) {
+      if (formData.newPassword !== formData.confirmPassword) {
+        setPasswordError('As senhas não coincidem');
+        return;
+      }
+    }
+
+    const dataToUpdate: Partial<Prisma.UserUpdateInput> = {
+      name: formData.name
+    };
+
+    if (formData.newPassword) {
+      dataToUpdate.password = formData.newPassword;
+    }
+
+    const updated = await onSubmit(dataToUpdate);
     if (updated) {
       setUser(updated);
       setIsChanged(false);
+      setFormData(prev => ({
+        ...prev,
+        name: updated.name || '',
+        email: updated.email || '',
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      }));
+      setPasswordError('');
     }
   };
 
@@ -110,6 +143,56 @@ export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormPr
         />
       </div>
 
+      <div className="border-t mt-6 pt-6">
+        <h3 className="text-lg font-medium mb-4">Alterar senha</h3>
+
+        <div>
+          <label htmlFor="currentPassword" className="block text-sm font-medium">
+            Senha atual
+          </label>
+          <input
+            id="currentPassword"
+            name="currentPassword"
+            type="password"
+            value={formData.currentPassword}
+            onChange={handleChange}
+            className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <div className="mt-4">
+          <label htmlFor="newPassword" className="block text-sm font-medium">
+            Nova senha
+          </label>
+          <input
+            id="newPassword"
+            name="newPassword"
+            type="password"
+            value={formData.newPassword}
+            onChange={handleChange}
+            className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <div className="mt-4">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium">
+            Confirmar nova senha
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        {passwordError && (
+          <p className="mt-2 text-sm text-red-600">{passwordError}</p>
+        )}
+      </div>
+
       <button
         type="submit"
         disabled={!isChanged}
@@ -119,7 +202,7 @@ export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormPr
             : 'bg-gray-300 text-gray-700 cursor-not-allowed'
         }`}
       >
-        Save changes
+        Salvar alterações
       </button>
     </form>
   );

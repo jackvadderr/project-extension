@@ -3,30 +3,30 @@ import { Prisma, Task } from "@prisma/client";
 
 export default class TaskRepository {
   async create(todolistData: Prisma.TaskCreateInput): Promise<Task> {
-    return db.Task.create({
+    return db.task.create({
       data: todolistData,
     });
   }
 
   async findById(id: string): Promise<Task | null> {
-    return db.Task.findUnique({
+    return db.task.findUnique({
       where: { id },
     });
   }
 
   async findAll(): Promise<Task[]> {
-    return db.Task.findMany();
+    return db.task.findMany();
   }
 
   async update(id: string, todolistData: Partial<Prisma.TaskUpdateInput>): Promise<Task | null> {
-    return db.Task.update({
+    return db.task.update({
       where: { id },
       data: todolistData,
     });
   }
 
   async delete(id: string): Promise<void> {
-    await db.Task.delete({
+    await db.task.delete({
       where: { id },
     });
   }

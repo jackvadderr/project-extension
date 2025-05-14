@@ -13,7 +13,18 @@ export default async function DashboardPage() {
   const onGoingEvents = await getEventosByFilter({ status: 'ongoing' }, 1, 1, { event_date: 'asc' });
   const eventsByMonth = await getCountEventsByMonthAction(1970, 2025, 1, 12);
   const eventsDistribuition = await getCountEventsDistribuition();
-  const eventsFuture = await getEventosByFilter({ status: 'scheduled' }, 1, 3, { event_date: 'asc' });
+  const currentDate = new Date();
+  const eventsFuture = await getEventosByFilter(
+    {
+      AND: [
+        { status: 'scheduled' },
+        { event_date: { gte: currentDate } }
+      ]
+    },
+    1,
+    3,
+    { event_date: 'asc' }
+  );
   const tasks = await listAllTaskAction()
   const scheduledDates = await getScheduledDatesAction();
 

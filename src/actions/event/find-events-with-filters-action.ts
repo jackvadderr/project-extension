@@ -2,7 +2,7 @@
 
 import EventRepository from '@/data/repository/impl/EventRepository';
 import { FindEventsWithFiltersUsecase } from '@/domain/usecase/Events/FindEventosWithFiltersUsecase';
-import { Event, EventStatus } from '@/types/Event';
+import { EventStatus } from '@/types/Event';
 import { Prisma } from '@prisma/client';
 
 export async function getEventosByFilter(

@@ -129,14 +129,19 @@ export default function ClientListPage({
       {/* Barra de busca e botão de adicionar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5">
         <div className="w-full sm:w-auto flex-1">
-          <SearchBar
-            placeholder="Buscar por nome ou email..."
-            value={searchTerm}
-            onChange={e => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-          />
+          <div className="flex items-center gap-4">
+            <SearchBar
+              placeholder="Buscar por nome ou email..."
+              value={searchTerm}
+              onChange={e => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <div className="text-sm font-medium bg-gray-200 px-3 py-1 rounded-full">
+              {filteredClients.length} {filteredClients.length === 1 ? 'cliente' : 'clientes'}
+            </div>
+          </div>
         </div>
         <AddClientButton onClick={handleAddClient} />
       </div>

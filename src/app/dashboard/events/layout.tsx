@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 interface EventsLayoutProps {
   children: React.ReactNode;
 }
-
 export default function EventsLayout({ children }: EventsLayoutProps) {
   return (
     <Suspense fallback={
@@ -15,6 +14,7 @@ export default function EventsLayout({ children }: EventsLayoutProps) {
       </div>
     }>
       <div className="min-h-screen bg-gray-100 rounded-2xl">
+        <h1 className="text-2xl font-bold p-6">Gerenciar Eventos</h1>
         {children}
       </div>
     </Suspense>

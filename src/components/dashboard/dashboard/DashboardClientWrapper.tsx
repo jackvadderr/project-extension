@@ -18,6 +18,7 @@ interface Props {
   createTask: (data: Prisma.TaskCreateInput) => Promise<Task>
   updateTask: (id: string, data: Partial<Prisma.TaskUpdateInput>) => Promise<Task | null>
   deleteTask: (id: string) => Promise<void>
+  scheduledDates
 }
 
 export default function DashboardClientWrapper({
@@ -28,10 +29,11 @@ export default function DashboardClientWrapper({
                                                  tasks,
                                                  createTask,
                                                  updateTask,
-                                                 deleteTask
+                                                 deleteTask,
+                                                 scheduledDates
                                                }: Props) {
-  const scheduledDates = ['2025-04-10', '2025-04-15', '2025-04-21'];
-  const blockedDates = ['2025-04-12', '2025-04-25'];
+  // const scheduledDates = ['2025-04-10', '2025-04-15', '2025-04-21'];
+  const blockedDates = [];
 
   return (
     <>
@@ -50,8 +52,9 @@ export default function DashboardClientWrapper({
           <h2 className="text-xl font-bold">Calendario</h2>
           <div className="h-80 overflow-hidden">
             <SimpleCalendarCard
-              scheduledDates={['2025-04-10', '2025-04-15', '2025-04-21']}
-              blockedDates={['2025-04-12', '2025-04-25']}
+              // scheduledDates={['2025-04-10', '2025-04-15', '2025-04-21']}
+              scheduledDates={scheduledDates}
+              blockedDates={blockedDates}
             />
           </div>
         </div>

@@ -6,6 +6,7 @@ import { createTaskAction } from '@/actions/task/create-task-action';
 import { deleteTaskAction } from '@/actions/task/delete-task-action';
 import { listAllTaskAction } from '@/actions/task/listAll-task-action';
 import { updateTaskAction } from '@/actions/task/update-task-action';
+import { getScheduledDatesAction } from '@/actions/event/get-scheduled-dates-action';
 
 
 export default async function DashboardPage() {
@@ -14,7 +15,7 @@ export default async function DashboardPage() {
   const eventsDistribuition = await getCountEventsDistribuition();
   const eventsFuture = await getEventosByFilter({ status: 'scheduled' }, 1, 3, { event_date: 'asc' });
   const tasks = await listAllTaskAction()
-
+  const scheduledDates = await getScheduledDatesAction();
 
   return (
     <DashboardClientWrapper
@@ -26,6 +27,7 @@ export default async function DashboardPage() {
       createTask={createTaskAction}
       updateTask={updateTaskAction}
       deleteTask={deleteTaskAction}
+      scheduledDates={scheduledDates}
     />
   );
 }

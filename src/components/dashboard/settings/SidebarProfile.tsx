@@ -1,26 +1,39 @@
 'use client';
 
-import { BellIcon, UserIcon } from 'lucide-react';
 import { useState } from 'react';
-import { Cog6ToothIcon } from '@heroicons/react/24/solid';
+import { Cog6ToothIcon, KeyIcon } from '@heroicons/react/24/solid';
+import { useRouter } from 'next/navigation';
 
 const sidebarItems = [
-  { icon: UserIcon, label: 'Profile' },
-  { icon: Cog6ToothIcon, label: 'Account' },
-  { icon: BellIcon, label: 'Notification' },
+  {
+    icon: Cog6ToothIcon,
+    label: 'Conta',
+    path: '/dashboard/settings/account'
+  },
+  {
+    icon: KeyIcon,
+    label: 'Controle de Acesso',
+    path: '/dashboard/settings/access'
+  },
 ];
 
 export default function SidebarProfile() {
-  const [active, setActive] = useState('Profile');
+  const router = useRouter();
+  const [active, setActive] = useState('Account');
+
+  const handleNavigation = (label: string, path: string) => {
+    setActive(label);
+    router.push(path);
+  };
 
   return (
     <div className="w-64 bg-white p-4 rounded-md shadow-sm">
       <h2 className="text-lg font-semibold mb-4">Settings</h2>
       <ul>
-        {sidebarItems.map(({ icon: Icon, label }) => (
+        {sidebarItems.map(({ icon: Icon, label, path }) => (
           <li
             key={label}
-            onClick={() => setActive(label)}
+            onClick={() => handleNavigation(label, path)}
             className={`flex items-center gap-3 px-4 py-2 cursor-pointer rounded-md ${
               active === label ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'
             }`}

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Home, Calendar, DollarSign, Settings, Menu, X } from "lucide-react";
 import { APP_NAME } from "@/constants/constants";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,19 +10,18 @@ const Drawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
-  // Função para fechar o Drawer
   const closeDrawer = () => setIsOpen(false);
 
   // Função para navegar e fechar o Drawer
   const handleNavigation = (href: string) => {
-    closeDrawer(); // Fecha o Drawer antes de mudar de página
-    setTimeout(() => router.push(href), 200); // Adiciona um pequeno delay na navegação
+    closeDrawer();
+    setTimeout(() => router.push(href), 200);
   };
 
   return (
     <>
       {/* Botão para abrir o Drawer */}
-      {!isOpen && ( // Exibe o botão apenas quando o Drawer estiver fechado
+      {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
           className="fixed top-4 left-4 z-50 p-2 rounded-md shadow-md hover:bg-gray-100 transition"

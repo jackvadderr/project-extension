@@ -1,19 +1,55 @@
-import Link from "next/link";
 import { ReactNode } from "react";
 import { APP_NAME, COPYRIGHT_YEAR } from "@/constants/constants";
 import { auth } from "@/lib/auth";
+import { MdEmail, MdWhatsapp } from "react-icons/md";
+import { FaFacebookF } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import { SiGooglemaps } from "react-icons/si";
+import { Header } from '@/components/home/Header';
+
 
 interface LayoutProps {
   children: ReactNode;
 }
+
+
+
+const TopBar = () => {
+  return (
+    <div className="bg-gray-100 py-2 px-8 flex justify-between items-center text-sm border-b">
+      <div className="flex items-center gap-6">
+        <a href="https://wa.me/5500000000000" className="flex items-center gap-2 hover:text-blue-700">
+          <MdWhatsapp size={16} />
+          <span>(00) 00000-0000</span>
+        </a>
+        <a href="mailto:contato@exemplo.com" className="flex items-center gap-2 hover:text-blue-700">
+          <MdEmail size={16} />
+          <span>contato@exemplo.com</span>
+        </a>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">
+          <FaInstagram />
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">
+          <FaFacebookF />
+        </a>
+        <a href="https://maps.app.goo.gl/JEFsHWWEjUbRWZL6A" target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">
+          <SiGooglemaps />        </a>
+      </div>
+    </div>
+  );
+};
 
 const Layout = async ({ children }: LayoutProps) => {
   const session = await auth();
 
   return (
     <>
+      <TopBar />
       <Header session={session} />
-      <main className="flex-grow p-4 items-center justify-center w-full">
+      <main className="flex-grow items-center justify-center w-full">
         {children}
       </main>
       <Footer />
@@ -21,47 +57,10 @@ const Layout = async ({ children }: LayoutProps) => {
   );
 };
 
-const Header = ({ session }: { session: any }) => {
-  return (
-    <header className="bg-[#1E3A8A] p-4 text-white flex justify-between items-center border-b w-full">
-      <div className="flex items-center">
-      <img src="/android-chrome-512x512.png" alt="Logo da Empresa" className="h-10 w-auto mr-4" />
-        <Logo />
-      </div>
-      <NavLinks />
-      {!session ? (
-        <Link href="/sign-in">
-          <button className="bg-white text-blue-500 px-4 py-2 rounded">Login</button>
-        </Link>
-      ) : (
-        <div className="flex items-center">
-          <Link href="/dashboard">
-            <button className="bg-white text-blue-500 px-4 py-2 rounded">Dashboard</button>
-          </Link>
-        </div>
-      )}
-    </header>
-  );
-};
-
 const Footer = () => (
   <footer className="bg-[#1E3A8A] p-4 text-white text-center w-full">
     <p>&copy; {COPYRIGHT_YEAR} {APP_NAME}. Todos os direitos reservados.</p>
   </footer>
-);
-
-const Logo = () => (
-  <h1 className="text-xl font-bold">{APP_NAME}</h1>
-);
-
-const NavLinks = () => (
-  <nav>
-    <ul className="flex space-x-4">
-      <li><Link href="/home" className="hover:underline">Inicio</Link></li>
-      <li><Link href="/home/about" className="hover:underline">Sobre</Link></li>
-      <li><Link href="/home/contact" className="hover:underline">Contato</Link></li>
-    </ul>
-  </nav>
 );
 
 export default Layout;

@@ -1,5 +1,5 @@
 // GERAL
-export const APP_NAME = "R.A Eventos";
+export const APP_NAME = "RA Eventos";
 export const COPYRIGHT_YEAR = new Date().getFullYear();
 export const MESSAGES = {
   welcome: "Bem-vindo ao nosso site!",

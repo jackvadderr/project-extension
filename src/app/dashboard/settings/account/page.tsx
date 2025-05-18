@@ -1,7 +1,10 @@
-import { auth } from '@/lib/auth';
 import { getUserAction } from '@/actions/systemUser/get-user-action';
-import SettingsPageWrapper from '../../../../components/dashboard/settings/SettingsPageWrapper';
 import { updateUserAction } from '@/actions/systemUser/update-user-action';
+import SettingsPageWrapper from '@/components/dashboard/settings/SettingsPageWrapper';
+import { auth } from '@/lib/auth';
+import { verifyPasswordAction } from '@/actions/systemUser/verify-password-action';
+import { hashPasswordAction } from '@/actions/systemUser/hashPasswordAction';
+
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -18,6 +21,8 @@ export default async function SettingsPage() {
           userId={userId}
           getUser={getUserAction}
           updateUser={updateUserAction}
+          verifyPassword={verifyPasswordAction}
+          hashPassword={hashPasswordAction}
         />
       </div>
     </div>

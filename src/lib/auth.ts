@@ -6,30 +6,32 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { schema } from "@/lib/schema";
+import { verifyPassword } from '@/utils/crypto-utils';
 
 const adapter = PrismaAdapter(db);
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter,
   providers: [
-    // GitHub,
     Credentials({
       credentials: {
         email: {},
         password: {},
       },
       authorize: async (credentials) => {
-        const validatedCredentials = schema.parse(credentials);
+        const { email, password } = schema.parse(credentials);
 
-        const user = await db.user.findFirst({
-          where: {
-            email: validatedCredentials.email,
-            password: validatedCredentials.password,
-          },
+        const user = await db.user.findUnique({
+          where: { email: email.toLowerCase() },
         });
 
-        if (!user) {
-          throw new Error("Invalid credentials.");
+        if (!user || !user.password) {
+          throw new Error("Credenciais inválidas.");
+        }
+
+        const isValid = await verifyPassword(user.password, password);
+        if (!isValid) {
+          throw new Error("Credenciais inválidas.");
         }
 
         return user;

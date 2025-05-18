@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Prisma, User } from '@prisma/client';
 
@@ -8,6 +8,8 @@ interface ProfileFormProps {
   userId: string;
   getUser: (id: string) => Promise<User | null>;
   onSubmit: (data: Partial<Prisma.UserUpdateInput>) => Promise<User | null>;
+  verifyPassword: (userId: string, currentPassword: string) => Promise<boolean>;
+  hashPassword: (plane: string) => Promise<string>;
 }
 
 type FormData = {
@@ -18,29 +20,36 @@ type FormData = {
   confirmPassword?: string;
 };
 
-export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormProps) {
+export default function ProfileForm({
+  userId,
+  getUser,
+  onSubmit,
+  verifyPassword,
+  hashPassword,
+}: ProfileFormProps) {
   const [user, setUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
   const [isChanged, setIsChanged] = useState(false);
   const [passwordError, setPasswordError] = useState('');
-
+  const [hashedPassword, setHashedPassword] = useState('');
 
   useEffect(() => {
     async function load() {
       const u = await getUser(userId);
       if (u) {
         setUser(u);
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           name: u.name || '',
-          email: u.email || ''
+          email: u.email || '',
         }));
+        setHashedPassword(u.password);
         setIsChanged(false);
       }
     }
@@ -49,7 +58,7 @@ export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormPr
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     setIsChanged(true);
   };
 
@@ -62,27 +71,34 @@ export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormPr
         setPasswordError('As senhas não coincidem');
         return;
       }
+
+      try {
+        await verifyPassword(userId, formData.currentPassword?.toString());
+      } catch {
+        setPasswordError('Senha atual incorreta');
+        return;
+      }
     }
 
     const dataToUpdate: Partial<Prisma.UserUpdateInput> = {
-      name: formData.name
+      name: formData.name,
     };
 
     if (formData.newPassword) {
-      dataToUpdate.password = formData.newPassword;
+      dataToUpdate.password = await hashPassword(formData.newPassword);
     }
 
     const updated = await onSubmit(dataToUpdate);
     if (updated) {
       setUser(updated);
       setIsChanged(false);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         name: updated.name || '',
         email: updated.email || '',
         currentPassword: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
       }));
       setPasswordError('');
     }
@@ -100,16 +116,10 @@ export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormPr
           />
         </div>
         <div className="flex gap-2">
-          <button
-            type="button"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md"
-          >
+          <button type="button" className="px-4 py-2 bg-blue-600 text-white rounded-md">
             Mudar foto de perfil
           </button>
-          <button
-            type="button"
-            className="px-4 py-2 bg-red-500 text-white rounded-md"
-          >
+          <button type="button" className="px-4 py-2 bg-red-500 text-white rounded-md">
             Apagar foto de perfil
           </button>
         </div>
@@ -188,9 +198,7 @@ export default function ProfileForm({ userId, getUser, onSubmit }: ProfileFormPr
           />
         </div>
 
-        {passwordError && (
-          <p className="mt-2 text-sm text-red-600">{passwordError}</p>
-        )}
+        {passwordError && <p className="mt-2 text-sm text-red-600">{passwordError}</p>}
       </div>
 
       <button

@@ -7,9 +7,33 @@ import { deleteTaskAction } from '@/actions/task/delete-task-action';
 import { listAllTaskAction } from '@/actions/task/listAll-task-action';
 import { updateTaskAction } from '@/actions/task/update-task-action';
 import { getScheduledDatesAction } from '@/actions/event/get-scheduled-dates-action';
+import { auth } from '@/lib/auth';
+import { getUserAction } from '@/actions/systemUser/get-user-action';
 
 
 export default async function DashboardPage() {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return (
+      <div className="flex items-center justify-center h-full text-gray-500">
+        <p>Não autenticado. Por favor, faça login.</p>
+      </div>
+    );
+  }
+
+  const user = await getUserAction(userId);
+  const isAdmin = user?.role === 'ADMIN';
+
+  if (!isAdmin) {
+    return (
+      <div className="flex items-center justify-center h-full text-gray-500">
+        <p>Acesso restrito. Entre em contato com o administrador para mais informações.</p>
+      </div>
+    );
+  }
+
   const onGoingEvents = await getEventosByFilter({ status: 'ongoing' }, 1, 1, { event_date: 'asc' });
   const eventsByMonth = await getCountEventsByMonthAction(1970, 2025, 1, 12);
   const eventsDistribuition = await getCountEventsDistribuition();

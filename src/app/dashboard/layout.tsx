@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import Sidebar from "@/components/layout/Sidebar";
 import { SignOut } from "@/components/sign-out";
 import { COPYRIGHT_YEAR, APP_NAME } from "@/constants/constants";
+import { getUserAction } from '@/actions/systemUser/get-user-action';
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -10,14 +11,26 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   const session = await auth();
+  const userId = session?.user?.id;
 
-  if (!session) {
+  if (!userId) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center p-4">
         <p className="text-gray-600">Você precisa estar logado para acessar o dashboard.</p>
         <a href="/sign-in">
           <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">Login</button>
         </a>
+      </div>
+    );
+  }
+
+  const user = await getUserAction(userId);
+  const isAdmin = user?.role === 'ADMIN';
+
+  if (!isAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-gray-500">
+        <p>Acesso restrito. Entre em contato com o administrador para mais informações.</p>
       </div>
     );
   }

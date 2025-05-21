@@ -1,4 +1,3 @@
-import ProfileForm from '@/components/dashboard/settings/ProfileForm';
 import { redirect } from 'next/navigation';
 
 const SettingsPage = () => {

@@ -14,6 +14,16 @@ export default class CustomerRepository {
     });
   }
 
+  async findManyByIds(ids: string[]): Promise<Customer[]> {
+    return db.customer.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   async findAll(): Promise<Customer[]> {
     return db.customer.findMany();
   }

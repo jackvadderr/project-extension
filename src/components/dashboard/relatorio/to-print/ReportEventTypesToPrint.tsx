@@ -5,14 +5,6 @@ interface EventTypeDistribution {
   count: number;
 }
 
-const mockEventTypes: EventTypeDistribution[] = [
-  { type: 'Casamento', count: 10 },
-  { type: 'Corporativo', count: 5 },
-  { type: 'Aniversário', count: 3 },
-  { type: 'Workshop', count: 2 },
-  { type: 'Outros', count: 1 },
-];
-
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
@@ -50,8 +42,21 @@ const styles = StyleSheet.create({
 // Simple icon replacement
 const PieChartIcon = () => <Text style={{ fontSize: 10 }}>📊</Text>;
 
-export default function ReportEventTypesToPrint() {
-  const total = mockEventTypes.reduce((acc, curr) => acc + curr.count, 0);
+export default function ReportEventTypesToPrint({ event = [] }: { event?: EventTypeDistribution[] }) {
+  const total = event.reduce((acc, curr) => acc + curr.count, 0);
+
+  // Early return if no events
+  if (event.length === 0) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.title}>
+          <PieChartIcon />
+          <Text>Distribuição por Tipo de Evento</Text>
+        </View>
+        <Text style={{ fontSize: 10 }}>Nenhum evento encontrado</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -61,7 +66,7 @@ export default function ReportEventTypesToPrint() {
       </View>
 
       <View>
-        {mockEventTypes.map((eventType, idx) => {
+        {event.map((eventType, idx) => {
           const percentage = (eventType.count / total) * 100;
 
           return (

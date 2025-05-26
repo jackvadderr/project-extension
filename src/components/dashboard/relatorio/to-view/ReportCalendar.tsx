@@ -1,31 +1,23 @@
 import { CalendarDays } from 'lucide-react';
 
 interface CalendarDay {
-  date: string; // formato '2025-05-01'
-  status: 'livre' | 'agendado' | 'reservado' | 'bloqueado';
+  date: string;
 }
 
-const mockCalendarData: CalendarDay[] = [
-  { date: '2025-05-01', status: 'reservado' },
-  { date: '2025-05-03', status: 'bloqueado' },
-  { date: '2025-05-05', status: 'agendado' },
-  { date: '2025-05-10', status: 'reservado' },
-  { date: '2025-05-15', status: 'bloqueado' },
-  { date: '2025-05-20', status: 'agendado' },
-];
-
-const statusColors: Record<CalendarDay['status'], string> = {
+const statusColors = {
   livre: 'bg-white border',
-  agendado: 'bg-yellow-300',
-  reservado: 'bg-green-400',
-  bloqueado: 'bg-red-400',
-};
+  agendado: 'bg-green-300',
+} as const;
 
 function formatDay(dateStr: string) {
   return new Date(dateStr).getDate();
 }
 
-export default function ReportCalendar() {
+const getDateStatus = (date: string, events: CalendarDay[]) => {
+  return events.some(event => event.date === date) ? 'agendado' : 'livre';
+};
+
+export default function ReportCalendar({ events }: { events: CalendarDay[] }) {
   return (
     <div className="mb-8">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -36,8 +28,7 @@ export default function ReportCalendar() {
       <div className="grid grid-cols-7 gap-1 text-sm mb-4">
         {[...Array(31)].map((_, i) => {
           const date = `2025-05-${String(i + 1).padStart(2, '0')}`;
-          const day = mockCalendarData.find(d => d.date === date);
-          const status = day ? day.status : 'livre';
+          const status = getDateStatus(date, events);
           return (
             <div
               key={date}
@@ -51,13 +42,10 @@ export default function ReportCalendar() {
 
       <div className="text-sm text-gray-700 space-x-4">
         <span className="inline-flex items-center gap-1">
-          <span className="w-3 h-3 bg-green-400 inline-block rounded-sm"></span> Reservado
+          <span className="w-3 h-3 bg-white border inline-block rounded-sm"></span> Livre
         </span>
         <span className="inline-flex items-center gap-1">
-          <span className="w-3 h-3 bg-yellow-300 inline-block rounded-sm"></span> Agendado
-        </span>
-        <span className="inline-flex items-center gap-1">
-          <span className="w-3 h-3 bg-red-400 inline-block rounded-sm"></span> Bloqueado
+          <span className="w-3 h-3 bg-green-300 inline-block rounded-sm"></span> Agendado
         </span>
       </div>
     </div>

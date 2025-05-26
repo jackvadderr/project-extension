@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { Download, ArrowLeft } from 'lucide-react';
 import ReportHeader from '@/components/dashboard/relatorio/to-view/ReportHeader';
@@ -32,16 +32,16 @@ export default function ClientReportPageWrapper({
     setStatus('Buscando dados...');
     setLogs(['Iniciando preparação do relatório...']);
 
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 50));
     setLogs((prev) => [...prev, 'Coletando eventos do sistema...']);
 
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 50));
     setLogs((prev) => [...prev, 'Analisando informações financeiras...']);
 
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 50));
     setLogs((prev) => [...prev, 'Calculando KPIs...']);
 
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 50));
     setLogs((prev) => [...prev, 'Finalizando preparação...']);
 
     setStatus('Pronto para gerar PDF');
@@ -57,27 +57,8 @@ export default function ClientReportPageWrapper({
     setReportData(initialReportData);
   }
 
-  const ActionButtons = () => (
-    <div className="flex justify-between items-center gap-2 my-8">
-      <button
-        onClick={reset}
-        className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Voltar
-      </button>
-      <PDFDownloadLink
-        document={<ReportPDF data={reportData} />}
-        fileName="relatorio-eventos.pdf"
-        className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        <Download className="w-4 h-4" />
-        Baixar PDF
-      </PDFDownloadLink>
-    </div>
-  );
-
   return (
+    <>
     <div className="container mx-auto p-6">
       {!ready ? (
         <div className="max-w-2xl mx-auto space-y-4 p-6 rounded-2xl shadow-md bg-white">
@@ -112,7 +93,7 @@ export default function ClientReportPageWrapper({
         </div>
       ) : (
         <>
-          <ActionButtons />
+          <ActionButtons reset={reset} reportData={reportData} />
           <div
             id="report-preview-container"
             className="border border-gray-300 rounded-xl shadow-xl bg-white p-6 space-y-6"
@@ -120,17 +101,118 @@ export default function ClientReportPageWrapper({
             <ReportHeader adminName={reportData.adminName} period={reportData.period} />
             <ReportSummary summary={reportData.summary} />
             <ReportKPIs kpis={reportData.kpis} />
-            <ReportFinancials financials={reportData.financials} />
-            <ReportCalendar calendar={reportData.calendar} />
+            <ReportFinancials data={reportData.financials}/>
+            <ReportCalendar events={reportData.calendar} />
             <ReportEventsTable events={reportData.events} />
-            <ReportClients clients={reportData.clients} />
+            <ReportClients clients={reportData.clients}/>
             <ReportForecast forecast={reportData.forecast} />
-            <ReportNotesFromAdm notes={reportData.notes} />
+            <ReportNotesFromAdm notes={"Terminar logo essa porra"} />
             <ReportFooter />
           </div>
-          <ActionButtons />
+          <ActionButtons reset={reset} reportData={reportData} />
         </>
       )}
     </div>
+    </>
   );
+}
+
+interface ActionButtonsProps {
+  reset: () => void;
+  reportData: {
+    adminName: string;
+    period: string;
+    summary: {
+      totalEvents: number;
+      revenue: number;
+      occupancyRate: number;
+    };
+    kpis: Array<{
+      label: string;
+      value: number;
+      status: string;
+    }>;
+    financials: {
+      totalRevenue: number;
+      averageTicket: number;
+      topClients: Array<{
+        name: string;
+        value: number;
+      }>;
+    };
+    calendar: Array<{
+      date: string;
+      status: string;
+    }>;
+    events: Array<{
+      date: string;
+      type: string; // Changed from any to string
+      client: string;
+      value: number; // Changed from any to number
+    }>;
+    clients: Array<{
+      name: string;
+      recurrence: number;
+      source: string;
+      revenue: number;
+    }>;
+    forecast: {
+      upcomingEvents: Array<{
+        date: string;
+        type: string;
+        client: string;
+        value: number;
+      }>;
+      occupancyGraph: number[];
+      eventTypeStats: Record<string, number>;
+    };
+    notes: string;
+  };
+}
+
+const ActionButtons: React.FC<ActionButtonsProps> = ({ reset, reportData }) => {
+  // DEBUG
+  console.log('ActionButtons reportData:', {
+    adminName: reportData.adminName,
+    period: reportData.period,
+    summary: reportData.summary,
+    kpis: reportData.kpis,
+    financials: reportData.financials,
+    calendar: reportData.calendar?.length,
+    events: reportData.events?.length,
+    clients: reportData.clients?.length,
+    forecast: {
+      upcomingEvents: reportData.forecast.upcomingEvents?.length,
+      occupancyGraph: reportData.forecast.occupancyGraph?.length,
+      eventTypeStats: reportData.forecast.eventTypeStats
+    },
+    notes: reportData.notes
+  });
+
+  return (
+    <div className="flex justify-between items-center gap-2 my-8">
+      <button
+        onClick={reset}
+        className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Voltar
+      </button>
+
+      <PDFDownloadLink
+        document={<ReportPDF data={reportData} />}
+        fileName="relatorio-eventos.pdf"
+        className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        {({ loading }) => loading ? (
+          'Gerando PDF...'
+        ) : (
+          <>
+            <Download className="w-4 h-4" />
+            Baixar PDF
+          </>
+        )}
+      </PDFDownloadLink>
+    </div>
+  )
 }

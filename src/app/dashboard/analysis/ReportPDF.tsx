@@ -4,7 +4,6 @@ import ReportKPIsToPrint from '@/components/dashboard/relatorio/to-print/ReportK
 import ReportFinancialsToPrint from '@/components/dashboard/relatorio/to-print/ReportFinancialsToPrint';
 import ReportCalendarToPrint from '@/components/dashboard/relatorio/to-print/ReportCalendarToPrint';
 import ReportEventsTableToPrint from '@/components/dashboard/relatorio/to-print/ReportEventTableToPrint';
-import ReportEventTypesToPrint from '@/components/dashboard/relatorio/to-print/ReportEventTypesToPrint';
 import ReportClientsToPrint from '@/components/dashboard/relatorio/to-print/ReportClientsToPrint';
 import ReportForecastToPrint from '@/components/dashboard/relatorio/to-print/ReportForecastToPrint';
 import ReportNotesFromAdmToPrint from '@/components/dashboard/relatorio/to-print/ReportNotesFromAdmToPrint';
@@ -93,8 +92,52 @@ const styles = StyleSheet.create({
 });
 
 
-
-export function ReportPDF({ data }) {
+export function ReportPDF({ data }: {
+  data: {
+    adminName: string
+    period: string
+    summary: {
+      totalEvents: number
+      revenue: number
+      occupancyRate: number
+    }
+    kpis: Array<{
+      label: string
+      value: number
+      status: string
+    }>
+    financials: {
+      totalRevenue: number
+      averageTicket: number
+      topClients: Array<{
+        name: string
+        value: number
+      }>
+    }
+    calendar: Array<{
+      date: string
+      status: string
+    }>
+    events: Array<{
+      date: string
+      type: any
+      client: string
+      value: any
+    }>
+    clients: Array<{
+      name: string
+      recurrence: number
+      source: string
+      revenue: number
+    }>
+    forecast: {
+      upcomingEvents: any[]
+      occupancyGraph: number[]
+      eventTypeStats: Record<string, number>
+    }
+    notes: string
+  }
+}) {
   return (
     <>
     <Document>
@@ -123,16 +166,13 @@ export function ReportPDF({ data }) {
           <ReportEventsTableToPrint events={data.events} />
         </View>
         <View>
-          <ReportEventTypesToPrint />
+          <ReportClientsToPrint clients={data.clients} />
         </View>
         <View>
-          <ReportClientsToPrint />
+          <ReportForecastToPrint forecast={data.forecast} />
         </View>
         <View>
-          <ReportForecastToPrint />
-        </View>
-        <View>
-          <ReportNotesFromAdmToPrint />
+          <ReportNotesFromAdmToPrint notes={data.notes} />
         </View>
         <View>
           <ReportFooterToPrint />

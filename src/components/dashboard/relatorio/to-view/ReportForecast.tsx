@@ -2,18 +2,19 @@ import { CalendarCheck } from 'lucide-react';
 
 interface ForecastEvent {
   date: string;
-  name: string;
+  client: string;
   type: string;
-  expectedOccupancy: number;
 }
 
-const mockForecast: ForecastEvent[] = [
-  { date: '2025-06-05', name: 'Evento XPTO', type: 'Corporativo', expectedOccupancy: 80 },
-  { date: '2025-06-10', name: 'Festa Julina', type: 'Aniversário', expectedOccupancy: 60 },
-  { date: '2025-06-15', name: 'Congresso 2025', type: 'Workshop', expectedOccupancy: 90 },
-];
+interface ReportForecastProps {
+  forecast: {
+    upcomingEvents: ForecastEvent[];
+    occupancyGraph: number[];
+    eventTypeStats: Record<string, number>;
+  };
+}
 
-export default function ReportForecast() {
+export default function ReportForecast({ forecast }: ReportForecastProps) {
   return (
     <div className="mb-8">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -23,12 +24,12 @@ export default function ReportForecast() {
 
       <div className="mb-4">
         <ul className="text-sm space-y-2">
-          {mockForecast.map((event, idx) => (
+          {forecast.upcomingEvents.map((event, idx) => (
             <li key={idx} className="flex justify-between border-b pb-1">
               <span>
-                {new Date(event.date).toLocaleDateString('pt-BR')} — {event.name} ({event.type})
+                {new Date(event.date).toLocaleDateString('pt-BR')} — {event.client} ({event.type})
               </span>
-              <span>{event.expectedOccupancy}%</span>
+              <span>{Math.round(forecast.occupancyGraph[idx] * 100)}%</span>
             </li>
           ))}
         </ul>
@@ -37,13 +38,13 @@ export default function ReportForecast() {
       <div>
         <h3 className="text-md font-medium mb-2">Gráfico de Ocupação Futura</h3>
         <div className="space-y-2">
-          {mockForecast.map((event, idx) => (
+          {forecast.upcomingEvents.map((event, idx) => (
             <div key={idx}>
-              <div className="text-xs text-gray-700 mb-1">{event.name}</div>
+              <div className="text-xs text-gray-700 mb-1">{event.client}</div>
               <div className="w-full h-2 bg-gray-200 rounded">
                 <div
                   className="h-2 bg-teal-500 rounded"
-                  style={{ width: `${event.expectedOccupancy}%` }}
+                  style={{ width: `${Math.round(forecast.occupancyGraph[idx] * 100)}%` }}
                 ></div>
               </div>
             </div>

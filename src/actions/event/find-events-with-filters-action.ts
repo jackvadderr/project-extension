@@ -17,6 +17,7 @@ export async function getEventosByFilter(
   date: any;
   location: string;
   status: "scheduled" | "ongoing" | "canceled" | "completed" | "indefinido" | string;
+  rent: number;
   max_capacity: number
 }[]> {
   const repository = new EventRepository();
@@ -31,6 +32,7 @@ export async function getEventosByFilter(
     date: event.event_date.toISOString(),
     location: event.location,
     status: (event.status as EventStatus) || 'Indefinido',
+    rent: event.rent,
     max_capacity: event.max_capacity,
   }));
 }

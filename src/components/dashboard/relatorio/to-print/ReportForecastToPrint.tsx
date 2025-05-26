@@ -7,12 +7,6 @@ interface ForecastEvent {
   expectedOccupancy: number;
 }
 
-const mockForecast: ForecastEvent[] = [
-  { date: '2025-06-05', name: 'Evento XPTO', type: 'Corporativo', expectedOccupancy: 80 },
-  { date: '2025-06-10', name: 'Festa Julina', type: 'Aniversário', expectedOccupancy: 60 },
-  { date: '2025-06-15', name: 'Congresso 2025', type: 'Workshop', expectedOccupancy: 90 },
-];
-
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
@@ -66,7 +60,7 @@ const styles = StyleSheet.create({
 // Simple icon replacement
 const CalendarIcon = () => <Text style={{ fontSize: 10 }}>📅</Text>;
 
-export default function ReportForecastToPrint() {
+export default function ReportForecastToPrint({forecast}: {forecast?: ForecastEvent[]}) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -75,7 +69,7 @@ export default function ReportForecastToPrint() {
       </View>
 
       <View style={styles.eventList}>
-        {mockForecast.map((event, idx) => (
+        {forecast.map((event, idx) => (
           <View key={idx} style={styles.eventItem}>
             <Text>
               {new Date(event.date).toLocaleDateString('pt-BR')} — {event.name} ({event.type})
@@ -87,7 +81,7 @@ export default function ReportForecastToPrint() {
 
       <View>
         <Text style={styles.chartTitle}>Gráfico de Ocupação Futura</Text>
-        {mockForecast.map((event, idx) => (
+        {forecast.map((event, idx) => (
           <View key={idx} style={styles.chartItem}>
             <Text style={styles.chartLabel}>{event.name}</Text>
             <View style={styles.barContainer}>

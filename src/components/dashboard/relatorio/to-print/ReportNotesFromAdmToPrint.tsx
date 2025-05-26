@@ -1,10 +1,5 @@
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 
-const mockNotes = `Observações gerais:
-- Cliente XPTO demonstrou interesse em novos pacotes corporativos.
-- Analisar possibilidade de desconto progressivo para clientes recorrentes.
-- Investir em divulgação de eventos via redes sociais e parcerias.`;
-
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
@@ -26,10 +21,9 @@ const styles = StyleSheet.create({
   },
 });
 
-// Simple icon replacement
 const NoteIcon = () => <Text style={{ fontSize: 10 }}>📝</Text>;
 
-export default function ReportNotesFromAdmToPrint() {
+export default function ReportNotesFromAdmToPrint({notes}: {notes?: string}) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -38,7 +32,7 @@ export default function ReportNotesFromAdmToPrint() {
       </View>
 
       <View style={styles.notesContainer}>
-        <Text>{mockNotes}</Text>
+        <Text>{notes}</Text>
       </View>
     </View>
   );

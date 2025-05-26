@@ -1,18 +1,8 @@
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 
 interface CalendarDay {
-  date: string; // formato '2025-05-01'
-  status: 'livre' | 'agendado' | 'reservado' | 'bloqueado';
+  date: string;
 }
-
-const mockCalendarData: CalendarDay[] = [
-  { date: '2025-05-01', status: 'reservado' },
-  { date: '2025-05-03', status: 'bloqueado' },
-  { date: '2025-05-05', status: 'agendado' },
-  { date: '2025-05-10', status: 'reservado' },
-  { date: '2025-05-15', status: 'bloqueado' },
-  { date: '2025-05-20', status: 'agendado' },
-];
 
 const styles = StyleSheet.create({
   container: {
@@ -72,14 +62,13 @@ const styles = StyleSheet.create({
   },
 });
 
-// Simple icon replacement
 const CalendarIcon = () => <Text style={{ fontSize: 10 }}>📅</Text>;
 
-function formatDay(dateStr: string) {
-  return new Date(dateStr).getDate();
-}
+const getDateStatus = (date: string, events: CalendarDay[]) => {
+  return events.some(event => event.date === date) ? 'agendado' : 'livre';
+};
 
-export default function ReportCalendarToPrint() {
+export default function ReportCalendarToPrint({ events }: { events: CalendarDay[] }) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -90,8 +79,7 @@ export default function ReportCalendarToPrint() {
       <View style={styles.calendarGrid}>
         {[...Array(31)].map((_, i) => {
           const date = `2025-05-${String(i + 1).padStart(2, '0')}`;
-          const day = mockCalendarData.find(d => d.date === date);
-          const status = day ? day.status : 'livre';
+          const status = getDateStatus(date, events);
           return (
             <View
               key={date}
@@ -105,16 +93,12 @@ export default function ReportCalendarToPrint() {
 
       <View style={styles.legendContainer}>
         <View style={styles.legendItem}>
-          <View style={[styles.legendColor, styles.reservado]} />
-          <Text>Reservado</Text>
+          <View style={[styles.legendColor, styles.livre]} />
+          <Text>Livre</Text>
         </View>
         <View style={styles.legendItem}>
           <View style={[styles.legendColor, styles.agendado]} />
           <Text>Agendado</Text>
-        </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendColor, styles.bloqueado]} />
-          <Text>Bloqueado</Text>
         </View>
       </View>
     </View>

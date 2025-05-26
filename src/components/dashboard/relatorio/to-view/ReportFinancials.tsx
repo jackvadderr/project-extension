@@ -6,17 +6,7 @@ interface FinancialData {
   topClients: { name: string; value: number }[];
 }
 
-const mockFinancialData: FinancialData = {
-  totalRevenue: 150000,
-  averageTicket: 6000,
-  topClients: [
-    { name: 'Cliente A', value: 35000 },
-    { name: 'Cliente B', value: 27000 },
-    { name: 'Cliente C', value: 21000 },
-  ],
-};
-
-export default function ReportFinancials() {
+export default function ReportFinancials({ data }: { data: FinancialData }) {
   return (
     <div className="mb-8">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -29,21 +19,22 @@ export default function ReportFinancials() {
             <DollarSign className="w-4 h-4" />
             Receita Total
           </div>
-          <div className="text-lg font-bold">R$ {mockFinancialData.totalRevenue.toLocaleString('pt-BR')}</div>
+          <div className="text-lg font-bold">R$ {data.totalRevenue.toLocaleString('pt-BR')}</div>
         </div>
         <div className="bg-gray-100 p-4 rounded">
           <div className="text-sm text-gray-600 flex items-center gap-1">
             <User className="w-4 h-4" />
             Ticket Médio
           </div>
-          <div className="text-lg font-bold">R$ {mockFinancialData.averageTicket.toLocaleString('pt-BR')}</div>
+          <div className="text-lg font-bold">R$ {data.averageTicket.toLocaleString('pt-BR')}</div>
         </div>
       </div>
 
+      {/*Top Clientes*/}
       <div className="mb-4">
         <h3 className="text-md font-medium mb-2">Top Clientes</h3>
         <ul>
-          {mockFinancialData.topClients.map((client, idx) => (
+          {data.topClients.map((client, idx) => (
             <li key={idx} className="flex justify-between text-sm border-b py-1">
               <span>{client.name}</span>
               <span>R$ {client.value.toLocaleString('pt-BR')}</span>
@@ -52,11 +43,12 @@ export default function ReportFinancials() {
         </ul>
       </div>
 
+      {/*Distribuicao visual*/}
       <div>
         <h3 className="text-md font-medium mb-2">Distribuição Visual</h3>
         <div className="space-y-2">
-          {mockFinancialData.topClients.map((client, idx) => {
-            const total = mockFinancialData.totalRevenue;
+          {data.topClients.map((client, idx) => {
+            const total = data.totalRevenue;
             const percentage = (client.value / total) * 100;
             return (
               <div key={idx}>

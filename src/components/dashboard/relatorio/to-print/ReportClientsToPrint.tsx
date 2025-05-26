@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
 // Simple icon replacement
 const UsersIcon = () => <Text style={{ fontSize: 10 }}>👥</Text>;
 
-export default function ReportClientsToPrint() {
+export default function ReportClientsToPrint({ clients }: {clients: Client[]}) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -83,7 +83,7 @@ export default function ReportClientsToPrint() {
         </View>
 
         {/* Table Rows */}
-        {mockClients.map((client, idx) => (
+        {clients.map((client, idx) => (
           <View key={idx} style={styles.dataRow}>
             <Text style={styles.dataCell}>{client.name}</Text>
             <Text style={styles.dataCell}>{client.recurrence}</Text>

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 
 const NoteIcon = () => <Text style={{ fontSize: 10 }}>📝</Text>;
 
-export default function ReportNotesFromAdmToPrint({notes}: {notes?: string}) {
+export default function ReportNotesFromAdmToPrint({notes}: {notes: string}) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>

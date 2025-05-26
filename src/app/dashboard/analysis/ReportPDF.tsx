@@ -91,53 +91,50 @@ const styles = StyleSheet.create({
   },
 });
 
-
-export function ReportPDF({ data }: {
-  data: {
-    adminName: string
-    period: string
-    summary: {
-      totalEvents: number
-      revenue: number
-      occupancyRate: number
-    }
-    kpis: Array<{
-      label: string
-      value: number
-      status: string
-    }>
-    financials: {
-      totalRevenue: number
-      averageTicket: number
-      topClients: Array<{
-        name: string
-        value: number
-      }>
-    }
-    calendar: Array<{
-      date: string
-      status: string
-    }>
-    events: Array<{
-      date: string
-      type: any
-      client: string
-      value: any
-    }>
-    clients: Array<{
-      name: string
-      recurrence: number
-      source: string
-      revenue: number
-    }>
-    forecast: {
-      upcomingEvents: any[]
-      occupancyGraph: number[]
-      eventTypeStats: Record<string, number>
-    }
-    notes: string
+export function ReportPDF({ data }: { data: {
+  adminName: string,
+  period: string,
+  summary: {
+    totalEvents: number
+    revenue: number
+    occupancyRate: number
   }
-}) {
+  kpis: {
+    label: string
+    value: number
+    status: string
+  }[]
+  financials: {
+    totalRevenue: number
+    averageTicket: number
+    topClients: {
+      name: string
+      value: number
+    }[]
+  }
+  calendar: { date: string, status: string }[]
+  events: {
+    date: string
+    type: any
+    client: string
+    value: any
+  }[]
+  clients: {
+    name: string
+    recurrence: number
+    source: string
+    revenue: number
+  }[]
+  forecast: {
+    upcomingEvents: any[]
+    occupancyGraph: number[]
+    eventTypeStats: Record<string, number>
+  }
+  notes: string
+}}) {
+  if (!data) {
+    return <Text>Carregando...</Text>;
+  }
   return (
     <>
     <Document>

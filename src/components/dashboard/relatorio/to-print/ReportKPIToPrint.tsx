@@ -6,10 +6,6 @@ interface KPI {
   status: 'green' | 'yellow' | 'red';
 }
 
-interface ReportKPIsProps {
-  kpis: KPI[];
-}
-
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
@@ -58,7 +54,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function ReportKPIsToPrint({ kpis }: ReportKPIsProps) {
+export default function ReportKPIsToPrint({ kpis }: {kpis: {
+    label: string
+    value: number
+    status: string
+  }[]
+}) {
   const statusStyles = {
     green: [styles.statusIndicator, styles.statusGreen],
     yellow: [styles.statusIndicator, styles.statusYellow],

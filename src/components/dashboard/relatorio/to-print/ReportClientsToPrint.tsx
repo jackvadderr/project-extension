@@ -78,7 +78,6 @@ export default function ReportClientsToPrint({ clients }: {clients: Client[]}) {
         <View style={styles.headerRow}>
           <Text style={styles.headerCell}>Nome</Text>
           <Text style={styles.headerCell}>Recorrência</Text>
-          <Text style={styles.headerCell}>Origem</Text>
           <Text style={[styles.headerCell, styles.rightAlignedCell]}>Faturamento (R$)</Text>
         </View>
 
@@ -87,7 +86,6 @@ export default function ReportClientsToPrint({ clients }: {clients: Client[]}) {
           <View key={idx} style={styles.dataRow}>
             <Text style={styles.dataCell}>{client.name}</Text>
             <Text style={styles.dataCell}>{client.recurrence}</Text>
-            <Text style={styles.dataCell}>{client.source}</Text>
             <Text style={[styles.dataCell, styles.rightAlignedCell]}>
               {client.revenue.toLocaleString('pt-BR')}
             </Text>

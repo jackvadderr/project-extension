@@ -1,20 +1,5 @@
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 
-interface Event {
-  date: string;
-  type: string;
-  client: string;
-  value: number;
-}
-
-const mockEvents: Event[] = [
-  { date: '2025-05-01', type: 'Casamento', client: 'Ana Lima', value: 8000 },
-  { date: '2025-05-05', type: 'Corporativo', client: 'Empresa XPTO', value: 12000 },
-  { date: '2025-05-10', type: 'Aniversário', client: 'Carlos Souza', value: 5000 },
-  { date: '2025-05-12', type: 'Workshop', client: 'Instituto Saber', value: 6500 },
-  { date: '2025-05-18', type: 'Casamento', client: 'Maria Oliveira', value: 10000 },
-];
-
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
@@ -63,14 +48,17 @@ const styles = StyleSheet.create({
   },
 });
 
-// Simple icon replacement
-const ListIcon = () => <Text style={{ fontSize: 10 }}>📋</Text>;
-
-export default function ReportEventsTableToPrint() {
+export default function ReportEventsTableToPrint({events}: {events:
+{
+  date: string
+  type: any
+  client: string
+  value: any
+}[]
+}) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <ListIcon />
         <Text>Tabela de Eventos Realizados</Text>
       </View>
 
@@ -78,18 +66,16 @@ export default function ReportEventsTableToPrint() {
         {/* Table Header */}
         <View style={styles.headerRow}>
           <Text style={styles.headerCell}>Data</Text>
-          <Text style={styles.headerCell}>Tipo</Text>
           <Text style={styles.headerCell}>Cliente</Text>
           <Text style={[styles.headerCell, styles.rightAlignedCell]}>Valor (R$)</Text>
         </View>
 
         {/* Table Rows */}
-        {mockEvents.map((event, idx) => (
+        {events.map((event, idx) => (
           <View key={idx} style={styles.dataRow}>
             <Text style={styles.dataCell}>
               {new Date(event.date).toLocaleDateString('pt-BR')}
             </Text>
-            <Text style={styles.dataCell}>{event.type}</Text>
             <Text style={styles.dataCell}>{event.client}</Text>
             <Text style={[styles.dataCell, styles.rightAlignedCell]}>
               {event.value.toLocaleString('pt-BR')}

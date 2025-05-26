@@ -6,80 +6,76 @@ interface CalendarDay {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
+    marginBottom: 32,
   },
   title: {
     fontSize: 16,
     fontWeight: 'semibold',
-    marginBottom: 10,
+    marginBottom: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
+    gap: 8,
   },
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 2,
-    marginBottom: 10,
+    gap: 4,
+    marginBottom: 16,
   },
   dayCell: {
     width: '13%', // Approximately 1/7 of the width (7 days in a week)
-    height: 25,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: 8,
+    fontSize: 10,
     borderRadius: 2,
   },
   livre: {
     backgroundColor: '#ffffff',
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: '#d1d5db',
   },
   agendado: {
-    backgroundColor: '#fde047', // yellow-300
-  },
-  reservado: {
-    backgroundColor: '#4ade80', // green-400
-  },
-  bloqueado: {
-    backgroundColor: '#f87171', // red-400
+    backgroundColor: '#86efac', // green-300
   },
   legendContainer: {
     flexDirection: 'row',
-    gap: 15,
-    fontSize: 8,
+    gap: 16,
+    fontSize: 10,
     color: '#4b5563',
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
+    gap: 4,
   },
   legendColor: {
-    width: 8,
-    height: 8,
-    borderRadius: 1,
+    width: 12,
+    height: 12,
+    borderRadius: 2,
   },
 });
 
-const CalendarIcon = () => <Text style={{ fontSize: 10 }}>📅</Text>;
+function formatDay(dateStr: string) {
+  return new Date(dateStr).getDate();
+}
 
 const getDateStatus = (date: string, events: CalendarDay[]) => {
-  return events.some(event => event.date === date) ? 'agendado' : 'livre';
+  console.log(events);
+  return events?.some(event => event.date === date) ? 'agendado' : 'livre';
 };
 
-export default function ReportCalendarToPrint({ events }: { events: CalendarDay[] }) {
+export default function ReportCalendarToPrint({ calendar }: { calendar: { date: string, status: string }[] }) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <CalendarIcon />
         <Text>Calendário de Eventos</Text>
       </View>
 
       <View style={styles.calendarGrid}>
         {[...Array(31)].map((_, i) => {
           const date = `2025-05-${String(i + 1).padStart(2, '0')}`;
-          const status = getDateStatus(date, events);
+          const status = getDateStatus(date, calendar);
           return (
             <View
               key={date}

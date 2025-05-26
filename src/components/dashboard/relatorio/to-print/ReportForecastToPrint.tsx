@@ -57,38 +57,47 @@ const styles = StyleSheet.create({
   },
 });
 
-// Simple icon replacement
-const CalendarIcon = () => <Text style={{ fontSize: 10 }}>📅</Text>;
-
-export default function ReportForecastToPrint({forecast}: {forecast?: ForecastEvent[]}) {
+export default function ReportForecastToPrint({forecast}: {forecast:
+{
+  upcomingEvents: any[]
+  occupancyGraph: number[]
+  eventTypeStats: Record<string, number>
+}
+}) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <CalendarIcon />
         <Text>Próximos Eventos e Ocupação Prevista</Text>
       </View>
 
-      <View style={styles.eventList}>
-        {forecast.map((event, idx) => (
-          <View key={idx} style={styles.eventItem}>
-            <Text>
-              {new Date(event.date).toLocaleDateString('pt-BR')} — {event.name} ({event.type})
-            </Text>
-            <Text>{event.expectedOccupancy}%</Text>
-          </View>
-        ))}
-      </View>
-
       <View>
-        <Text style={styles.chartTitle}>Gráfico de Ocupação Futura</Text>
-        {forecast.map((event, idx) => (
-          <View key={idx} style={styles.chartItem}>
-            <Text style={styles.chartLabel}>{event.name}</Text>
-            <View style={styles.barContainer}>
-              <View style={[styles.barFill, { width: `${event.expectedOccupancy}%` }]} />
+        <View style={styles.eventList}>
+          {forecast.upcomingEvents.map((event, idx) => (
+            <View key={idx} style={styles.eventItem}>
+              <Text>
+                {new Date(event.date).toLocaleDateString('pt-BR')} — {event.client} ({event.type})
+              </Text>
+              <Text>{Math.round(forecast.occupancyGraph[idx] * 100)}%</Text>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
+
+        <View>
+          <Text style={styles.chartTitle}>Gráfico de Ocupação Futura</Text>
+          {forecast.upcomingEvents.map((event, idx) => (
+            <View key={idx} style={styles.chartItem}>
+              <Text style={styles.chartLabel}>{event.client}</Text>
+              <View style={styles.barContainer}>
+                <View
+                  style={[
+                    styles.barFill,
+                    { width: `${Math.round(forecast.occupancyGraph[idx] * 100)}%` }
+                  ]}
+                />
+              </View>
+            </View>
+          ))}
+        </View>
       </View>
     </View>
   );

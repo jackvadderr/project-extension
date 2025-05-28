@@ -11,16 +11,21 @@ const SignInPage = async () => {
   if (session) redirect("/dashboard");
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm bg-white rounded-lg shadow-md">
-        <div className="text-center p-6 border-b border-gray-200">
-          <div
-            className="mx-auto mb-4 w-20 h-20 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: "url('/favicon.ico')" }}
-          ></div>
-          <h1 className="text-2xl font-semibold text-gray-800">Login</h1>
+    <div className="min-h-screen bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#e5e9f2_100%)] flex items-center justify-center px-4">
+      <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl">
+        <div className="flex flex-col items-center text-center px-6 pt-8 pb-4 border-b border-gray-200">
+          <div className="mb-3">
+            <img
+              src="/R.A.png"
+              alt="Logo R.A. Eventos"
+              className="h-24 w-24 object-contain rounded-full shadow-lg border-2 border-white"
+            />
+          </div>
+          <h1 className="text-2xl font-bold text-gray-800">Bem-vindo de volta</h1>
+          <p className="text-sm text-gray-500 mt-1">Acesse sua conta para continuar</p>
         </div>
-        <div className="p-6 space-y-5">
+
+        <div className="px-6 py-6 space-y-6">
           <form
             className="space-y-4"
             action={async (formData) => {
@@ -38,7 +43,7 @@ const SignInPage = async () => {
               type="email"
               required
               autoComplete="email"
-              className="w-full border border-gray-300 focus:border-blue-600 focus:ring-blue-600 rounded-md p-3"
+              className="shadow-sm focus:shadow-md"
             />
             <Input
               name="password"
@@ -46,15 +51,19 @@ const SignInPage = async () => {
               type="password"
               required
               autoComplete="current-password"
-              className="w-full border border-gray-300 focus:border-blue-600 focus:ring-blue-600 rounded-md p-3"
+              className="shadow-sm focus:shadow-md"
             />
-            <Button className="w-full py-3 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium" type="submit">
+            <Button
+              type="submit"
+              className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold transition-all shadow-md"
+            >
               Entrar
             </Button>
           </form>
+
           <div className="text-center">
-            <Link href="/sign-up" className="text-blue-600 hover:underline font-medium">
-              Nao tem acesso?
+            <Link href="/sign-up" className="text-sm text-blue-600 hover:underline font-medium">
+              Não tem acesso?
             </Link>
           </div>
         </div>

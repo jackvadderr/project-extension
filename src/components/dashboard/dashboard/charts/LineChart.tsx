@@ -64,10 +64,12 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
   const colorMap = new Map<number, string>();
 
   return (
-    <div className="w-full h-full min-h-[300px]">
+    <div className="w-full h-full min-h-[300px] bg-white rounded-xl shadow p-4">
       <ResponsiveLine
         data={transformedData}
-        margin={{ top: 30, right: 30, bottom: 70, left: 50 }} // Margens ajustadas
+        animate={true}
+        motionConfig="default"
+        margin={{ top: 20, right: 10, bottom: 60, left: 30 }}
         xScale={{ type: 'point' }}
         yScale={{
           type: 'linear',
@@ -103,34 +105,33 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
           legendOffset: -40,
           legendPosition: 'middle'
         }}
-        pointSize={8} // Ponto um pouco menor
+        pointSize={8}
         pointColor={{ theme: 'background' }}
         pointBorderWidth={2}
         pointBorderColor={{ from: 'serieColor' }}
-        enableSlices="x" // Mostrar tooltip para todos os pontos do eixo X
+        enableSlices="x"
         useMesh={true}
-        curve="monotoneX" // Curva mais suave
+        curve="catmullRom"
         lineWidth={2}
-        tooltip={({ point }) => {
-          return (
-            <div className="bg-white p-2 border border-gray-300 rounded shadow text-sm">
-              <div><strong>{point.data.xFormatted}</strong> {point.serieId.split(' ')[1]}</div>
-              <div>Eventos: <strong>{point.data.yFormatted}</strong></div>
+        tooltip={({ point }) => (
+          <div className="bg-white p-2 border border-gray-200 rounded shadow-md text-xs text-gray-800">
+            <div className="font-medium">
+              {point.data.xFormatted} - {(point.serieId as string).split(' ')[1]}
             </div>
-          );
-        }}
+            <div>Eventos: <strong>{point.data.yFormatted}</strong></div>
+          </div>
+        )}
         legends={[
           {
-            anchor: 'bottom', // Legenda na parte inferior
-            direction: 'row', // Em linha horizontal
+            anchor: 'bottom',
+            direction: 'row',
             justify: false,
-            translateY: 60, // Aumentei um pouco o espaço vertical
-            itemsSpacing: 25, // Aumentei o espaçamento entre itens
-            itemWidth: 100, // Largura um pouco maior
-            itemWidth: 80, // Largura reduzida
-            itemHeight: 16, // Altura reduzida
+            translateY: 60,
+            itemsSpacing: 25,
+            itemWidth: 80,
+            itemHeight: 16,
             itemOpacity: 0.85,
-            symbolSize: 10, // Símbolos menores
+            symbolSize: 10,
             symbolShape: 'circle',
             symbolBorderColor: 'rgba(0, 0, 0, .5)',
             effects: [
@@ -146,6 +147,6 @@ const EventsByMonthChart = ({ data }: EventsByMonthChartProps) => {
       />
     </div>
   );
-}
+};
 
 export default EventsByMonthChart;

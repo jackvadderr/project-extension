@@ -7,20 +7,19 @@ import EventDistribution from '@/components/dashboard/dashboard/charts/PieChart'
 import { EventCardProps } from '@/types/EventCardProps'
 import TodoListWrapper from '@/components/dashboard/dashboard/TodoListClient';
 import SimpleCalendarCard from './calendar/CalendarStatusCard';
-import { Task } from '@prisma/client';
+import { Task, Prisma } from '@prisma/client';
 
 interface Props {
-  onGoingEvents: any;
+  onGoingEvents:any;
   eventsByMonthFormatted: any;
-  eventsDistribuitionFormatted: any;
+  eventsDistribuitionFormatted: { name: string; value: number }[];
   eventsFutureFormatted: EventCardProps[];
-  tasks: Task[]
-  createTask: (data: Prisma.TaskCreateInput) => Promise<Task>
-  updateTask: (id: string, data: Partial<Prisma.TaskUpdateInput>) => Promise<Task | null>
-  deleteTask: (id: string) => Promise<void>
-  scheduledDates
+  tasks: Task[];
+  createTask: (data: Prisma.TaskCreateInput) => Promise<Task>;
+  updateTask: (id: string, data: Partial<Prisma.TaskUpdateInput>) => Promise<Task | null>;
+  deleteTask: (id: string) => Promise<void>;
+  scheduledDates: string[];
 }
-
 export default function DashboardClientWrapper({
                                                  onGoingEvents,
                                                  eventsByMonthFormatted,
@@ -33,7 +32,7 @@ export default function DashboardClientWrapper({
                                                  scheduledDates
                                                }: Props) {
   // const scheduledDates = ['2025-04-10', '2025-04-15', '2025-04-21'];
-  const blockedDates = [];
+  const blockedDates: string[] = [];
 
   return (
     <>
@@ -49,7 +48,7 @@ export default function DashboardClientWrapper({
 
         {/* Cards principais (maiores) */}
         <div className="bg-white shadow rounded-2xl p-4 md:col-span-1 lg:col-span-1">
-          <h2 className="text-xl font-bold">Calendario</h2>
+          <h2 className="text-xl font-bold">Calendário</h2>
           <div className="h-80 overflow-hidden">
             <SimpleCalendarCard
               // scheduledDates={['2025-04-10', '2025-04-15', '2025-04-21']}

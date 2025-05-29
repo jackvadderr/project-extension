@@ -15,16 +15,16 @@ const EventDistribution = ({ data }) => (
             from: 'color',
             modifiers: [['darker', 0.2]],
         }}
-        arcLinkLabelsSkipAngle={15}
+        arcLinkLabelsSkipAngle={9}
         arcLinkLabelsTextColor="#333333"
-        arcLinkLabelsThickness={2}
+        arcLinkLabelsThickness={4}
         arcLinkLabelsColor={{ from: 'color' }}
-        arcLinkLabelsDiagonalLength={6}
-        arcLinkLabelsStraightLength={8}
-        arcLabelsSkipAngle={15}
+        arcLinkLabelsDiagonalLength={13}
+        arcLinkLabelsStraightLength={13}
+        arcLabelsSkipAngle={9}
         arcLabelsTextColor={{
-            from: 'color',
-            modifiers: [['darker', 2]],
+          from: 'color',
+          modifiers: [['darker', 10]],
         }}
         arcLabel={(d) => `${d.data.percentageLabel}`}
         defs={[
@@ -46,7 +46,7 @@ const EventDistribution = ({ data }) => (
                 justify: false,
                 translateX: 0,
                 translateY: 30, // Posicionada abaixo do gráfico
-                itemsSpacing: 10, // Espaçamento entre itens
+                itemsSpacing: 4, // Espaçamento entre itens
                 itemWidth: 80, // Largura reduzida
                 itemHeight: 14, // Altura reduzida
                 itemTextColor: '#666',

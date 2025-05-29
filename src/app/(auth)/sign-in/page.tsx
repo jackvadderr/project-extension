@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { executeAction } from "@/lib/executeAction";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import ToastListener from "@/components/ui/ToastListener";
 
 const SignInPage = async () => {
   const session = await auth();
@@ -12,6 +13,7 @@ const SignInPage = async () => {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#e5e9f2_100%)] flex items-center justify-center px-4">
+      <ToastListener />
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl">
         <div className="flex flex-col items-center text-center px-6 pt-8 pb-4 border-b border-gray-200">
           <div className="mb-3">
@@ -30,11 +32,16 @@ const SignInPage = async () => {
             className="space-y-4"
             action={async (formData) => {
               "use server";
-              await executeAction({
-                actionFn: async () => {
-                  await signIn("credentials", formData);
-                },
-              });
+              try {
+                await executeAction({
+                  actionFn: async () => {
+                    await signIn("credentials", formData);
+                  },
+                });
+                redirect("/sign-in?success=" + encodeURIComponent("Login realizado com sucesso!"));
+              } catch {
+                redirect("/sign-in?error=" + encodeURIComponent("Erro ao fazer login. Verifique seus dados."));
+              }
             }}
           >
             <Input

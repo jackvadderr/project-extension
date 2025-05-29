@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import ToastListener from "@/components/ui/ToastListener";
 
 const SignUpPage = async () => {
   const session = await auth();
@@ -11,6 +12,7 @@ const SignUpPage = async () => {
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#e5e9f2_100%)] flex items-center justify-center px-4">
+      <ToastListener />
       <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl">
         <div className="flex flex-col items-center text-center px-6 pt-8 pb-4 border-b border-gray-200">
           <div className="mb-3">
@@ -20,17 +22,21 @@ const SignUpPage = async () => {
               className="h-24 w-24 object-contain rounded-full shadow-lg border-2 border-white"
             />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800">Criar Conta</h1>
-          <p className="text-sm text-gray-500 mt-1">Registre-se para começar a usar o sistema</p>
+          <h1 className="text-2xl font-bold text-gray-800">Cadastro</h1>
+          <p className="text-sm text-gray-500 mt-1">Crie sua conta para começar</p>
         </div>
-
-        <div className="px-6 py-6 space-y-6">
+        <div className="p-6 space-y-5">
           <form
             className="space-y-4"
             action={async (formData) => {
               "use server";
               const res = await signUp(formData);
-              if (res.success) redirect("/sign-in");
+              if (res.success) {
+                redirect("/sign-in?success=1");
+              } else {
+                const message = encodeURIComponent(res.error || "Erro ao cadastrar.");
+                redirect(`/sign-up?error=${message}`);
+              }
             }}
           >
             <Input
@@ -56,7 +62,6 @@ const SignUpPage = async () => {
               Cadastrar
             </Button>
           </form>
-
           <div className="text-center">
             <span className="text-sm text-gray-600">Já registrado? </span>
             <Link href="/sign-in" className="text-blue-600 hover:underline font-medium">

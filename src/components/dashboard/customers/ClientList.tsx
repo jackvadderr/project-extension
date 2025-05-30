@@ -27,8 +27,8 @@ export default function ClientList({
 
   const getStatusColor = (status: string) => {
     return status === 'active'
-      ? 'bg-green-100 text-green-800'
-      : 'bg-red-100 text-red-800';
+      ? 'bg-green-100 text-green-800 border-green-300'
+      : 'bg-red-100 text-red-800 border-red-300';
   };
 
   const handleRowClick = (e: React.MouseEvent, client: Customer) => {
@@ -76,7 +76,7 @@ export default function ClientList({
                 {client.cpf}
               </td>
               <td className="px-6 py-4 whitespace-nowrap bg-white group-hover:bg-gray-50">
-                  <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(client.status)}`}>
+                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-medium rounded-full border ${getStatusColor(client.status)}`}>
                     {client.status === 'active' ? 'Ativo' : 'Inativo'}
                   </span>
               </td>

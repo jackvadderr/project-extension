@@ -333,8 +333,8 @@ export default function EventListPage({
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 transition-opacity animate-fade-in">
+          <div className="bg-white p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-lg scale-100 animate-slide-up">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">
                 {editingEvent ? "Editar Evento" : "Cadastrar Evento"}

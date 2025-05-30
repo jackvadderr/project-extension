@@ -1,8 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { DndContext, closestCenter, useSensor, useSensors, PointerSensor } from '@dnd-kit/core'
-import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable'
 import { TodoItem } from './TodoItem'
 import { Task, Prisma } from '@prisma/client'
 
@@ -51,7 +61,6 @@ export default function TodoList({
           text: newTodoText.trim(),
           completed: false
         })
-
         setTodos([...todos, {
           id: newTask.id,
           text: newTask.text,
@@ -109,18 +118,18 @@ export default function TodoList({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 animate-fade-in">
       <div className="flex gap-2">
         <input
           type="text"
-          className="flex-1 p-2 border rounded"
+          className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           value={newTodoText}
           onChange={(e) => setNewTodoText(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
           placeholder="Adicionar novo item"
         />
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 active:scale-95 transition"
           onClick={handleAdd}
         >
           Adicionar
@@ -129,7 +138,7 @@ export default function TodoList({
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={todos.map(t => t.id)} strategy={verticalListSortingStrategy}>
-          <div className="grid gap-2">
+          <div className="grid gap-3">
             {todos.map(todo => (
               <TodoItem
                 key={todo.id}

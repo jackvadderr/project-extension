@@ -21,11 +21,13 @@ export default function TodoListWrapper({
                                           deleteTask
                                         }: TodoListWrapperProps) {
   return (
-    <TodoList
-      tasks={tasks}
-      createTask={createTask}
-      updateTask={updateTask}
-      deleteTask={deleteTask}
-    />
+    <div className="space-y-2">
+      <TodoList
+        tasks={tasks}
+        createTask={createTask}
+        updateTask={updateTask}
+        deleteTask={deleteTask}
+      />
+    </div>
   )
 }

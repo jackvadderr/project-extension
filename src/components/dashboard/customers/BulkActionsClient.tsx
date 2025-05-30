@@ -14,7 +14,7 @@ export default function BulkActionsClient({
                                             selectedCount
                                           }: BulkActionsClientProps) {
   return (
-    <div className="mb-4 p-3 bg-blue-50 rounded-full flex justify-between items-center">
+    <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-full shadow-sm flex justify-between items-center">
       <span className="text-blue-800 font-medium text-lg">
         {selectedCount} {selectedCount === 1 ? 'cliente selecionado' : 'clientes selecionados'}
       </span>

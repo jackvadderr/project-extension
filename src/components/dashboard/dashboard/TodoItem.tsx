@@ -1,9 +1,10 @@
-'use client';
+'use client'
 
 import { useState, useRef, useEffect } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { Todo } from './TodoList'
+import { Trash2, GripVertical } from 'lucide-react'
 
 interface Props {
   todo: Todo
@@ -33,9 +34,7 @@ export function TodoItem({ todo, onEdit, onDelete, onToggleComplete }: Props) {
   }
 
   useEffect(() => {
-    if (editing && inputRef.current) {
-      inputRef.current.focus()
-    }
+    if (editing && inputRef.current) inputRef.current.focus()
   }, [editing])
 
   const handleBlur = () => {
@@ -43,53 +42,43 @@ export function TodoItem({ todo, onEdit, onDelete, onToggleComplete }: Props) {
     onEdit(todo.id, text)
   }
 
-  const handleCheckboxChange = () => {
-    onToggleComplete(todo.id)
-  }
-
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={`p-2 rounded border flex justify-between items-center group ${
-        todo.completed ? 'bg-gray-50 opacity-80' : 'bg-white'
+      className={`p-3 rounded-xl border flex justify-between items-center bg-white group transition shadow-sm hover:shadow-md ${
+        todo.completed ? 'opacity-70 line-through text-gray-500' : ''
       }`}
     >
-      <div className="flex items-center flex-1">
-        {/* Alça exclusiva para drag */}
+      <div className="flex items-center flex-1 gap-2">
         <span
           {...attributes}
           {...listeners}
-          className="mr-2 cursor-move select-none"
-          title="Arraste para reordenar"
+          title="Arrastar"
+          className="text-gray-400 hover:text-gray-600 transition cursor-grab"
         >
-          ≡
+          <GripVertical size={18} />
         </span>
 
         <input
           type="checkbox"
           checked={todo.completed}
-          onChange={handleCheckboxChange}
-          onClick={(e) => e.stopPropagation()}
-          className={`mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 ${
-            todo.completed ? 'cursor-default' : 'cursor-pointer'
-          }`}
+          onChange={() => onToggleComplete(todo.id)}
+          className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-2 focus:ring-blue-500 transition cursor-pointer"
         />
 
         {editing ? (
           <input
             ref={inputRef}
-            className="flex-1 bg-transparent outline-none text-sm"
+            className="flex-1 bg-transparent outline-none text-sm text-gray-800"
             value={text}
             onChange={e => setText(e.target.value)}
             onBlur={handleBlur}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') inputRef.current?.blur()
-            }}
+            onKeyDown={(e) => e.key === 'Enter' && inputRef.current?.blur()}
           />
         ) : (
           <div
-            className={`flex-1 text-sm ${todo.completed ? 'line-through text-gray-500' : ''}`}
+            className="flex-1 text-sm text-gray-800 cursor-text"
             onDoubleClick={() => !todo.completed && setEditing(true)}
           >
             {text}
@@ -98,14 +87,11 @@ export function TodoItem({ todo, onEdit, onDelete, onToggleComplete }: Props) {
       </div>
 
       <button
-        className="ml-2 text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={(e) => {
-          e.stopPropagation()
-          onDelete(todo.id)
-        }}
         title="Excluir"
+        onClick={() => onDelete(todo.id)}
+        className="text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
       >
-        Excluir
+        <Trash2 size={16} />
       </button>
     </div>
   )

@@ -64,7 +64,7 @@ const EventDistribution = ({ data }) => (
                 ],
             },
         ]}
-        motionConfig="gentle" // Animação mais suave
+        motionConfig="gentle"
       />
   </div>
 );

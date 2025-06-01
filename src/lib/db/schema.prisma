@@ -8,16 +8,16 @@ datasource db {
 }
 
 model User {
-  id            String          @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String?         @unique
+  email         String?   @unique
   password      String?
   emailVerified DateTime?
   image         String?
-  role          String?         @default("NORMAL")
+  role          String?   @default("NORMAL")
 
-  accounts      Account[]
-  sessions      Session[]
+  accounts Account[]
+  sessions Session[]
 
   // Optional for WebAuthn support
   Authenticator Authenticator[]
@@ -84,21 +84,21 @@ model Authenticator {
 }
 
 model Event {
-  id               Int       @id @default(autoincrement())
-  name             String
-  description      String?
-  event_date       DateTime
-  location         String @default("R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830")
-  max_capacity     Int @default(100)
-  status           String? @default("scheduled")
-  event_type       String?
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-  duration         Float
-  rent             Float
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String?
+  event_date   DateTime
+  location     String   @default("R. Nicarágua, 1226 - Nova Porto Velho, Porto Velho - RO, 76820-830")
+  max_capacity Int      @default(100)
+  status       String?  @default("scheduled")
+  event_type   String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  duration     Float
+  rent         Float
 
-  clientId         String
-  client           Customer    @relation(fields: [clientId], references: [id])
+  clientId String
+  client   Customer @relation(fields: [clientId], references: [id])
 }
 
 model Task {
@@ -108,19 +108,27 @@ model Task {
 }
 
 model Customer {
-  id         String    @id @default(cuid())
-  name       String
-  cpf        String    @unique
-  phone      String?
-  email      String?
-  address    String?
-  status     String    @default("active")
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  cpf       String   @unique
+  phone     String?
+  email     String?
+  address   String?
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  events     Event[]
+  events Event[]
 
   @@index([cpf])
   @@index([email])
 }
 
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

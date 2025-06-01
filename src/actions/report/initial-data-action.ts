@@ -76,6 +76,16 @@ const calculateFinancialMetrics = (eventsByClients: any[]): FinancialMetrics => 
   return { totalEvents, revenue, averageTicket }
 }
 
+function getMonthName(monthNumber: number): string {
+  const months = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
+
+  return months[monthNumber - 1] || "Mês inválido";
+}
+
+
 const getUpcomingEvents = async (allEvents: any[]): Promise<any[]> => {
   const today = new Date()
   const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 1)
@@ -178,7 +188,7 @@ export async function getReportDataAction(adminName: string, period: Period) {
 
   return {
     adminName,
-    period: 'Janeiro - Dezembro 2025',
+    period: `${getMonthName(period.startMonth)} ${period.startYear} - ${getMonthName(period.endMonth)} ${period.endYear}`,
     summary: {
       totalEvents,
       revenue,

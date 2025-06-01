@@ -38,12 +38,11 @@ export default function ClientReportPageWrapper({
   const [currentEndMonth, setCurrentEndMonth] = useState(initialEndMonth);
   const [notes, setNotes] = useState(initialReportData.notes);
   const [loading, setLoading] = useState(false);
-  const [ready, setReady] = useState(false); // Estado restaurado
-  const [status, setStatus] = useState(''); // Estado restaurado
-  const [logs, setLogs] = useState<string[]>([]); // Estado restaurado
+  const [ready, setReady] = useState(false);
+  const [status, setStatus] = useState('');
+  const [logs, setLogs] = useState<string[]>([]);
   const router = useRouter();
 
-  // Sincroniza os estados quando os props iniciais mudam
   useEffect(() => {
     setCurrentStartYear(initialStartYear);
     setCurrentEndYear(initialEndYear);
@@ -60,7 +59,6 @@ export default function ClientReportPageWrapper({
     setStatus('Buscando dados...');
     setLogs(['Iniciando preparação do relatório...']);
 
-    // Simulação de processo assíncrono
     await new Promise((r) => setTimeout(r, 50));
     setLogs((prev) => [...prev, 'Coletando eventos do sistema...']);
 
@@ -83,7 +81,6 @@ export default function ClientReportPageWrapper({
     setLoading(false);
   }
 
-  // Função reset restaurada e adaptada
   function reset() {
     setReady(false);
     setLoading(false);
@@ -229,9 +226,9 @@ interface ActionButtonsProps {
     }>;
     events: Array<{
       date: string;
-      type: string; // Changed from any to string
+      type: string;
       client: string;
-      value: number; // Changed from any to number
+      value: number;
     }>;
     clients: Array<{
       name: string;

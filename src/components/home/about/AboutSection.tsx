@@ -12,8 +12,8 @@ export default function AboutSection({
                                        textColor = 'text-black'
                                      }: AboutSectionProps) {
   return (
-    <section id={id} className={`${bgColor} py-12`}>
-      <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-8">
+    <section id={id} className={`${bgColor} py-12 px-6 sm:px-10 md:px-16`}>
+      <div className="w-full grid md:grid-cols-2 gap-8">
         <div className={`${textColor} space-y-6`}>
           <h2 className="text-3xl md:text-4xl font-bold">About Us.</h2>
           <p className={`text-lg md:text-xl ${textColor}/80`}>

@@ -19,11 +19,8 @@ export default function FeatureSection({
                                        }: FeatureSectionProps) {
   return (
     <section id={id} className={`${bgColor} py-28`}>
-      <div
-        className={`container mx-auto px-6 flex flex-col md:flex-row items-center ${
-          reverse ? 'md:flex-row-reverse' : ''
-        } gap-8`}
-      >
+      <div className={`w-full px-6 sm:px-10 md:px-16 flex flex-col md:flex-row items-center ${reverse ? 'md:flex-row-reverse' : ''} gap-12`}>
+
         {/* Texto */}
         <div className="md:w-1/2">
           <h2 className="text-3xl font-semibold mb-4">{title}</h2>

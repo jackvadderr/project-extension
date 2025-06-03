@@ -1,7 +1,7 @@
 import db from "@/lib/db/db";
 import { Prisma, User } from "@prisma/client";
 
-export default class TaskRepository {
+export default class UserRepository {
   async create(todolistData: Prisma.UserCreateInput): Promise<User> {
     return db.user.create({
       data: todolistData,

@@ -1,9 +1,10 @@
 import { ReactNode } from "react";
 import { auth } from "@/lib/auth";
-import Sidebar from "@/components/layout/Sidebar";
 import { SignOut } from "@/components/sign-out";
 import { COPYRIGHT_YEAR, APP_NAME } from "@/constants/constants";
 import { getUserAction } from '@/actions/systemUser/get-user-action';
+import Drawer from "@/components/layout/Sidebar";
+
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -37,7 +38,6 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
-      <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header session={session} />
         <main className="flex-grow p-6 bg-gray-50">
@@ -51,11 +51,12 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
 
 const Header = ({ session }: { session: any }) => {
   return (
-    <header className="bg-[#1c3681] p-4 text-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-sm w-full">
-      <h1 className="text-lg font-semibold text-center md:text-left flex-1">
-      </h1>
+    <header className="bg-[#1c3681] p-4 text-white flex items-center justify-between gap-4 shadow-sm w-full">
+      {/* Botão do Drawer à esquerda */}
+      <Drawer />
 
-      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 w-full md:w-auto">
+      {/* Email + Botão Sair à direita */}
+      <div className="ml-auto flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
         <p className="text-xs sm:text-sm text-blue-100 opacity-90 text-center sm:text-left break-words">
           {session.user?.email}
         </p>

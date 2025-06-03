@@ -6,7 +6,7 @@ interface ContactSectionProps {
 
 const ContactSection = ({ id }: ContactSectionProps) => {
   return (
-    <section id={id} className="bg-gray-900 text-white py-16 px-4">
+    <section id={id} className="bg-gray-900 text-white py-16 px-6 sm:px-10 md:px-16">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold">Pronto para celebrar?</h1>
         <p className="text-gray-300 mt-2">Deixe suas dúvidas aqui e garanta sua data especial.</p>

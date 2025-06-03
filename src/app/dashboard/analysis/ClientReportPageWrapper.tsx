@@ -16,6 +16,8 @@ import ReportForecast from "@/components/dashboard/relatorio/to-view/ReportForec
 import ReportNotesFromAdm from "@/components/dashboard/relatorio/to-view/ReportNotesFromAdm";
 import ReportFooter from "@/components/dashboard/relatorio/to-view/ReportFooter";
 import { ReportPDF } from "./ReportPDF";
+import DownloadExcelButton from '@/components/dashboard/relatorio/to-excel/DownloadExcelButton';
+import DownloadPdfButton from '@/components/dashboard/relatorio/to-print/DownloadPdfButton';
 
 // Tipagem resumida do reportData, para facilitar o exemplo.
 interface ClientReportPageWrapperProps {
@@ -441,31 +443,13 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ reset, reportData }) => {
 
       <div className="flex gap-2">
         {/* Botão de Download de PDF (já existente) */}
-        <PDFDownloadLink
-          document={<ReportPDF data={reportData} />}
-          fileName="relatorio-eventos.pdf"
-          className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          {({ loading }) =>
-            loading ? (
-              "Gerando PDF..."
-            ) : (
-              <>
-                <Download className="w-4 h-4" />
-                Baixar PDF
-              </>
-            )
-          }
-        </PDFDownloadLink>
+        <DownloadPdfButton
+           document={<ReportPDF data={reportData} />}
+           fileName="relatorio-eventos.pdf"
+         />
 
-        {/* Novo botão de Download de Excel */}
-        <button
-          onClick={handleDownloadExcel}
-          className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-        >
-          <File className="w-4 h-4" />
-          Baixar Excel
-        </button>
+
+        <DownloadExcelButton onClick={handleDownloadExcel} />
       </div>
     </div>
   );

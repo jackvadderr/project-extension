@@ -56,11 +56,12 @@ const Header = ({ session }: { session: any }) => {
       <Drawer />
 
       {/* Email + Botão Sair à direita */}
+      {/*<div className="flex justify-center">*/}
       <div className="ml-auto flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
         <p className="text-xs sm:text-sm text-blue-100 opacity-90 text-center sm:text-left break-words">
           {session.user?.email}
         </p>
-        <a href="/home">
+        <a className="flex justify-center" href="/home">
           <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">HOME</button>
         </a>
         <SignOut className="bg-[#2c3575] hover:bg-[#1c3681] px-4 py-1.5 rounded-full text-xs font-medium shadow-sm border border-[#4367b6]" />

@@ -1,4 +1,4 @@
-import ContactMessagesWrapper from './ContactMessagesWrapper';
+import ContactMessagesWrapper from '../../../../components/dashboard/notifications/ContactMessagesWrapper';
 import { listAllContactMessageAction } from '@/actions/contactMessage/list-all-contact-message-action';
 
 

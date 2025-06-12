@@ -27,6 +27,7 @@ const scrollToElement = (elementId: string) => {
     });
   }
 };
+
 export const Header = ({ session }: { session: SessionType }) => {
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -41,9 +42,9 @@ export const Header = ({ session }: { session: SessionType }) => {
       </div>
 
       <nav className="flex gap-6">
-        <Link href="/home" className="hover:underline">Inicio</Link>
-        <a href="#about" className="hover:underline" onClick={(e) => handleSmoothScroll(e, 'about')}>Sobre</a>
-        <a href="#contact" className="hover:underline" onClick={(e) => handleSmoothScroll(e, 'contact')}>Contato</a>
+        <Link href="/home" className="text-gray-700 no-underline hover:text-pink-500 transition-colors">Inicio</Link>
+        <a href="#about" className="text-gray-700 no-underline hover:text-pink-500 transition-colors" onClick={(e) => handleSmoothScroll(e, 'about')}>Sobre</a>
+        <a href="#contact" className="text-gray-700 no-underline hover:text-pink-500 transition-colors" onClick={(e) => handleSmoothScroll(e, 'contact')}>Contato</a>
       </nav>
 
       {!session ? (

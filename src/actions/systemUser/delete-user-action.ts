@@ -1,7 +1,7 @@
 "use server";
 
 import UserRepository from '@/data/repository/impl/UserRepository';
-import { DeleteUserUsecase } from '@/domain/usecase/User/DeleteUserUsecase';
+import { DeleteUserUsecase } from '@/domain/usecase/SystemUser/DeleteUserUsecase';
 
 export async function deleteUserAction(id: string): Promise<void> {
   const repository = new UserRepository();

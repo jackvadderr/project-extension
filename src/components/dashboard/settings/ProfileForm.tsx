@@ -115,14 +115,6 @@ export default function ProfileForm({
             className="rounded-full object-cover"
           />
         </div>
-        <div className="flex gap-2">
-          <button type="button" className="px-4 py-2 bg-blue-600 text-white rounded-md">
-            Mudar foto de perfil
-          </button>
-          <button type="button" className="px-4 py-2 bg-red-500 text-white rounded-md">
-            Apagar foto de perfil
-          </button>
-        </div>
       </div>
 
       <div>

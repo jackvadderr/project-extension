@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Cog6ToothIcon, KeyIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
+import { IoIosNotifications } from "react-icons/io";
 
 const sidebarItems = [
   {
@@ -14,6 +15,11 @@ const sidebarItems = [
     icon: KeyIcon,
     label: 'Controle de Acesso',
     path: '/dashboard/settings/access'
+  },
+  {
+    icon: IoIosNotifications,
+    label: 'Notificacoes e mensagens',
+    path: '/dashboard/settings/notifications'
   },
 ];
 

@@ -44,28 +44,38 @@ const SignInPage = async () => {
               }
             }}
           >
-            <Input
-              name="email"
-              placeholder="Email"
-              type="email"
-              required
-              autoComplete="email"
-              className="shadow-sm focus:shadow-md"
-            />
-            <Input
-              name="password"
-              placeholder="Senha"
-              type="password"
-              required
-              autoComplete="current-password"
-              className="shadow-sm focus:shadow-md"
-            />
-            <Button
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Digite seu email"
+                required
+                autoComplete="email"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Digite sua senha"
+                required
+                autoComplete="current-password"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+              />
+            </div>
+
+            <button
               type="submit"
-              className="w-full py-3 rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-semibold transition-all shadow-md"
+              className="w-full flex justify-center items-center gap-2 py-3 mt-2 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow transition-all"
             >
-              Entrar
-            </Button>
+              🔐 Entrar
+            </button>
           </form>
 
           <div className="text-center">

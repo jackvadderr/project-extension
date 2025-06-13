@@ -41,8 +41,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({
         <div className="w-full md:w-1/2">
           <div className="text-white space-y-4">
             <h2 className="text-2xl font-bold">Contato</h2>
-            <p>📱 69 9 9999-9999</p>
-            <p>📧 raeventos@raeventos.com.br</p>
+            <p>📱 69 9 9932-0731</p>
+            <p>📧 raeventos@gmail.com.br</p>
             <p>📍 Porto Velho - RO</p>
           </div>
           <div className="flex space-x-4 mt-8 text-white">

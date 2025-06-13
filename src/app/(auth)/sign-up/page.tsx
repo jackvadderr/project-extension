@@ -39,29 +39,53 @@ const SignUpPage = async () => {
               }
             }}
           >
-            <Input
-              name="email"
-              placeholder="Email"
-              type="email"
-              required
-              autoComplete="email"
-              className="shadow-sm focus:shadow-md"
-            />
-            <Input
-              name="password"
-              placeholder="Senha"
-              type="password"
-              required
-              autoComplete="new-password"
-              className="shadow-sm focus:shadow-md"
-            />
-            <Button
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Digite seu nome"
+                required
+                autoComplete="name"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Digite seu email"
+                required
+                autoComplete="email"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Senha</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Digite sua senha"
+                required
+                autoComplete="new-password"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition"
+              />
+            </div>
+
+            <button
               type="submit"
-              className="w-full py-3 rounded-lg bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-semibold transition-all shadow-md"
+              className="w-full flex justify-center items-center gap-2 py-3 mt-2 rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold shadow transition-all"
             >
-              Cadastrar
-            </Button>
+              ✅ Cadastrar
+            </button>
           </form>
+
           <div className="text-center">
             <span className="text-sm text-gray-600">Já registrado? </span>
             <Link href="/sign-in" className="text-blue-600 hover:underline font-medium">

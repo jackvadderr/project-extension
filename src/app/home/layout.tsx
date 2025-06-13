@@ -20,11 +20,11 @@ const TopBar = () => {
       <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 justify-center sm:justify-start">
         <a href="https://wa.me/5500000000000" className="flex items-center gap-2 hover:text-blue-700 transition">
           <MdWhatsapp size={16} className="text-green-600" />
-          <span>(00) 00000-0000</span>
+          <span>(69) 2265-1949</span>
         </a>
-        <a href="mailto:contato@exemplo.com" className="flex items-center gap-2 hover:text-blue-700 transition">
+        <a href="mailto:raeventos@gmail.com.br" className="flex items-center gap-2 hover:text-blue-700 transition">
           <MdEmail size={16} className="text-red-500" />
-          <span>contato@exemplo.com</span>
+          <span> raeventos@gmail.com.br</span>
         </a>
       </div>
 

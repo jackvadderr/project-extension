@@ -9,7 +9,7 @@ interface SignOutProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 const SignOut = ({ className, ...props }: SignOutProps) => {
   const handleSignOut = async () => {
-    await signOut();
+    await signOut({ redirectTo: "/home" });
   };
 
   return (

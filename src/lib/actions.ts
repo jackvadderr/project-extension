@@ -5,8 +5,14 @@ import { hashPassword } from '@/utils/crypto-utils';
 
 const signUp = async (formData: FormData) => {
   try {
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const name = formData.get("name")?.toString();
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
+
+    if (!name || !email || !password) {
+      return { success: false, error: "Todos os campos são obrigatórios." };
+    }
+
     const validatedData = schema.parse({ email, password });
 
     const existingUser = await db.user.findUnique({
@@ -21,6 +27,7 @@ const signUp = async (formData: FormData) => {
 
     await db.user.create({
       data: {
+        name,
         email: validatedData.email.toLowerCase(),
         password: passwordHash,
         role: "ADMIN",
@@ -29,7 +36,10 @@ const signUp = async (formData: FormData) => {
 
     return { success: true };
   } catch (error) {
-    return { success: false, error: error instanceof Error ? error.message : "Erro desconhecido" };
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Erro desconhecido",
+    };
   }
 };
 

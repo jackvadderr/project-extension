@@ -1,6 +1,7 @@
 // components/common/DownloadPdfButton.tsx
 import { AiFillFilePdf } from "react-icons/ai";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import { JSX } from 'react';
 
 interface DownloadPdfButtonProps {
   document: JSX.Element;

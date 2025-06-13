@@ -105,105 +105,111 @@ export default function ProfileForm({
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="space-y-4">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="relative w-16 h-16">
+    <form
+      onSubmit={handleFormSubmit}
+      className="mx-auto mt-6 max-w-3xl bg-white border border-gray-200 shadow-md rounded-2xl p-10 space-y-8"
+    >
+      <h2 className="text-3xl font-bold text-gray-800 border-b pb-4 flex items-center gap-2">
+        <span className="text-purple-700 text-4xl">👤</span> Configurações da conta
+      </h2>
+
+      <div className="flex items-center gap-6">
+        <div className="relative w-24 h-24 shrink-0">
           <Image
             src={user?.image || '/avatar.svg'}
-            alt="Profile Picture"
+            alt="Foto de perfil"
             fill
-            className="rounded-full object-cover"
+            className="rounded-full object-cover ring-2 ring-gray-300 shadow-sm"
+          />
+        </div>
+        <div className="flex-1">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nome de usuário</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
           />
         </div>
       </div>
 
       <div>
-        <label htmlFor="name" className="block text-sm font-medium">
-          Nome de usuario
-        </label>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          value={formData.name}
-          onChange={handleChange}
-          className="mt-1 w-full p-2 border border-gray-300 rounded-md"
-        />
-      </div>
-
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium">
-          Email
-        </label>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
         <input
           id="email"
           name="email"
           type="email"
           value={formData.email}
           disabled
-          className="mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+          className="w-full px-4 py-3 border border-gray-200 bg-gray-100 rounded-xl text-gray-500 shadow-sm cursor-not-allowed"
         />
       </div>
 
-      <div className="border-t mt-6 pt-6">
-        <h3 className="text-lg font-medium mb-4">Alterar senha</h3>
+      <div className="border-t pt-6">
+        <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span className="text-orange-500 text-2xl">🔒</span> Alterar senha
+        </h3>
 
-        <div>
-          <label htmlFor="currentPassword" className="block text-sm font-medium">
-            Senha atual
-          </label>
-          <input
-            id="currentPassword"
-            name="currentPassword"
-            type="password"
-            value={formData.currentPassword}
-            onChange={handleChange}
-            className="mt-1 w-full p-2 border border-gray-300 rounded-md"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="col-span-1 md:col-span-1">
+            <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-1">Senha atual</label>
+            <input
+              id="currentPassword"
+              name="currentPassword"
+              type="password"
+              value={formData.currentPassword}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            />
+          </div>
+
+          <div className="col-span-1 md:col-span-1">
+            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">Nova senha</label>
+            <input
+              id="newPassword"
+              name="newPassword"
+              type="password"
+              value={formData.newPassword}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            />
+          </div>
+
+          <div className="col-span-1 md:col-span-1">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirmar nova senha</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+            />
+          </div>
         </div>
 
-        <div className="mt-4">
-          <label htmlFor="newPassword" className="block text-sm font-medium">
-            Nova senha
-          </label>
-          <input
-            id="newPassword"
-            name="newPassword"
-            type="password"
-            value={formData.newPassword}
-            onChange={handleChange}
-            className="mt-1 w-full p-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        <div className="mt-4">
-          <label htmlFor="confirmPassword" className="block text-sm font-medium">
-            Confirmar nova senha
-          </label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className="mt-1 w-full p-2 border border-gray-300 rounded-md"
-          />
-        </div>
-
-        {passwordError && <p className="mt-2 text-sm text-red-600">{passwordError}</p>}
+        {passwordError && (
+          <p className="text-sm text-red-600 mt-2">{passwordError}</p>
+        )}
       </div>
 
-      <button
-        type="submit"
-        disabled={!isChanged}
-        className={`mt-4 px-4 py-2 rounded-md ${
-          isChanged
-            ? 'bg-blue-600 text-white hover:bg-blue-700'
-            : 'bg-gray-300 text-gray-700 cursor-not-allowed'
-        }`}
-      >
-        Salvar alterações
-      </button>
+      <div className="flex justify-end mt-6">
+        <button
+          type="submit"
+          disabled={!isChanged}
+          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all shadow ${
+            isChanged
+              ? 'bg-purple-600 text-white hover:bg-purple-700'
+              : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+          }`}
+        >
+          💾 Salvar alterações
+        </button>
+      </div>
+
     </form>
+
   );
 }

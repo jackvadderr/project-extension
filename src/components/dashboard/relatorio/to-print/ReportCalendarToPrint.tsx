@@ -4,6 +4,13 @@ interface CalendarDay {
   date: string;
 }
 
+interface Period {
+  startMonth: number; // 1 a 12
+  startYear: number;
+  endMonth: number;
+  endYear: number;
+}
+
 const styles = StyleSheet.create({
   container: {
     marginBottom: 32,
@@ -11,10 +18,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'semibold',
-    marginBottom: 16,
+    marginBottom: 8,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+  },
+  periodText: {
+    fontSize: 12,
+    marginBottom: 16,
+    color: '#6b7280', // cinza
   },
   calendarGrid: {
     flexDirection: 'row',
@@ -56,16 +68,28 @@ const styles = StyleSheet.create({
   },
 });
 
+function getMonthName(monthNumber: number): string {
+  const months = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
+  return months[monthNumber - 1] || '';
+}
+
 function formatDay(dateStr: string) {
   return new Date(dateStr).getDate();
 }
 
 const getDateStatus = (date: string, events: CalendarDay[]) => {
-  console.log(events);
   return events?.some(event => event.date === date) ? 'agendado' : 'livre';
 };
 
-export default function ReportCalendarToPrint({ calendar }: { calendar: { date: string, status: string }[] }) {
+type ReportCalendarToPrintProps = {
+  calendar: { date: string; status: string }[];
+  period: Period;
+};
+
+export default function ReportCalendarToPrint({ calendar }: ReportCalendarToPrintProps) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -77,10 +101,7 @@ export default function ReportCalendarToPrint({ calendar }: { calendar: { date: 
           const date = `2025-05-${String(i + 1).padStart(2, '0')}`;
           const status = getDateStatus(date, calendar);
           return (
-            <View
-              key={date}
-              style={[styles.dayCell, styles[status]]}
-            >
+            <View key={date} style={[styles.dayCell, styles[status]]}>
               <Text>{i + 1}</Text>
             </View>
           );

@@ -9,15 +9,44 @@ const statusColors = {
   agendado: 'bg-green-300',
 } as const;
 
-function formatDay(dateStr: string) {
-  return new Date(dateStr).getDate();
+const monthNames = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+];
+
+// Função para pegar o número do mês (0-11) a partir do nome do mês em português
+function getMonthIndex(monthName: string) {
+  return monthNames.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+}
+
+// Retorna as datas no formato YYYY-MM-DD para o mês e ano indicados
+function getDaysInMonth(year: number, monthIndex: number) {
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+
+  return [...Array(daysInMonth)].map((_, i) => {
+    const day = i + 1;
+    return `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  });
 }
 
 const getDateStatus = (date: string, events: CalendarDay[]) => {
   return events.some(event => event.date === date) ? 'agendado' : 'livre';
 };
 
-export default function ReportCalendar({ events }: { events: CalendarDay[] }) {
+export default function ReportCalendar({
+                                         events,
+                                         period,
+                                       }: {
+  events: CalendarDay[];
+  period: string;
+}) {
+  const [startPeriod] = period.split(' - ');
+  const [startMonthName, startYearStr] = startPeriod.split(' ');
+  const startYear = Number(startYearStr);
+  const startMonthIndex = getMonthIndex(startMonthName);
+
+  const days = getDaysInMonth(startYear, startMonthIndex);
+
   return (
     <div className="mb-8">
       <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -26,15 +55,15 @@ export default function ReportCalendar({ events }: { events: CalendarDay[] }) {
       </h2>
 
       <div className="grid grid-cols-7 gap-1 text-sm mb-4">
-        {[...Array(31)].map((_, i) => {
-          const date = `2025-05-${String(i + 1).padStart(2, '0')}`;
+        {days.map(date => {
           const status = getDateStatus(date, events);
+          const dayNumber = Number(date.split('-')[2]);
           return (
             <div
               key={date}
               className={`h-10 flex items-center justify-center rounded ${statusColors[status]}`}
             >
-              {i + 1}
+              {dayNumber}
             </div>
           );
         })}

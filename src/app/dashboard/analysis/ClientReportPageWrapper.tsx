@@ -243,10 +243,10 @@ export default function ClientReportPageWrapper({
             <ReportSummary summary={reportData.summary} />
             <ReportKPIs kpis={reportData.kpis} />
             <ReportFinancials data={reportData.financials} />
-            <ReportCalendar events={reportData.calendar} />
+            <ReportCalendar events={reportData.calendar} period={reportData.period} />
             <ReportEventsTable events={reportData.events} />
             <ReportClients clients={reportData.clients} />
-            <ReportForecast forecast={reportData.forecast} />
+            {/*<ReportForecast forecast={reportData.forecast} />*/}
             <ReportNotesFromAdm notes={notes} />
             <ReportFooter />
           </div>

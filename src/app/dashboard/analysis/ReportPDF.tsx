@@ -157,7 +157,7 @@ export function ReportPDF({ data }: { data: {
           <ReportFinancialsToPrint financials={data.financials} />
         </View>
         <View>
-          <ReportCalendarToPrint calendar={data.calendar} />
+          <ReportCalendarToPrint calendar={data.calendar} period={data.period}  />
         </View>
         <View>
           <ReportEventsTableToPrint events={data.events} />
@@ -165,9 +165,9 @@ export function ReportPDF({ data }: { data: {
         <View>
           <ReportClientsToPrint clients={data.clients} />
         </View>
-        <View>
-          <ReportForecastToPrint forecast={data.forecast} />
-        </View>
+        {/*<View>*/}
+        {/*  <ReportForecastToPrint forecast={data.forecast} />*/}
+        {/*</View>*/}
         <View>
           <ReportNotesFromAdmToPrint notes={data.notes} />
         </View>

@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from '@react-pdf/renderer';
 
+
 interface Summary {
   totalEvents: number;
   revenue: number;
@@ -47,14 +48,17 @@ export default function ReportSummaryToPrint({ summary }: ReportSummaryProps) {
       <Text style={styles.title}>Sumário Executivo</Text>
       <View style={styles.grid}>
         <View style={styles.card}>
+          {/*<CalendarIcon />*/}
           <Text style={styles.label}>Eventos Realizados</Text>
           <Text style={styles.value}>{summary.totalEvents}</Text>
         </View>
         <View style={styles.card}>
+          {/*<DollarIcon />*/}
           <Text style={styles.label}>Receita Total</Text>
           <Text style={styles.value}>R$ {summary.revenue.toLocaleString('pt-BR')}</Text>
         </View>
         <View style={styles.card}>
+          {/*<ChartIcon />*/}
           <Text style={styles.label}>Taxa de Ocupação</Text>
           <Text style={styles.value}>{(summary.occupancyRate * 100).toFixed(0)}%</Text>
         </View>

@@ -62,14 +62,10 @@ const styles = StyleSheet.create({
   },
 });
 
-// Simple icon replacement
-const UsersIcon = () => <Text style={{ fontSize: 10 }}>👥</Text>;
-
 export default function ReportClientsToPrint({ clients }: {clients: Client[]}) {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <UsersIcon />
         <Text>Clientes</Text>
       </View>
 

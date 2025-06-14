@@ -142,7 +142,7 @@ export function ReportPDF({ data }: { data: {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.title}>Relatório de Eventos</Text>
+            <Text style={styles.title}>Relatório de Eventos - RA Eventos</Text>
             <Text>Administrador: {data.adminName}</Text>
             <Text>Período: {data.period}</Text>
           </View>

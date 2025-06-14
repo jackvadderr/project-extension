@@ -1,4 +1,3 @@
-// ClientReportPageWrapper.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -19,7 +18,6 @@ import { ReportPDF } from "./ReportPDF";
 import DownloadExcelButton from '@/components/dashboard/relatorio/to-excel/DownloadExcelButton';
 import DownloadPdfButton from '@/components/dashboard/relatorio/to-print/DownloadPdfButton';
 
-// Tipagem resumida do reportData, para facilitar o exemplo.
 interface ClientReportPageWrapperProps {
   initialReportData: {
     adminName: string;
@@ -164,9 +162,7 @@ export default function ClientReportPageWrapper({
               <input
                 type="number"
                 value={currentStartYear}
-                onChange={(e) =>
-                  setCurrentStartYear(Number(e.target.value))
-                }
+                onChange={(e) => setCurrentStartYear(Number(e.target.value))}
                 className="w-full p-2 border rounded"
               />
             </div>
@@ -178,9 +174,7 @@ export default function ClientReportPageWrapper({
                 min="1"
                 max="12"
                 value={currentStartMonth}
-                onChange={(e) =>
-                  setCurrentStartMonth(Number(e.target.value))
-                }
+                onChange={(e) => setCurrentStartMonth(Number(e.target.value))}
                 className="w-full p-2 border rounded"
               />
             </div>
@@ -190,9 +184,7 @@ export default function ClientReportPageWrapper({
               <input
                 type="number"
                 value={currentEndYear}
-                onChange={(e) =>
-                  setCurrentEndYear(Number(e.target.value))
-                }
+                onChange={(e) => setCurrentEndYear(Number(e.target.value))}
                 className="w-full p-2 border rounded"
               />
             </div>
@@ -204,9 +196,7 @@ export default function ClientReportPageWrapper({
                 min="1"
                 max="12"
                 value={currentEndMonth}
-                onChange={(e) =>
-                  setCurrentEndMonth(Number(e.target.value))
-                }
+                onChange={(e) => setCurrentEndMonth(Number(e.target.value))}
                 className="w-full p-2 border rounded"
               />
             </div>
@@ -224,7 +214,7 @@ export default function ClientReportPageWrapper({
             disabled={loading}
             className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:opacity-50"
           >
-            {loading ? "Preparando..." : "Preparar Relatório"}
+            {loading ? 'Preparando...' : 'Preparar Relatório'}
           </button>
 
           {status && <p className="text-gray-600 mt-2">{status}</p>}
@@ -239,16 +229,17 @@ export default function ClientReportPageWrapper({
         </div>
       ) : (
         <>
-          <ActionButtons reset={reset} reportData={{ ...reportData, notes }} />
+          <ActionButtons
+            reset={reset}
+            reportData={{ ...reportData, notes }}
+            reportDate={''}
+          />
 
           <div
             id="report-preview-container"
             className="border border-gray-300 rounded-xl shadow-xl bg-white p-6 space-y-6"
           >
-            <ReportHeader
-              adminName={reportData.adminName}
-              period={reportData.period}
-            />
+            <ReportHeader adminName={reportData.adminName} period={reportData.period} />
             <ReportSummary summary={reportData.summary} />
             <ReportKPIs kpis={reportData.kpis} />
             <ReportFinancials data={reportData.financials} />
@@ -260,7 +251,11 @@ export default function ClientReportPageWrapper({
             <ReportFooter />
           </div>
 
-          <ActionButtons reset={reset} reportData={{ ...reportData, notes }} />
+          <ActionButtons
+            reset={reset}
+            reportData={{ ...reportData, notes }}
+            reportDate={''}
+          />
         </>
       )}
     </div>
@@ -269,6 +264,7 @@ export default function ClientReportPageWrapper({
 
 interface ActionButtonsProps {
   reset: () => void;
+  reportDate: string,
   reportData: {
     adminName: string;
     period: string;
@@ -312,122 +308,208 @@ interface ActionButtonsProps {
   };
 }
 
-const ActionButtons: React.FC<ActionButtonsProps> = ({ reset, reportData }) => {
+const ActionButtons: React.FC<ActionButtonsProps> = ({ reset, reportData}) => {
   // --------------------------------------------------------
   // Função para gerar e disparar o download do arquivo Excel
   // --------------------------------------------------------
   const handleDownloadExcel = async () => {
     try {
-      // 1) Fazemos um dynamic import do exceljs apenas no client
       const ExcelJS = (await import("exceljs")).default;
 
-      // 2) Cria uma nova planilha (workbook) e adiciona uma aba
       const workbook = new ExcelJS.Workbook();
-      const sheet = workbook.addWorksheet("Relatório");
+      const sheet = workbook.addWorksheet("📋 Relatório");
 
-      // 3) Montar linhas iniciais de cabeçalho
-      //    Você pode personalizar as cores/fontes conforme preferir.
-      sheet.addRow(["Relatório de Eventos"]);
-      sheet.addRow([`Administrador: ${reportData.adminName}`]);
-      sheet.addRow([`Período: ${reportData.period}`]);
-      sheet.addRow([]); // linha em branco
+      // Funções auxiliares
+      const applyBorders = (cell: any) => {
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      };
 
-      // 4) Seção de Summary
-      sheet.addRow(["", "RESUMO"]);
-      sheet.addRow(["Total de Eventos", reportData.summary.totalEvents]);
-      sheet.addRow(["Receita Total", reportData.summary.revenue]);
-      sheet.addRow([
-        "Taxa de Ocupação",
-        `${reportData.summary.occupancyRate}%`,
-      ]);
+      const formatCurrencyCell = (cell: any) => {
+        cell.numFmt = 'R$ #,##0.00';
+        cell.alignment = { horizontal: 'right' };
+        applyBorders(cell);
+      };
+
+      const formatDateCell = (cell: any) => {
+        cell.numFmt = 'dd/mm/yyyy';
+        cell.alignment = { horizontal: 'center' };
+        applyBorders(cell);
+      };
+
+      const applyZebraStyle = (row: any, index: number) => {
+        if (index % 2 === 1) {
+          row.eachCell((cell: any) => {
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "FFF9F9F9" },
+            };
+          });
+        }
+        row.eachCell((cell: any) => applyBorders(cell));
+      };
+
+      const addStyledHeader = (text: string) => {
+        const row = sheet.addRow([text]);
+        sheet.mergeCells(`A${row.number}:B${row.number}`);
+        row.font = { bold: true, size: 14 };
+        row.alignment = { vertical: "middle", horizontal: "center" };
+        row.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FFE6E6E6" },
+        };
+        row.height = 20;
+      };
+
+      const addLabelValueRow = (label: string, value: any, isCurrency = false) => {
+        const row = sheet.addRow([label, value]);
+        row.getCell(1).font = { bold: true };
+        applyBorders(row.getCell(1));
+        if (isCurrency) formatCurrencyCell(row.getCell(2));
+        else applyBorders(row.getCell(2));
+      };
+
+      // --- Construção do relatório ---
+
+      addStyledHeader("📋 Relatório de Eventos");
+      addLabelValueRow("Administrador", reportData.adminName);
+      addLabelValueRow("Período", reportData.period);
       sheet.addRow([]);
 
-      // 5) Seção de KPIs
-      sheet.addRow(["", "KPIs"]);
-      sheet.addRow(["Label", "Valor", "Status"]);
-      reportData.kpis.forEach((kpi) => {
-        sheet.addRow([kpi.label, kpi.value, kpi.status]);
+      addStyledHeader("📊 RESUMO");
+      addLabelValueRow("Total de Eventos", reportData.summary.totalEvents);
+      addLabelValueRow("Receita Total", reportData.summary.revenue, true);
+      const occupancy = (reportData.summary.occupancyRate * 100).toFixed(0) + "%";
+      addLabelValueRow("Taxa de Ocupação", occupancy);
+      sheet.addRow([]);
+
+      addStyledHeader("📈 KPIs");
+      const kpiHeader = sheet.addRow(["Label", "Valor"]);
+      kpiHeader.font = { bold: true };
+      kpiHeader.eachCell((cell: any) => {
+        cell.alignment = { horizontal: "center", wrapText: true };
+        applyBorders(cell);
+      });
+      reportData.kpis.forEach((kpi, i) => {
+        const row = sheet.addRow([kpi.label, kpi.value]);
+        applyZebraStyle(row, i);
       });
       sheet.addRow([]);
 
-      // 6) Seção de Financials
-      sheet.addRow(["", "Dados Financeiros"]);
-      sheet.addRow(["Receita Total", reportData.financials.totalRevenue]);
-      sheet.addRow(["Ticket Médio", reportData.financials.averageTicket]);
+      addStyledHeader("💵 Dados Financeiros");
+      addLabelValueRow("Receita Total", reportData.financials.totalRevenue, true);
+      addLabelValueRow("Ticket Médio", reportData.financials.averageTicket, true);
       sheet.addRow([]);
-      sheet.addRow(["Top Clientes", "Valor"]);
-      reportData.financials.topClients.forEach((c) => {
-        sheet.addRow([c.name, c.value]);
+
+      addStyledHeader("🏆 Top Clientes");
+      const topHeader = sheet.addRow(["Cliente", "Receita"]);
+      topHeader.font = { bold: true };
+      topHeader.eachCell((cell: any) => {
+        cell.alignment = { horizontal: "center", wrapText: true };
+        applyBorders(cell);
+      });
+      reportData.financials.topClients.forEach((c, i) => {
+        const row = sheet.addRow([c.name, c.value]);
+        formatCurrencyCell(row.getCell(2));
+        applyZebraStyle(row, i);
       });
       sheet.addRow([]);
 
-      // 7) Seção de Calendar
-      sheet.addRow(["", "Calendário de Eventos"]);
-      sheet.addRow(["Data", "Status"]);
-      reportData.calendar.forEach((day) => {
-        sheet.addRow([day.date, day.status]);
+      addStyledHeader("📅 Eventos Detalhados");
+      const evHeader = sheet.addRow(["Data", "Tipo", "Cliente", "Valor"]);
+      evHeader.font = { bold: true };
+      evHeader.eachCell((cell: any) => {
+        cell.alignment = { horizontal: "center", wrapText: true };
+        applyBorders(cell);
+      });
+      reportData.events.forEach((ev, i) => {
+        const row = sheet.addRow([
+          new Date(ev.date),
+          ev.type,
+          ev.client,
+          ev.value,
+        ]);
+        formatDateCell(row.getCell(1));
+        formatCurrencyCell(row.getCell(4));
+        applyZebraStyle(row, i);
       });
       sheet.addRow([]);
 
-      // 8) Seção de Eventos Detalhados
-      sheet.addRow(["", "Eventos Detalhados"]);
-      sheet.addRow(["Data", "Tipo", "Cliente", "Valor"]);
-      reportData.events.forEach((ev) => {
-        sheet.addRow([ev.date, ev.type, ev.client, ev.value]);
+      addStyledHeader("🧑‍🤝‍🧑 Clientes");
+      const clHeader = sheet.addRow(["Nome", "Recorrência", "Receita"]);
+      clHeader.font = { bold: true };
+      clHeader.eachCell((cell: any) => {
+        cell.alignment = { horizontal: "center", wrapText: true };
+        applyBorders(cell);
+      });
+      reportData.clients.forEach((c, i) => {
+        const row = sheet.addRow([
+          c.name,
+          c.recurrence,
+          c.revenue,
+        ]);
+        formatCurrencyCell(row.getCell(3));
+        applyZebraStyle(row, i);
       });
       sheet.addRow([]);
 
-      // 9) Seção de Clientes
-      sheet.addRow(["", "Clientes"]);
-      sheet.addRow(["Nome", "Recorrência", "Origem", "Receita"]);
-      reportData.clients.forEach((c) => {
-        sheet.addRow([c.name, c.recurrence, c.source, c.revenue]);
-      });
+      addStyledHeader("📝 Notas do Administrador");
+      const noteRow = sheet.addRow([reportData.notes]);
+      sheet.mergeCells(`A${noteRow.number}:B${noteRow.number}`);
+      noteRow.alignment = { wrapText: true };
       sheet.addRow([]);
 
-      // 10) Seção de Forecast
-      sheet.addRow(["", "Forecast - Próximos Eventos"]);
-      sheet.addRow(["Data", "Tipo", "Cliente", "Valor"]);
-      reportData.forecast.upcomingEvents.forEach((f) => {
-        sheet.addRow([f.date, f.type, f.client, f.value]);
-      });
-      sheet.addRow([]);
-
-      // 11) Seção de Notas
-      sheet.addRow(["", "Notas do Administrador"]);
-      sheet.addRow([reportData.notes]);
-      sheet.addRow([]);
-
-      // 12) Ajustar largura automática das colunas (opcional)
+      // Ajusta larguras das colunas
       sheet.columns.forEach((column) => {
         let maxLength = 10;
         column.eachCell({ includeEmpty: true }, (cell) => {
           const text = cell.value ? cell.value.toString() : "";
-          if (text.length > maxLength) {
-            maxLength = text.length;
-          }
+          maxLength = Math.max(maxLength, text.length);
         });
-        column.width = maxLength + 2;
+        column.width = maxLength + 4;
       });
 
-      // 13) Gerar o buffer e criar um Blob para download
+      // --- Aba extra só com dados para o gráfico de pizza ---
+      const chartSheet = workbook.addWorksheet("📊 Receita por Cliente");
+      chartSheet.addRow(["Cliente", "Receita"]);
+      reportData.financials.topClients.forEach((c) => {
+        const row = chartSheet.addRow([c.name, c.value]);
+        formatCurrencyCell(row.getCell(2));
+      });
+
+      chartSheet.columns.forEach((column) => {
+        let maxLength = 10;
+        column.eachCell({ includeEmpty: true }, (cell) => {
+          const text = cell.value ? cell.value.toString() : "";
+          maxLength = Math.max(maxLength, text.length);
+        });
+        column.width = maxLength + 4;
+      });
+
+      // --- Exporta arquivo Excel ---
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], {
-        type:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
       const url = URL.createObjectURL(blob);
 
-      // 14) Criar um link e clicar para disparar o download
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "relatorio-eventos.xlsx";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
+      const anchor = document.createElement("a");
+      // Gerar nome do arquivo com base no período
+      const safePeriod = reportData.period
+        ? reportData.period.replace(/\s+/g, "_").replace(/[^\w-_]/g, "")
+        : "Relatorio";
+      anchor.href = url;
+      anchor.download = `Relatorio-${safePeriod}.xlsx`;
+      anchor.click();
       URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("Erro gerando Excel:", err);
+    } catch (error) {
+      console.error("Erro ao gerar Excel:", error);
     }
   };
 
@@ -447,7 +529,6 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ reset, reportData }) => {
            document={<ReportPDF data={reportData} />}
            fileName="relatorio-eventos.pdf"
          />
-
 
         <DownloadExcelButton onClick={handleDownloadExcel} />
       </div>

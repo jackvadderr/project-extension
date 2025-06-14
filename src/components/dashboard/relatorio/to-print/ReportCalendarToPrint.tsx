@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   dayCell: {
-    width: '13%', // Approximately 1/7 of the width (7 days in a week)
+    width: '13%',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
